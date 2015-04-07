@@ -78,7 +78,7 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +105,7 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\CMovements\CMovements.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

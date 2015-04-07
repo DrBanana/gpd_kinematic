@@ -70,4 +70,9 @@ int CMovements::GetMovePerStep()
     return m_shift/len;
 }
 
+int CMovements::GetStepsCnt()
+{
+    return m_end-m_start;
+}
+
 
