@@ -29,5 +29,6 @@ public:
     void SetEnd(int);
     int GetEnd();
     int GetMovePerStep();
+    int GetStepsCnt();
     void Move();
 };
