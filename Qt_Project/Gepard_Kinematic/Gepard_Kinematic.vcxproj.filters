@@ -92,6 +92,15 @@
     <ClCompile Include="..\..\src\ProgressBar\progressbardlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Release\moc_timeline.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_timeline.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TimeLine\timeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -110,6 +119,9 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\TimeLine\timeline.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

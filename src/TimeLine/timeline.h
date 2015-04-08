@@ -71,12 +71,12 @@ private:
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
 
-	int segmentSize = 50; //Размер сегмента по дефолту, в пикселях
+	int segmentSize; //Размер сегмента по дефолту, в пикселях
 	int segmentsAmount; //Текущее количество сегментов
 
 	int fRowHeight; //Высота верхней строки со шкалой
 
-	const qreal timeStep=1; //Шаг
+	qreal timeStep; //Шаг
 
 	int rowCount; //число строк не считая линейку
 
