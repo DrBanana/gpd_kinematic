@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QBoxLayout>
+
 
 #include<TimeLine/timeline.h>
 
@@ -32,6 +34,8 @@ private:
 	QDockWidget * tLineWidget;
 	TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
+
+
 };
 
 #endif // MAINWINDOW_H

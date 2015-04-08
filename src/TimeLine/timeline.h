@@ -20,6 +20,7 @@
 #include<vector>
 #include <qlineedit.h>
 #include<qheaderview.h>
+#include <QMenuBar>
 
 
 struct _row
@@ -70,6 +71,12 @@ private:
 	QTableWidget * TableViewer;
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
+	QMenuBar * mainMenu;
+
+	//Экшны меню
+	QMenu * mRun;             //Меню запуска
+	QAction * aRun;           //Запуск
+	QAction * aRunParams;     //Запуск с параметрами
 
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
 	int segmentsAmount; //Текущее количество сегментов

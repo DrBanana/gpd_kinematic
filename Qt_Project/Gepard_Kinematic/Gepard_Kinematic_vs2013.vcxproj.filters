@@ -104,6 +104,15 @@
     <ClCompile Include="..\..\src\ProgressBar\progressbardlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\CMovements\Mover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_tRunPrmWin.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="tRunPrmWin.cpp">
+      <Filter>Source Files\TimeLine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -133,6 +142,9 @@
     <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="tRunPrmWin.h">
+      <Filter>Header Files\TimeLine</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.ui">
@@ -142,6 +154,9 @@
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_progressbardlg.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CMovements\Mover.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

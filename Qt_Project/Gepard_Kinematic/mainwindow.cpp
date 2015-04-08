@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
 	tLineWidget->setWidget(timeLineWidget);
 	tLineWidget->show();
+
+
+
 	
 }
 

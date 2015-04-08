@@ -265,6 +265,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp" />
+    <ClCompile Include="..\..\src\CMovements\Mover.cpp" />
     <ClCompile Include="..\..\src\GRenderWin.cpp" />
     <ClCompile Include="..\..\src\ProgressBar\progressbardlg.cpp" />
     <ClCompile Include="..\..\src\QtGRenderWidget.cpp" />
@@ -289,6 +290,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Debug\moc_tRunPrmWin.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mainwindow.cpp" />
     <ClCompile Include="Release\moc_mainwindow.cpp">
@@ -307,6 +309,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="tRunPrmWin.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\CMovements\CMovements.h">
@@ -542,7 +545,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\CMovements\Mover.h" />
     <ClInclude Include="GeneratedFiles\ui_progressbardlg.h" />
+    <CustomBuild Include="tRunPrmWin.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

@@ -31,8 +31,13 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     vHeader->setSectionResizeMode(QHeaderView::Fixed);           //менять размер всех строк тока программно
     TableViewer->setVerticalHeader(vHeader);
 
+	//Скроем хэдер
+	TableViewer->horizontalHeader()->hide();
+
     TableViewer->show(); 
 
+
+	//сцена
     graphS = new QGraphicsScene(0, 0, w, fRowHeight); //Сцена со шкалой
 
     graphicsWindow = new QGraphicsView();                      //Вьювер линейки
@@ -45,12 +50,24 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     //Устанавливаем graphicView в таблицу
     TableViewer->setCellWidget(0, 1, graphicsWindow);
     
-    //Компоновка таймлайна
-    
-    QBoxLayout *mainLay = new QHBoxLayout();
+	//МенюБар
+	mainMenu = new QMenuBar();
+	
+	mRun = new QMenu(tr("Run"), mainMenu);                   //Менюшка в баре
+
+	aRunParams = new QAction(tr("Run with params"), mRun);   //Экшн запуск
+	aRun = new QAction(tr("Run"), mRun);                     //Экшн запуск с параметрами
+	
+	mainMenu->addMenu(mRun);                //Менюшку в бар
+	mRun->addAction(aRun);                  //Экшн в менюшку
+	mRun->addAction(aRunParams);
+   
+	
+	//Компоновка таймлайна
+    QBoxLayout *mainLay = new QVBoxLayout();
     
     mainLay->addWidget(TableViewer, 1, 0);
-
+	mainLay->setMenuBar(mainMenu);
     this->setLayout(mainLay);
     
 
