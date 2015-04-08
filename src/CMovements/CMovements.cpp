@@ -1,47 +1,33 @@
 #include "CMovements.h"
 
 
-CMovements::CMovements( GPDSolid &part )
-    : m_part(part)
+CMovements::CMovements(EMovementTypes movType,GPDVector axis,double shift,int start,int end)
+    : m_moveType(movType),m_axis(axis),m_shift(shift),m_start(start),m_end(end)
 {
-    
+    if (end>start)
+    {
+        m_start=0;
+        m_end=1;
+    }
 }
 
 CMovements::~CMovements()
 {
-
 }
 
-void CMovements::SetMovementType( EMovementTypes movType )
+void CMovements::SetMovementType(EMovementTypes movType)
 {
     m_moveType=movType;
 }
 
-void CMovements::SetShift( double shift )
+void CMovements::SetShift(double shift)
 {
     m_shift=shift;
 }
 
-void CMovements::SetAxis( GPDVector axis )
+void CMovements::SetAxis(GPDVector axis)
 {
     m_axis = axis;
-}
-
-void CMovements::SetPart( GPDSolid &part )
-{
-    m_part=part;
-}
-
-void CMovements::Move()
-{
-//     switch (m_moveType)
-//         case UMovementTypes::LINEAR:
-//                         break;
-// 
-//         case UMovementTypes::CIRCULAR:
-//                         break;
-//         default:
-//             break;
 }
 
 int CMovements::GetStart()
@@ -49,12 +35,12 @@ int CMovements::GetStart()
     return m_start;
 }
 
-void CMovements::SetStart( int start)
+void CMovements::SetStart(int start)
 {
     m_start=start;
 }
 
-void CMovements::SetEnd( int end)
+void CMovements::SetEnd(int end)
 {
     m_end=end;
 }
