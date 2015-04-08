@@ -83,6 +83,15 @@
     <ClCompile Include="..\..\src\CMovements\Mover.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Release\moc_progressbardlg.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_progressbardlg.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ProgressBar\progressbardlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -95,6 +104,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <CustomBuild Include="mainwindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -112,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\CMovements\Mover.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_progressbardlg.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
