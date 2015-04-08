@@ -14,6 +14,7 @@ using namespace Gepard::Assembly;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
+    progressDlg(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);

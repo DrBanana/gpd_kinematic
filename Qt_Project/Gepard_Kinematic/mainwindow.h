@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include <Gepard/GeometryManager.h>
+#include <ProgressBar/progressbardlg.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,7 @@ private:
 
     Gepard::GeometryManager g_manager;
 
+    ProgressBarDlg      progressDlg;
 };
 
 #endif // MAINWINDOW_H
