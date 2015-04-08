@@ -21,6 +21,17 @@ MainWindow::MainWindow(QWidget *parent) :
     GRenderWin *gRender = new GRenderWin(true, true, this);
     setCentralWidget(gRender);
 
+	//Таймлайн
+	timeLineWidget = new TimeLine(20);
+	timeLineWidget->show();
+
+	//Доквиджет для таймлайна
+	tLineWidget = new QDockWidget(this);
+	this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
+	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+	tLineWidget->setWidget(timeLineWidget);
+	tLineWidget->show();
+	
 }
 
 MainWindow::~MainWindow()

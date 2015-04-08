@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDockWidget>
+
+#include<TimeLine/timeline.h>
 
 #include <Gepard/GeometryManager.h>
 
@@ -24,6 +27,11 @@ private:
     Ui::MainWindow *ui;
 
     Gepard::GeometryManager g_manager;
+
+	QDockWidget * tLineWidget;
+	TimeLine * timeLineWidget;
+
+
 
 };
 
