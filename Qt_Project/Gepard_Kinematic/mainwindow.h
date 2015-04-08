@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDockWidget>
+
+#include<TimeLine/timeline.h>
 
 #include <Gepard/GeometryManager.h>
 #include <ProgressBar/progressbardlg.h>
@@ -26,6 +29,8 @@ private:
 
     Gepard::GeometryManager g_manager;
 
+	QDockWidget * tLineWidget;
+	TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
 };
 
