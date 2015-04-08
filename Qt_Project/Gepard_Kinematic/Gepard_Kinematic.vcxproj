@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp" />
+    <ClCompile Include="..\..\src\CMovements\Mover.cpp" />
     <ClCompile Include="..\..\src\GRenderWin.cpp" />
     <ClCompile Include="..\..\src\QtGRenderWidget.cpp" />
     <ClCompile Include="Debug\moc_GRenderWin.cpp">
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\CMovements\CMovements.h" />
+    <ClInclude Include="..\..\src\CMovements\Mover.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
     <CustomBuild Include="..\..\src\GRenderWin.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath);%(AdditionalInputs)</AdditionalInputs>

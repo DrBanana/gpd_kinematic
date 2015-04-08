@@ -80,6 +80,9 @@
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\CMovements\Mover.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -105,6 +108,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\CMovements\CMovements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CMovements\Mover.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
