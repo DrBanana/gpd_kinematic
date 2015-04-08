@@ -34,5 +34,23 @@ public:
      *	добавить перемещение
      */
     int AddMovement(EMovementTypes,GPDVector,double,int=0,int=1);
+
+    int AddMovement(CMovements);
+
+    //************************************
+    // Method:    GetMovementAt
+    // FullName:  CMover::GetMovementAt
+    // Access:    public 
+    // Returns:   CMovements
+    // Qualifier:
+    // Parameter: int pos Номер движения в списке, которое хотим получить
+    //************************************
+    CMovements* GetMovementAt(int pos);
+
+    CMovements* GetFirstMovement();
+
+    int GetSizeOfmovementsVector();
+   
+    void Move();
 };
 

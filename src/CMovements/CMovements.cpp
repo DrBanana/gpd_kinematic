@@ -11,6 +11,15 @@ CMovements::CMovements(EMovementTypes movType,GPDVector axis,double shift,int st
     }
 }
 
+CMovements::CMovements( const CMovements& copy)
+{
+    m_moveType=copy.m_moveType;
+    m_axis=copy.m_axis;
+    m_end=copy.m_end;
+    m_shift=copy.m_shift;
+    m_start=copy.m_start;
+}
+
 CMovements::~CMovements()
 {
 }
@@ -37,11 +46,19 @@ int CMovements::GetStart()
 
 void CMovements::SetStart(int start)
 {
+    if (start>m_end)
+    {
+        return;
+    }
     m_start=start;
 }
 
 void CMovements::SetEnd(int end)
 {
+    if (end<m_start)
+    {
+        return;
+    }
     m_end=end;
 }
 

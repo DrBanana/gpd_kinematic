@@ -33,6 +33,11 @@ public:
      *  если start<end, то ставит значения по умолчанию
      */
     CMovements(EMovementTypes=EMovementTypes::LINEAR,GPDVector=GPDVector(0,0,0),double=0.0,int=0,int=1);
+    
+    /*
+     *	конструктор копирования
+     */
+    CMovements(const CMovements&);
     /*
      *	деструктор
      */
@@ -51,6 +56,7 @@ public:
     void SetAxis(GPDVector);
     /*
      *	задать начало движения на таймлайне
+     *  если значение больше m_end, ничего не происходит
      */
     void SetStart(int);
     /*
@@ -59,6 +65,7 @@ public:
     int GetStart();
     /*
      *	задать конец движения на таймлайне
+     *  если значение меньше m_start, ничего не происходит
      */
     void SetEnd(int);
     /*
