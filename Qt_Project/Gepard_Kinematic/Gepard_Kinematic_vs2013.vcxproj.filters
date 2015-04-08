@@ -45,6 +45,12 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\TimeLine">
+      <UniqueIdentifier>{f3e614ac-714f-42ac-ae26-d2fe13e11562}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TimeLine">
+      <UniqueIdentifier>{f3ff9626-6db2-421f-82ea-07bcf656193b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\GRenderWin.cpp">
@@ -78,7 +84,16 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TimeLine\timeline.cpp">
+      <Filter>Source Files\TimeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_timeline.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_timeline.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,14 +106,17 @@
     <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\src\CMovements\CMovements.h">
-      <Filter>Generated Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_mainwindow.h">
       <Filter>Generated Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\includes\gepard.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\CMovements\CMovements.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\TimeLine\timeline.h">
+      <Filter>Header Files\TimeLine</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
