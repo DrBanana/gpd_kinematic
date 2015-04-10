@@ -34,6 +34,7 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
 	//Скроем хэдер
 	TableViewer->horizontalHeader()->hide();
 
+
     TableViewer->show(); 
 
 
@@ -72,7 +73,7 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     
 
     //Второе окно, с кнопочками
-    QWidget *win = new QWidget();
+    win = new QWidget();
     win->resize(40, 80);
     
     QPushButton * addButton = new QPushButton(tr("+"));  //Добавить
@@ -119,6 +120,7 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     connect(delButton, SIGNAL(clicked()), this, SLOT(delRow()));
     connect(dropButton, SIGNAL(clicked()), this, SLOT(dropTime()));
     connect(addButton2, SIGNAL(clicked()), this, SLOT(addDrive()));
+	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
 
 }
 
@@ -203,17 +205,23 @@ void TimeLine::addRow()
 
     TableViewer->setRowCount(TableViewer->rowCount()+1); //Прибавляем строку (текущее 0 + 1, 2+1...)
 
-    int thisRow = rowCount;
+    int thisRow = rowCount;  //Текущая строка
 
     //Создаем новые виджеты для структуры
     QGraphicsScene * scene = new QGraphicsScene(0, 0, w, fRowHeight*2);
     QGraphicsView * view = new QGraphicsView();
 
+	//Назначаем объекты структуре
     newRow.rowGScene = scene;
     newRow.rowGView = view;
     newRow.rowGView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    rowVect.push_back(newRow);
+	//Грузим CMover в структуру строки
+	//CMover * pMover = new CMover();
+
+
+
+    rowVect.push_back(newRow);  //Пишем структуру в массив
 
     TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, rowVect[thisRow].rowGView); //Помещаем вьювер графики в новую строку
 
@@ -238,17 +246,15 @@ void TimeLine::delRow()
     TableViewer->setRowCount(TableViewer->rowCount() - 1);
 
     rowCount--;
-
-
-}
-
-void TimeLine::addMovment()
-{
-    
-
 }
 
 TimeLine::~TimeLine()
 {
+	win->close();
+}
 
+void TimeLine::actionRunWithPrms()
+{
+	prmWin = new tRunPrmWin(segmentsAmount);
+	prmWin->show();
 }

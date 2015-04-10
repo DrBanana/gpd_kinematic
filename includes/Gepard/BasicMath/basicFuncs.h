@@ -34,7 +34,7 @@ namespace Gepard
         /*
         *  exp
         */
-        const double exp = 2.7182818284590452353602874713527;
+        //const double exp = 2.7182818284590452353602874713527;
 
         /*
         * exp*2

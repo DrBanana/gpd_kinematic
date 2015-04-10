@@ -4,6 +4,8 @@
 #include <QtWidgets/QWidget>
 //#include "ui_timeline.h"
 
+
+
 #include<Qlabel>
 #include<qgraphicsview>
 #include<qgraphicsitem.h>
@@ -22,12 +24,18 @@
 #include<qheaderview.h>
 #include <QMenuBar>
 
+#include"tRunPrmWin.h"
+#include"CMovements/CMovements.h"
+#include"CMovements/Mover.h"
 
 struct _row
 { 
-	QGraphicsScene *rowGScene;/* = new QGraphicsScene();*/
-	QGraphicsView *rowGView; /*= new QGraphicsView();*/
+	QGraphicsScene *rowGScene;
+	QGraphicsView *rowGView;
+
 	std::vector <QGraphicsRectItem *> tmovments;
+
+	CMover * partMover;
 };
 
 
@@ -46,21 +54,20 @@ public slots:
 	void delTime();
 	void dropTime();
 
-	//Добавление строк
+	//Добавление строк, со строкой добвляется CMover
 	void addRow();
 	void delRow();
 
 	//Добавление разделительных меток на новую сцену
 	void addTimeMarks(QGraphicsScene *);
 
-	//Добавление объектов
-	void addMovment();
+	//Запуск
+	void actionRunWithPrms();
 
 signals:
 
-	bool addClick();
-	bool delClick();
-	bool dropClick();
+
+
 
 protected:
 
@@ -72,14 +79,16 @@ private:
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
 	QMenuBar * mainMenu;
+	tRunPrmWin * prmWin;
 
+	QWidget *win;
 	//Экшны меню
 	QMenu * mRun;             //Меню запуска
 	QAction * aRun;           //Запуск
 	QAction * aRunParams;     //Запуск с параметрами
 
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
-	int segmentsAmount; //Текущее количество сегментов
+	int segmentsAmount; //Текущее количество сегментов (после запуска равно общему числу сегментов)
 
 	int fRowHeight; //Высота верхней строки со шкалой
 
@@ -91,7 +100,6 @@ private:
 	int h; //высота сцены
 
 	std::vector <_row> rowVect;  //Вектор строк
-
 	
 };
 

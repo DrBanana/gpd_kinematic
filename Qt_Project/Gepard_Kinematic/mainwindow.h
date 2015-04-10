@@ -5,11 +5,10 @@
 #include <QDockWidget>
 #include <QBoxLayout>
 
+#include <ProgressBar/progressbardlg.h>
+#include <Gepard/GeometryManager.h>
 
 #include<TimeLine/timeline.h>
-
-#include <Gepard/GeometryManager.h>
-#include <ProgressBar/progressbardlg.h>
 
 namespace Ui {
 class MainWindow;

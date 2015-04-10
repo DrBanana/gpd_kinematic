@@ -60,4 +60,5 @@ void MainWindow::on_actionOpenStep_triggered()
      }
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
+
 }

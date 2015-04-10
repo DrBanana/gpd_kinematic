@@ -110,7 +110,10 @@
     <ClCompile Include="Debug\moc_tRunPrmWin.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="tRunPrmWin.cpp">
+    <ClCompile Include="Release\moc_tRunPrmWin.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TimeLine\tRunPrmWin.cpp">
       <Filter>Source Files\TimeLine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -142,7 +145,7 @@
     <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="tRunPrmWin.h">
+    <CustomBuild Include="..\..\src\TimeLine\tRunPrmWin.h">
       <Filter>Header Files\TimeLine</Filter>
     </CustomBuild>
   </ItemGroup>
