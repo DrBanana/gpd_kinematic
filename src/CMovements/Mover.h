@@ -1,5 +1,5 @@
 #pragma once
-#include "CMovements.h"
+#include <CMovements\CMovements.h>
 #include "..\includes\gepard.h"
 #include <algorithm>
 #include <vector>  
@@ -15,25 +15,25 @@ private:
     /*
      *	ссылко на деталь
      */
-    GPDSolid &m_part;
+   Gepard::Topology_Geometry::GPDSolid &m_part;
     /*
      *	коллекция движения для тела
      */
-    vector<CMovements> m_movementsVector;
+   vector<CMovements> m_movementsVector;
 public:
     /*
      *	конструктор
      */
-    CMover(GPDSolid &);
+	CMover(Gepard::Topology_Geometry::GPDSolid &);
     virtual ~CMover(void);
     /*
      *	задать деталь
      */
-    void SetPart(GPDSolid&);
+	void SetPart(Gepard::Topology_Geometry::GPDSolid&);
     /*
      *	добавить перемещение
      */
-    int AddMovement(EMovementTypes,GPDVector,double,int=0,int=1);
+    int AddMovement(EMovementTypes,Gepard::BasicMath::GPDVector,double,int=0,int=1);
 
     int AddMovement(CMovements);
 

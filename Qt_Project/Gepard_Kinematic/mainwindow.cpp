@@ -6,7 +6,7 @@
 
 
 using namespace Gepard::Callbacks;
-using namespace Gepard::BasicMath;
+//using namespace Gepard::BasicMath;
 using namespace Gepard::Topology_Geometry;
 using namespace Gepard::Visualization;
 using namespace Gepard::Surfaces;

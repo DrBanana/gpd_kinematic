@@ -1,7 +1,7 @@
 #include "CMovements.h"
 
 
-CMovements::CMovements(EMovementTypes movType,GPDVector axis,double shift,int start,int end)
+CMovements::CMovements(EMovementTypes movType, Gepard::BasicMath::GPDVector axis, double shift, int start, int end)
     : m_moveType(movType),m_axis(axis),m_shift(shift),m_start(start),m_end(end)
 {
     if (end>start)
@@ -34,7 +34,7 @@ void CMovements::SetShift(double shift)
     m_shift=shift;
 }
 
-void CMovements::SetAxis(GPDVector axis)
+void CMovements::SetAxis(Gepard::BasicMath::GPDVector axis)
 {
     m_axis = axis;
 }

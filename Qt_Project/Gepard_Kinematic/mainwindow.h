@@ -6,11 +6,10 @@
 #include <QBoxLayout>
 
 #include <ProgressBar/progressbardlg.h>
-#include <Gepard/GeometryManager.h>
-
 #include<TimeLine/timeline.h>
 #include <AddMovement/AddMovementDlg.h>
 
+#include <Gepard/GeometryManager.h>
 namespace Ui {
 class MainWindow;
 }

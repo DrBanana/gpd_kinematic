@@ -22,7 +22,7 @@ private:
     //Смещение или угол на который надо повернуть деталь
     double m_shift; 
     //Ось вдоль которой будет происходить смещение или ось вокруг которой будет вращаться тело
-    GPDVector m_axis;
+	Gepard::BasicMath::GPDVector m_axis;
     //Начало движения на таймлайне
     int m_start;
     //конец движения на таймлайне
@@ -32,7 +32,7 @@ public:
      *	конструктор, инициализирующий все параметры по умолчанию
      *  если start<end, то ставит значения по умолчанию
      */
-    CMovements(EMovementTypes=EMovementTypes::LINEAR,GPDVector=GPDVector(0,0,0),double=0.0,int=0,int=1);
+	CMovements(EMovementTypes = EMovementTypes::LINEAR, Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0), double = 0.0, int = 0, int = 1);
     
     /*
      *	конструктор копирования
@@ -53,7 +53,7 @@ public:
     /*
      *	задать ось
      */
-    void SetAxis(GPDVector);
+	void SetAxis(Gepard::BasicMath::GPDVector);
     /*
      *	задать начало движения на таймлайне
      *  если значение больше m_end, ничего не происходит

@@ -25,8 +25,8 @@
 #include <QMenuBar>
 
 #include"tRunPrmWin.h"
-#include"CMovements/CMovements.h"
-#include"CMovements/Mover.h"
+//#include"CMovements/CMovements.h"
+//#include"CMovements/Mover.h"
 
 struct _row
 { 
@@ -35,7 +35,7 @@ struct _row
 
 	std::vector <QGraphicsRectItem *> tmovments;
 
-	CMover * partMover;
+	//CMover * partMover;
 };
 
 
