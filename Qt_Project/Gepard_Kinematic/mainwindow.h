@@ -5,6 +5,7 @@
 #include <QDockWidget>
 
 #include<TimeLine/timeline.h>
+#include <AddMovement/AddMovementDlg.h>
 
 #include <Gepard/GeometryManager.h>
 #include <ProgressBar/progressbardlg.h>
@@ -24,6 +25,8 @@ public:
 private slots:
     void on_actionOpenStep_triggered();
 
+    void on_test();
+
 private:
     Ui::MainWindow *ui;
 
@@ -32,6 +35,8 @@ private:
 	QDockWidget * tLineWidget;
 	TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
+
+    AddMovementDlg addMovement;
 };
 
 #endif // MAINWINDOW_H
