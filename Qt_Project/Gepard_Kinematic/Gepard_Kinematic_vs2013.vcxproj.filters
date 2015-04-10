@@ -116,6 +116,15 @@
     <ClCompile Include="..\..\src\TimeLine\tRunPrmWin.cpp">
       <Filter>Source Files\TimeLine</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\moc_AddMovementDlg.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_AddMovementDlg.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AddMovement\AddMovementDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -147,6 +156,9 @@
     </CustomBuild>
     <CustomBuild Include="..\..\src\TimeLine\tRunPrmWin.h">
       <Filter>Header Files\TimeLine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\AddMovement\AddMovementDlg.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

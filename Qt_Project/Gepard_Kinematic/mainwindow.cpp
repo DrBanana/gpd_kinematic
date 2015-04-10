@@ -4,6 +4,7 @@
 #include <Gepard/Callbacks/CB_GeometryRender.h>
 #include <GRenderWin.h>
 
+
 using namespace Gepard::Callbacks;
 using namespace Gepard::BasicMath;
 using namespace Gepard::Topology_Geometry;
@@ -15,6 +16,7 @@ using namespace Gepard::Assembly;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     progressDlg(parent),
+    addMovement(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -36,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 	
+    connect(ui->actionTest, SIGNAL(triggered()), SLOT(on_test()));
+
 }
 
 MainWindow::~MainWindow()
@@ -61,4 +65,9 @@ void MainWindow::on_actionOpenStep_triggered()
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
 
+}
+
+void MainWindow::on_test()
+{
+    addMovement.show();
 }

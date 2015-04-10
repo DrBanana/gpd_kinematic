@@ -9,6 +9,7 @@
 #include <Gepard/GeometryManager.h>
 
 #include<TimeLine/timeline.h>
+#include <AddMovement/AddMovementDlg.h>
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +26,8 @@ public:
 private slots:
     void on_actionOpenStep_triggered();
 
+    void on_test();
+
 private:
     Ui::MainWindow *ui;
 
@@ -34,7 +37,7 @@ private:
 	TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
 
-
+    AddMovementDlg addMovement;
 };
 
 #endif // MAINWINDOW_H
