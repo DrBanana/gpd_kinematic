@@ -4,6 +4,8 @@
 #include <QtWidgets/QWidget>
 //#include "ui_timeline.h"
 
+
+
 #include<Qlabel>
 #include<qgraphicsview>
 #include<qgraphicsitem.h>
@@ -20,13 +22,21 @@
 #include<vector>
 #include <qlineedit.h>
 #include<qheaderview.h>
+#include <QMenuBar>
 
+#include"tRunPrmWin.h"
+#include <AddMovement/AddMovementDlg.h>
+//#include"CMovements/CMovements.h"
+//#include"CMovements/Mover.h"
 
 struct _row
 { 
-	QGraphicsScene *rowGScene;/* = new QGraphicsScene();*/
-	QGraphicsView *rowGView; /*= new QGraphicsView();*/
+	QGraphicsScene *rowGScene;
+	QGraphicsView *rowGView;
+
 	std::vector <QGraphicsRectItem *> tmovments;
+
+	//CMover * partMover;
 };
 
 
@@ -45,21 +55,23 @@ public slots:
 	void delTime();
 	void dropTime();
 
-	//Добавление строк
+	//Добавление строк, со строкой добвляется CMover
 	void addRow();
 	void delRow();
 
 	//Добавление разделительных меток на новую сцену
 	void addTimeMarks(QGraphicsScene *);
 
-	//Добавление объектов
-	void addMovment();
+	//Запуск
+	void actionRunWithPrms();
+
+	//окно добавления движения
+	void actionAdd();
 
 signals:
 
-	bool addClick();
-	bool delClick();
-	bool dropClick();
+
+
 
 protected:
 
@@ -70,9 +82,21 @@ private:
 	QTableWidget * TableViewer;
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
+	QMenuBar * mainMenu;
+	tRunPrmWin * prmWin;
+
+	QWidget *win;
+	//Экшны меню
+	QMenu * mRun;             //Меню запуска
+	QMenu * mAdd;             //Меню добавления
+	QAction * aRun;           //Запуск
+	QAction * aRunParams;     //Запуск с параметрами
+	QAction * aMover;         //Добавить двигатель + установить движения 
+
+	AddMovementDlg * addMovement;
 
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
-	int segmentsAmount; //Текущее количество сегментов
+	int segmentsAmount; //Текущее количество сегментов (после запуска равно общему числу сегментов)
 
 	int fRowHeight; //Высота верхней строки со шкалой
 
@@ -84,7 +108,6 @@ private:
 	int h; //высота сцены
 
 	std::vector <_row> rowVect;  //Вектор строк
-
 	
 };
 

@@ -16,7 +16,7 @@ using namespace Gepard::Assembly;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     progressDlg(parent),
-    addMovement(parent),
+ 
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -34,8 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
 	tLineWidget->setWidget(timeLineWidget);
 	tLineWidget->show();
-	
-    connect(ui->actionTest, SIGNAL(triggered()), SLOT(on_test()));
+
 
 }
 
@@ -61,9 +60,5 @@ void MainWindow::on_actionOpenStep_triggered()
      }
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
-}
 
-void MainWindow::on_test()
-{
-    addMovement.show();
 }
