@@ -25,8 +25,6 @@ public:
 private slots:
     void on_actionOpenStep_triggered();
 
-    void on_test();
-
 private:
     Ui::MainWindow *ui;
 
@@ -36,7 +34,6 @@ private:
 	TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
 
-    AddMovementDlg addMovement;
 };
 
 #endif // MAINWINDOW_H

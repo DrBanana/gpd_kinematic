@@ -25,6 +25,7 @@
 #include <QMenuBar>
 
 #include"tRunPrmWin.h"
+#include <AddMovement/AddMovementDlg.h>
 //#include"CMovements/CMovements.h"
 //#include"CMovements/Mover.h"
 
@@ -64,6 +65,9 @@ public slots:
 	//Запуск
 	void actionRunWithPrms();
 
+	//окно добавления движения
+	void actionAdd();
+
 signals:
 
 
@@ -84,8 +88,12 @@ private:
 	QWidget *win;
 	//Экшны меню
 	QMenu * mRun;             //Меню запуска
+	QMenu * mAdd;             //Меню добавления
 	QAction * aRun;           //Запуск
 	QAction * aRunParams;     //Запуск с параметрами
+	QAction * aMover;         //Добавить двигатель + установить движения 
+
+	AddMovementDlg * addMovement;
 
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
 	int segmentsAmount; //Текущее количество сегментов (после запуска равно общему числу сегментов)

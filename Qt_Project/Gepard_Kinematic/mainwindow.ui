@@ -32,17 +32,11 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenStep"/>
-   <addaction name="actionTest"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenStep">
    <property name="text">
     <string>OpenStep</string>
-   </property>
-  </action>
-  <action name="actionTest">
-   <property name="text">
-    <string>test</string>
    </property>
   </action>
  </widget>

@@ -55,13 +55,18 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
 	mainMenu = new QMenuBar();
 	
 	mRun = new QMenu(tr("Run"), mainMenu);                   //ћенюшка в баре
+	mAdd = new QMenu(tr("Add"), mainMenu);
 
 	aRunParams = new QAction(tr("Run with params"), mRun);   //Ёкшн запуск
 	aRun = new QAction(tr("Run"), mRun);                     //Ёкшн запуск с параметрами
+	aMover = new QAction(tr("Add part mover"), mAdd);
 	
 	mainMenu->addMenu(mRun);                //ћенюшку в бар
 	mRun->addAction(aRun);                  //Ёкшн в менюшку
 	mRun->addAction(aRunParams);
+
+	mainMenu->addMenu(mAdd);
+	mAdd->addAction(aMover);
    
 	
 	// омпоновка таймлайна
@@ -121,6 +126,7 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     connect(dropButton, SIGNAL(clicked()), this, SLOT(dropTime()));
     connect(addButton2, SIGNAL(clicked()), this, SLOT(addDrive()));
 	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
+	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
 
 }
 
@@ -250,11 +256,18 @@ void TimeLine::delRow()
 
 TimeLine::~TimeLine()
 {
-	win->close();
+	//win->close();
+	delete(win);
 }
 
 void TimeLine::actionRunWithPrms()
 {
 	prmWin = new tRunPrmWin(segmentsAmount);
 	prmWin->show();
+}
+
+void TimeLine::actionAdd()
+{
+	addMovement = new AddMovementDlg(segmentsAmount);
+	addMovement->show();
 }

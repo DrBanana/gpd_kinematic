@@ -1,8 +1,8 @@
 #include "CMovements.h"
 
 
-CMovements::CMovements(EMovementTypes movType, Gepard::BasicMath::GPDVector axis, double shift, int start, int end)
-    : m_moveType(movType),m_axis(axis),m_shift(shift),m_start(start),m_end(end)
+CMovements::CMovements(EMovementTypes movType, QString name ,/*Gepard::BasicMath::*/GPDVector axis, double shift, int start, int end)
+    : m_moveType(movType), m_name(name),m_axis(axis),m_shift(shift),m_start(start),m_end(end)
 {
     if (end>start)
     {
@@ -14,6 +14,7 @@ CMovements::CMovements(EMovementTypes movType, Gepard::BasicMath::GPDVector axis
 CMovements::CMovements( const CMovements& copy)
 {
     m_moveType=copy.m_moveType;
+	m_name = copy.m_name;
     m_axis=copy.m_axis;
     m_end=copy.m_end;
     m_shift=copy.m_shift;
@@ -28,6 +29,18 @@ void CMovements::SetMovementType(EMovementTypes movType)
 {
     m_moveType=movType;
 }
+
+void CMovements::SetMoveName(QString newName)
+{
+	m_name.clear();
+	m_name = newName;
+}
+
+QString CMovements::GetMoveName()
+{
+	return m_name;
+}
+
 
 void CMovements::SetShift(double shift)
 {
@@ -77,5 +90,6 @@ int CMovements::GetStepsCnt()
 {
     return m_end-m_start;
 }
+
 
 

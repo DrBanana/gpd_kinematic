@@ -89,12 +89,6 @@
     <ClCompile Include="..\..\src\TimeLine\timeline.cpp">
       <Filter>Source Files\TimeLine</Filter>
     </ClCompile>
-    <ClCompile Include="Debug\moc_timeline.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_timeline.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="Debug\moc_progressbardlg.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
@@ -124,6 +118,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\AddMovement\AddMovementDlg.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_timeline.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_timeline.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
