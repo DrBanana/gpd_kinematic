@@ -3,12 +3,13 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QBoxLayout>
 
+#include <ProgressBar/progressbardlg.h>
 #include<TimeLine/timeline.h>
+#include <AddMovement/AddMovementDlg.h>
 
 #include <Gepard/GeometryManager.h>
-#include <ProgressBar/progressbardlg.h>
-
 namespace Ui {
 class MainWindow;
 }
@@ -33,6 +34,7 @@ private:
     QDockWidget * tLineWidget;
     TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
+
 };
 
 #endif // MAINWINDOW_H

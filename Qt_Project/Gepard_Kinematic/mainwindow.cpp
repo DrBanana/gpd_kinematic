@@ -5,6 +5,7 @@
 #include <GRenderWin.h>
 #include "CMovements/Mover.h"
 
+
 using namespace Gepard::Callbacks;
 using namespace Gepard::BasicMath;
 using namespace Gepard::Topology_Geometry;
@@ -16,6 +17,7 @@ using namespace Gepard::Assembly;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     progressDlg(parent),
+ 
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -57,6 +59,7 @@ void MainWindow::on_actionOpenStep_triggered()
          g_manager.GetMathModelPtr()->CloseModel();
      }
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
+
 
 }
 

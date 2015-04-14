@@ -3,5 +3,5 @@
 //=======================================================================
 
 #include "Gepard/gepardDefines.h"
-#include "Gepard/GPDNamespaces_inc.h"
+//#include "Gepard/GPDNamespaces_inc.h"
 #include "Gepard/GeometryManager.h"
