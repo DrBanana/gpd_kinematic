@@ -1,7 +1,6 @@
 #include "Mover.h"
-
-using namespace Gepard::Topology_Geometry;
 using namespace Gepard::BasicMath;
+using namespace Gepard::Topology_Geometry;
 
 CMover::CMover(GPDSolid *part)
     : m_part(part)
@@ -23,9 +22,9 @@ m_movementsVector.push_back(movement);
 return m_movementsVector.size();
 }
 
-int CMover::AddMovement(EMovementTypes movType, QString name, GPDVector axis, double shift, int start, int end)
+int CMover::AddMovement(EMovementTypes movType, GPDPoint point, QString name, GPDVector axis, double shift, int start, int end)
 {
-    m_movementsVector.push_back(CMovements(movType,name,axis,shift,start,end));
+    m_movementsVector.push_back(CMovements(movType,point,name,axis,shift,start,end));
     return m_movementsVector.size();
 }
 
@@ -39,16 +38,12 @@ void CMover::MoveIt(int pos)
        mReper.R.setCoords(move.GetPoint().nx,move.GetPoint().ny,move.GetPoint().nz);
        mReper.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
        rep.Transform(GPDReper::getGlobalReper(), mReper);
-       
     }
     else
         if (move.GetMovementType()==EMovementTypes::LINEAR)
         {
             GPDVector vec = move.GetAxis()*move.GetShift();
             rep.R += vec;
-            //rep.moveOnVector(vec);
-            //mReper.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
-            //rep.Transform(GPDReper::getGlobalReper(), mReper);
         }
     m_part->UpdateSolidPosition(rep);
 }
