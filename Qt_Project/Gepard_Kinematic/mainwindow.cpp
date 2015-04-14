@@ -75,10 +75,22 @@ void MainWindow::on_actionMoveIt_triggered()
     GPDPoint point = GPDPoint(0,0,0);
     CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
     CMovements ml = CMovements(EMovementTypes::LINEAR,point,"",vect,20.0,0,1);
+    CMovements mr = CMovements();
+    mr.SetAxis(GPDVector(0,-1,0));
+    mr.SetMovementType(CIRCULAR);
+    mr.SetPoint(point);
+    mr.SetShift(2.0);
+    mr.SetStart(0);
+    mr.SetEnd(0);
+
     m.AddMovement(ml);
-    m.AddMovement(mc);
-    m.MoveIt(0);
-    m.MoveIt(1);
+    m.AddMovement(mr);
+    int cnt = m.AddMovement(mc);
+        for (int i =0;i<cnt;i++)
+        {
+            m.MoveIt(i);
+        }
+//    m.MoveIt(0);
     g_manager.HideSolid(mathModel->Solids[0]);
     g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
 }

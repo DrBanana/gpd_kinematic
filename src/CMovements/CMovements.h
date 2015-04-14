@@ -40,7 +40,8 @@ public:
       *  конструктор, инициализирующий все параметры по умолчанию
       *  если start<end, то ставит значения по умолчанию
       */
-    CMovements(EMovementTypes = EMovementTypes::LINEAR, 
+    CMovements(EMovementTypes = EMovementTypes::LINEAR,
+                GPDPoint = GPDPoint(0,0,0),
                 QString = " ",
                 GPDVector = GPDVector(0, 0, 0),
                 double = 0.0,
@@ -50,13 +51,13 @@ public:
      *  конструктор, инициализирующий все параметры по умолчанию
      *  если start<end, то ставит значения по умолчанию
      */
-    CMovements(EMovementTypes = EMovementTypes::CIRCULAR,
-        GPDPoint = GPDPoint(0,0,0), 
-        QString = " ",
-        GPDVector = GPDVector(0, 0, 0),
-        double = 0.0,
-        int = 0,
-        int = 1);
+//     CMovements(EMovementTypes = EMovementTypes::CIRCULAR,
+//         GPDPoint = GPDPoint(0,0,0), 
+//         QString = " ",
+//         GPDVector = GPDVector(0, 0, 0),
+//         double = 0.0,
+//         int = 0,
+//         int = 1);
 
     /*
      *	конструктор копирования
