@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>803</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -32,11 +32,21 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenStep"/>
+   <addaction name="separator"/>
+   <addaction name="actionMoveIt"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenStep">
    <property name="text">
     <string>OpenStep</string>
+   </property>
+  </action>
+  <action name="actionMoveIt">
+   <property name="text">
+    <string>MoveIt</string>
+   </property>
+   <property name="toolTip">
+    <string>MoveIt</string>
    </property>
   </action>
  </widget>
