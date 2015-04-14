@@ -4,7 +4,9 @@
 
 #include "..\includes\gepard.h"
 #include <QString>
-using namespace Gepard::BasicMath;
+
+
+//using namespace Gepard::BasicMath;
 
 
  //	ѕеречисление типов движени€
@@ -27,9 +29,9 @@ private:
     //—мещение или угол на который надо повернуть деталь
     double m_shift; 
     //ќсь вдоль которой будет происходить смещение или ось вокруг которой будет вращатьс€ тело
-    GPDVector m_axis;
+	Gepard::BasicMath::GPDVector m_axis;
     //“очка вокруг которой надо вращать тело
-    GPDPoint m_point;
+	Gepard::BasicMath::GPDPoint m_point;
     //Ќачало движени€ на таймлайне
     int m_start;
     //конец движени€ на таймлайне
@@ -42,7 +44,7 @@ public:
       */
     CMovements(EMovementTypes = EMovementTypes::LINEAR, 
                 QString = " ",
-                GPDVector = GPDVector(0, 0, 0),
+				Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
                 double = 0.0,
                 int = 0,
                 int = 1);
@@ -51,9 +53,9 @@ public:
      *  если start<end, то ставит значени€ по умолчанию
      */
     CMovements(EMovementTypes = EMovementTypes::CIRCULAR,
-        GPDPoint = GPDPoint(0,0,0), 
+		Gepard::BasicMath::GPDPoint = Gepard::BasicMath::GPDPoint(0, 0, 0),
         QString = " ",
-        GPDVector = GPDVector(0, 0, 0),
+		Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
         double = 0.0,
         int = 0,
         int = 1);
@@ -88,11 +90,11 @@ public:
     /*
      *	задать ось
      */
-    void SetAxis(GPDVector);
+	void SetAxis(Gepard::BasicMath::GPDVector);
     /*
      *	ѕолучить ось
      */
-    GPDVector GetAxis();
+	Gepard::BasicMath::GPDVector GetAxis();
 
     /*
      *	задать начало движени€ на таймлайне
@@ -125,11 +127,11 @@ public:
     /*
      *	«адать точку
      */
-    GPDPoint GetPoint();
+	Gepard::BasicMath::GPDPoint GetPoint();
     /*
      *	ѕолучить точку
      */
-    void SetPoint(GPDPoint);
+	void SetPoint(Gepard::BasicMath::GPDPoint);
 };
 
 #endif //CMOVEMENTS_H

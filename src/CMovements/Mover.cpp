@@ -1,5 +1,7 @@
 #include "Mover.h"
 
+using namespace Gepard::Topology_Geometry;
+using namespace Gepard::BasicMath;
 
 CMover::CMover(GPDSolid *part)
     : m_part(part)

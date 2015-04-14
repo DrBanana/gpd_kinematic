@@ -7,6 +7,7 @@
 using namespace Gepard::Visualization;
 using namespace Gepard::Callbacks;
 using namespace Gepard::Topology_Geometry;
+using namespace Gepard::BasicMath;
 
 
 
@@ -115,14 +116,16 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	startStepInput->setText(tr("0"));
 	endStepInput->setText(tr("1"));
 
-	connect(partAddButton, SIGNAL(clicked()), this, SLOT(flagPart()));
-	connect(axisAddButton, SIGNAL(clicked()), this, SLOT(flagFace()));
-	connect(linearRadio, SIGNAL(clicked()), this, SLOT(setLinear()));
-	connect(radialRadio, SIGNAL(clicked()), this, SLOT(setRadial()));
-	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(showAll()));
-	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(partNameOutputGreen()));
-	connect(axisOutput, SIGNAL(textChanged(const QString&)), this, SLOT(axisOutputGreen()));
-	//connect(axisAddButton, SIGNAL(clicked()), this, SLOT(showAxis()));
+	connect(partAddButton, SIGNAL(clicked()), this, SLOT(flagPart()));            //Выбираем деталь
+	connect(axisAddButton, SIGNAL(clicked()), this, SLOT(flagFace()));            //Выбираем поверхность
+	connect(linearRadio, SIGNAL(clicked()), this, SLOT(setLinear()));             //Установить параметры линейного движения
+	connect(radialRadio, SIGNAL(clicked()), this, SLOT(setRadial()));             //Радиального
+	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(showAll()));               //Показать форму при установлении детали
+	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(partNameOutputGreen()));   //Изменить палитру
+	connect(axisOutput, SIGNAL(textChanged(const QString&)), this, SLOT(axisOutputGreen()));           //Изменить палитру
+
+	connect(moveAddButton, SIGNAL(clicked()), this, SLOT(addMovement()));
+
 
 	//changePalette(partNameOutput, greenPalette);
 
@@ -217,11 +220,13 @@ QString AddMovementDlg::GetFaceName(Gepard::Topology_Geometry::GPDFace * _facePr
 void AddMovementDlg::setLinear()
 {
 	shiftLabel->setText(tr("Shift"));
+	moveFlag = true;
 }
 
 void AddMovementDlg::setRadial()
 {
 	shiftLabel->setText(tr("Angle°"));
+	moveFlag = false;
 }
 
 void AddMovementDlg::hideAll()
@@ -322,5 +327,16 @@ void AddMovementDlg::flagFace()
 void AddMovementDlg::flagNothing()
 {
 	currentMode = NOTHING;
+}
+
+void AddMovementDlg::addMovement()
+{
+	CMovements newMovement = CMovements();
+
+	if (moveFlag == true) 
+	{
+		
+	}
+
 }
 

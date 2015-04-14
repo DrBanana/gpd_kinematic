@@ -7,7 +7,7 @@
 #include "..\includes\gepard.h"
 #include <algorithm>
 #include <vector>  
-using namespace Gepard::Topology_Geometry;
+//using namespace Gepard::Topology_Geometry;
 using namespace std;
 
 
@@ -17,24 +17,24 @@ class CMover
 {
 private:
     
-    GPDSolid *m_part;
+	Gepard::Topology_Geometry::GPDSolid *m_part;
     vector<CMovements> m_movementsVector;
 public:
     
 
-    CMover(GPDSolid *);
+	CMover(Gepard::Topology_Geometry::GPDSolid *);
     virtual ~CMover(void);
     
     /*
      *	задать деталь
      */
-    void SetPart(GPDSolid*);
+	void SetPart(Gepard::Topology_Geometry::GPDSolid*);
     
     /*
      *	добавить перемещение
      */
     int AddMovement(CMovements);
-    int AddMovement(EMovementTypes, QString,GPDVector,double,int=0,int=1);
+	int AddMovement(EMovementTypes, QString, Gepard::BasicMath::GPDVector, double, int = 0, int = 1);
 
     ////////////////////////////////
     // Method:    GetMovementAt
