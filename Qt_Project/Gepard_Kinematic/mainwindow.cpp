@@ -52,7 +52,7 @@ void MainWindow::on_actionOpenStep_triggered()
      auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
 
      int import_ret = g_manager.importSTEP(filename.toStdString(), cam0Render);
-
+	 
      if (import_ret!=0)
      {
          qDebug()<<"Файл не был загружен!";
