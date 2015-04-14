@@ -1,25 +1,5 @@
 #include "CMovements.h"
-
-
-CMovements::CMovements(EMovementTypes movType, 
-                        QString name ,
-                        GPDVector axis, 
-                        double shift, 
-                        int start, 
-                        int end)
-    : m_moveType(movType), 
-    m_name(name),
-    m_axis(axis),
-    m_shift(shift),
-    m_start(start),
-    m_end(end)
-{
-    if (end>start)
-    {
-        m_start=0;
-        m_end=1;
-    }
-}
+using namespace Gepard::BasicMath;
 
 CMovements::CMovements(EMovementTypes movType,
                         GPDPoint point,

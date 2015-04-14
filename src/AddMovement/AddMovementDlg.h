@@ -7,7 +7,7 @@
 #include <Gepard/Visualization/SpecialObjects/GAxis.h>
 #include <Gepard/Visualization/GColor.h>
 
-
+#include <CMovements/Mover.h>
 
 #include <QtWidgets/QDialog>
 #include <QtGui>
@@ -23,7 +23,7 @@
 
 
 using namespace Gepard::Visualization;
-using namespace Gepard::BasicMath;
+//using namespace Gepard::BasicMath;
 
 
  //	Класс диалога задания параметров движения детали
@@ -57,6 +57,8 @@ public slots:
 	void flagPart();
 	void flagFace();
 	void flagNothing();
+
+	void addMovement();
 	//Виртуальная функция обратного вызова - реакции на действия пользователя
 	void renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message) override;
 	void showAxis();
@@ -105,8 +107,8 @@ private:
 
 	int stepCount; //Общее число шагов
 	int shift;
-	GPDVector shiftEnd;
-	GPDVector shiftStart;
+	Gepard::BasicMath::GPDVector shiftEnd;
+	Gepard::BasicMath::GPDVector shiftStart;
 
 	GAxis * newAxis;
 
@@ -114,6 +116,10 @@ private:
 
 	modeFlag currentMode;
 
+	bool moveFlag;
+
 	Gepard::BasicMath::GPDReper fReper;
+
+	CMover * newMove;
 
 };
