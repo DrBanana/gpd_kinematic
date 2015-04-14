@@ -24,14 +24,15 @@ public:
 
 private slots:
     void on_actionOpenStep_triggered();
+    void on_actionMoveIt_triggered();
 
 private:
     Ui::MainWindow *ui;
 
     Gepard::GeometryManager g_manager;
 
-	QDockWidget * tLineWidget;
-	TimeLine * timeLineWidget;
+    QDockWidget * tLineWidget;
+    TimeLine * timeLineWidget;
     ProgressBarDlg      progressDlg;
 
 };

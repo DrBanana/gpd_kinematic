@@ -3,6 +3,7 @@
 
 #include <Gepard/Callbacks/CB_GeometryRender.h>
 #include <GRenderWin.h>
+#include "CMovements/Mover.h"
 
 
 using namespace Gepard::Callbacks;
@@ -24,16 +25,6 @@ MainWindow::MainWindow(QWidget *parent) :
     GRenderWin *gRender = new GRenderWin(true, true, this);
     setCentralWidget(gRender);
 
-	//Таймлайн
-	timeLineWidget = new TimeLine(20);
-	timeLineWidget->show();
-
-	//Доквиджет для таймлайна
-	tLineWidget = new QDockWidget(this);
-	this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
-	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-	tLineWidget->setWidget(timeLineWidget);
-	tLineWidget->show();
 
 
 }
@@ -61,4 +52,24 @@ void MainWindow::on_actionOpenStep_triggered()
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
 
+}
+
+void MainWindow::on_actionMoveIt_triggered()
+{
+    Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
+
+    CMover m = CMover(mathModel->Solids[0]);
+    GPDVector vect;
+    vect.x =1;
+    vect.y =0;
+    vect.z =0;
+    GPDPoint point = GPDPoint(0,0,0);
+    CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
+    CMovements ml = CMovements(EMovementTypes::LINEAR,point,"",vect,20.0,0,1);
+    m.AddMovement(ml);
+    m.AddMovement(mc);
+    m.MoveIt(0);
+    m.MoveIt(1);
+    g_manager.HideSolid(mathModel->Solids[0]);
+    g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
 }
