@@ -46,14 +46,17 @@ public:
      *	Задать тип движения
      */
     void SetMovementType(EMovementTypes);
+    EMovementTypes GetMovementType();
     /*
      *	задать смещение или угол в зависимости от типа движения
      */
     void SetShift(double);
+    double GetShift();
     /*
      *	задать ось
      */
     void SetAxis(GPDVector);
+    GPDVector GetAxis();
     /*
      *	задать начало движения на таймлайне
      *  если значение больше m_end, ничего не происходит

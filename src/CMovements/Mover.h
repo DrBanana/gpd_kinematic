@@ -51,6 +51,6 @@ public:
 
     int GetSizeOfmovementsVector();
    
-    void Move();
+    void MoveIt(int);
 };
 

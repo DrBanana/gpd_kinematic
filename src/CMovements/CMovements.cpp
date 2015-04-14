@@ -78,4 +78,19 @@ int CMovements::GetStepsCnt()
     return m_end-m_start;
 }
 
+EMovementTypes CMovements::GetMovementType()
+{
+    return m_moveType;
+}
+
+Gepard::BasicMath::GPDVector CMovements::GetAxis()
+{
+    return m_axis;
+}
+
+double CMovements::GetShift()
+{
+    return m_shift;
+}
+
 

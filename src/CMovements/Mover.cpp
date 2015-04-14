@@ -27,9 +27,16 @@ int CMover::AddMovement( CMovements movement)
     return m_movementsVector.size();
 }
 
-void CMover::Move()
+void CMover::MoveIt(int pos)
 {
-
+    CMovements move = m_movementsVector.at(pos);
+    GPDReper rep = m_part.SolidReper;
+    if (move.GetMovementType()==EMovementTypes::CIRCULAR)
+    {
+        rep.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
+            m_part.UpdateSolidPosition(rep);
+    }
+    
 }
 
 //************************************
