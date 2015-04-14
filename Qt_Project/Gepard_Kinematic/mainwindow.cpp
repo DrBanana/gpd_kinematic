@@ -73,10 +73,12 @@ void MainWindow::on_actionMoveIt_triggered()
     vect.y =0;
     vect.z =0;
     GPDPoint point = GPDPoint(0,0,0);
-    //CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
+    CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
     CMovements ml = CMovements(EMovementTypes::LINEAR,point,"",vect,20.0,0,1);
     m.AddMovement(ml);
+    m.AddMovement(mc);
     m.MoveIt(0);
+    m.MoveIt(1);
     g_manager.HideSolid(mathModel->Solids[0]);
     g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
 }
