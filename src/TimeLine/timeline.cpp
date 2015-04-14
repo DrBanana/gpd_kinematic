@@ -124,7 +124,6 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     connect(addButton, SIGNAL(clicked()), this, SLOT(addRow()));
     connect(delButton, SIGNAL(clicked()), this, SLOT(delRow()));
     connect(dropButton, SIGNAL(clicked()), this, SLOT(dropTime()));
-    connect(addButton2, SIGNAL(clicked()), this, SLOT(addDrive()));
 	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
 

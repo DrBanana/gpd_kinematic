@@ -1,8 +1,13 @@
 
 #pragma once
 
+#include "..\includes\gepard.h"
 #include <Gepard/Callbacks/CB_GeometryRender.h>
 #include <Gepard/Topology_Geometry/GPDSolid.h>
+#include <Gepard/Visualization/SpecialObjects/GAxis.h>
+#include <Gepard/Visualization/GColor.h>
+
+
 
 #include <QtWidgets/QDialog>
 #include <QtGui>
@@ -18,6 +23,7 @@
 
 
 using namespace Gepard::Visualization;
+using namespace Gepard::BasicMath;
 
 
  //	Класс диалога задания параметров движения детали
@@ -35,6 +41,7 @@ public:
     
 
 	QString GetSolidName(Gepard::Topology_Geometry::GPDSolid *);
+	QString GetFaceName(Gepard::Topology_Geometry::GPDFace *);
 
 public slots:
 
@@ -46,8 +53,14 @@ public slots:
 	void partNameOutputGreen();
 	void axisOutputRed();
 	void axisOutputGreen();
+	//Переключение флага
+	void flagPart();
+	void flagFace();
+	void flagNothing();
 	//Виртуальная функция обратного вызова - реакции на действия пользователя
 	void renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message) override;
+	void showAxis();
+	void deleteAxis(GAxis *);
 
 signals:
 
@@ -91,5 +104,16 @@ private:
 	QStringList  moveListLabels;
 
 	int stepCount; //Общее число шагов
+	int shift;
+	GPDVector shiftEnd;
+	GPDVector shiftStart;
+
+	GAxis * newAxis;
+
+	enum modeFlag{ PART, FACE, NOTHING };
+
+	modeFlag currentMode;
+
+	Gepard::BasicMath::GPDReper fReper;
 
 };

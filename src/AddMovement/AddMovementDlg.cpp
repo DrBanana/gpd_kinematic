@@ -15,14 +15,16 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 {
 	stepCount = steps;
 
+	this->setWindowFlags(Qt::WindowStaysOnTopHint);
+
 	//Палитра
 	redPalette = new QPalette();
-	redPalette->setColor(QPalette::Base, Qt::red);
+	redPalette->setColor(QPalette::Base, QColor(255,0,0,120));
 	greenPalette = new QPalette();
-	greenPalette->setColor(QPalette::Base, Qt::green);
+	greenPalette->setColor(QPalette::Base, QColor(0, 255, 0, 120));
 
-	//Определяем виджеты
-
+	//Определяем виджеты 
+	
 	mainLabel = new QLabel(tr("Chiose part"));                //Выбор детали
 	partLabel = new QLabel(tr("Part: "));                //Деталь:
 	moveTypeLabel = new QLabel(tr("Move Type"));            //Тип движения:
@@ -113,15 +115,18 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	startStepInput->setText(tr("0"));
 	endStepInput->setText(tr("1"));
 
-
+	connect(partAddButton, SIGNAL(clicked()), this, SLOT(flagPart()));
+	connect(axisAddButton, SIGNAL(clicked()), this, SLOT(flagFace()));
 	connect(linearRadio, SIGNAL(clicked()), this, SLOT(setLinear()));
 	connect(radialRadio, SIGNAL(clicked()), this, SLOT(setRadial()));
 	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(showAll()));
 	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(partNameOutputGreen()));
 	connect(axisOutput, SIGNAL(textChanged(const QString&)), this, SLOT(axisOutputGreen()));
+	//connect(axisAddButton, SIGNAL(clicked()), this, SLOT(showAxis()));
 
 	//changePalette(partNameOutput, greenPalette);
 
+	currentMode = NOTHING;
 }
 
 
@@ -132,30 +137,59 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
     if (!isVisible()) return;
     if (!_message._Object) return;
 
-    if (_message._Object->_type == GODT_FACE)
-    {
-        GPDFace* _facePtr = (GPDFace*)_message._Object->ObjectData;
-        if (!_facePtr) return;
+	if (currentMode == NOTHING) return;
 
-        GPDSolid *solidPtr = _facePtr->parentSolidPtr;
+	
+		if (_message._Object->_type == GODT_FACE)
+		{
+			GPDFace* _facePtr = (GPDFace*)_message._Object->ObjectData;
+			if (!_facePtr) return;
 
-        //выделить тело:
-        GCamera* cam0 = GeometryRenderManager::GetCamera(0);
-        GPDGeometryRender* render0 = (GPDGeometryRender*)cam0;
-        render0->SetSolidSelection(solidPtr);
-        
+			if (currentMode == FACE) 
+			{
+				axisOutput->setText(GetFaceName(_facePtr));
 
-        //Вот так можно вызвать сигнал добавления:
-        //ВЫЗЫЫВААЙ ЕГО ПО КНОПОЧКЕ "ДОБАВИТЬ ДВИЖЕНИЕ"
-        //emit addMovementSignal(solidPtr);
+				fReper = _facePtr->GetFaceReper();
+				
+				shift = shiftInput->text().toInt();
 
-        qDebug() << "Solid name:" << GetSolidName(solidPtr) << " = "<< solidPtr;
+				shiftStart = fReper.R;
+				shiftEnd = fReper.R+fReper.E2*shift;
 
-		partNameOutput->setText(GetSolidName(solidPtr));
-        //ui.lineEdit_Object->setText(GetSolidName(solidPtr));
+				showAxis();
 
-    }//if GODT_FACE
+				currentMode = NOTHING;
 
+			}
+			else if (currentMode == PART)
+			{
+				GPDSolid *solidPtr = _facePtr->parentSolidPtr;
+
+				//выделить тело:
+				GCamera* cam0 = GeometryRenderManager::GetCamera(0);
+				GPDGeometryRender* render0 = (GPDGeometryRender*)cam0;
+				render0->SetSolidSelection(solidPtr);	
+				
+				//_facePtr->GetFaceReper();
+				//Вот так можно вызвать сигнал добавления:
+				//ВЫЗЫЫВААЙ ЕГО ПО КНОПОЧКЕ "ДОБАВИТЬ ДВИЖЕНИЕ"
+				//emit addMovementSignal(solidPtr);
+
+				qDebug() << "Solid name:" << GetSolidName(solidPtr) << " = " << solidPtr;
+
+				partNameOutput->setText(GetSolidName(solidPtr));
+				//ui.lineEdit_Object->setText(GetSolidName(solidPtr));
+
+				currentMode = NOTHING;
+			}
+
+
+			
+
+		
+
+		}//if GODT_FACE
+	
 }
 
 QString AddMovementDlg::GetSolidName(Gepard::Topology_Geometry::GPDSolid *_solidPtr)
@@ -169,6 +203,15 @@ QString AddMovementDlg::GetSolidName(Gepard::Topology_Geometry::GPDSolid *_solid
 	_messageStr += ")";
 
 	return _messageStr;
+}
+
+QString AddMovementDlg::GetFaceName(Gepard::Topology_Geometry::GPDFace * _facePrt)
+{
+	QString faceName = QString::fromStdString(_facePrt->GetFaceTypeStr());
+	faceName.append(tr(" "));
+	faceName.append(QString::number(_facePrt->GetUIN()));
+
+	return faceName;
 }
 
 void AddMovementDlg::setLinear()
@@ -247,3 +290,37 @@ void AddMovementDlg::axisOutputGreen()
 {
 	axisOutput->setPalette(*greenPalette);
 }
+
+void AddMovementDlg::showAxis()
+{
+	GCamera * cam0 = GeometryRenderManager::GetCamera(0);
+	GPDGeometryRender * cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+	cam0Render->DeleteSpecialGObject((SpecialGObject*)newAxis);
+
+	newAxis = cam0Render->DrawAxis(shiftStart.x, shiftStart.y, shiftStart.z, shiftEnd.x, shiftEnd.y, shiftEnd.z, GColor(0, 0, 1), "Axis");
+}
+
+void AddMovementDlg::deleteAxis(GAxis *Axis)
+{
+	GCamera * cam0 = GeometryRenderManager::GetCamera(0);
+	GPDGeometryRender * cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+	cam0Render->DeleteSpecialGObject((SpecialGObject*)Axis);
+}
+
+void AddMovementDlg::flagPart()
+{
+	currentMode = PART;
+}
+
+void AddMovementDlg::flagFace()
+{
+	currentMode = FACE;
+}
+
+void AddMovementDlg::flagNothing()
+{
+	currentMode = NOTHING;
+}
+
