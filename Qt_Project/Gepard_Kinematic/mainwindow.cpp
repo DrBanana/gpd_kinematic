@@ -5,7 +5,6 @@
 #include <GRenderWin.h>
 #include "CMovements/Mover.h"
 
-
 using namespace Gepard::Callbacks;
 using namespace Gepard::BasicMath;
 using namespace Gepard::Topology_Geometry;
@@ -24,8 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GRenderWin *gRender = new GRenderWin(true, true, this);
     setCentralWidget(gRender);
-
-
 }
 
 MainWindow::~MainWindow()
@@ -42,15 +39,13 @@ void MainWindow::on_actionOpenStep_triggered()
      auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
 
      int import_ret = g_manager.importSTEP(filename.toStdString(), cam0Render);
-	 
+     
      if (import_ret!=0)
      {
          qDebug()<<"Файл не был загружен!";
          g_manager.GetMathModelPtr()->CloseModel();
      }
      //Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
-
-
 }
 
 void MainWindow::on_actionMoveIt_triggered()
