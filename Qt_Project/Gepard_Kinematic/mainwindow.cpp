@@ -25,17 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GRenderWin *gRender = new GRenderWin(true, true, this);
     setCentralWidget(gRender);
 
-    //Таймлайн
-    timeLineWidget = new TimeLine(20);
-    timeLineWidget->show();
 
-    //Доквиджет для таймлайна
-    tLineWidget = new QDockWidget(this);
-    this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
-    tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    tLineWidget->setWidget(timeLineWidget);
-    tLineWidget->show();
-    
 }
 
 MainWindow::~MainWindow()
@@ -52,7 +42,7 @@ void MainWindow::on_actionOpenStep_triggered()
      auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
 
      int import_ret = g_manager.importSTEP(filename.toStdString(), cam0Render);
-
+	 
      if (import_ret!=0)
      {
          qDebug()<<"Файл не был загружен!";
