@@ -23,20 +23,32 @@ return m_movementsVector.size();
 
 int CMover::AddMovement(EMovementTypes movType, QString name, GPDVector axis, double shift, int start, int end)
 {
-    m_movementsVector.push_back(CMovements(movType, name,axis,shift,start,end));
+    m_movementsVector.push_back(CMovements(movType,name,axis,shift,start,end));
     return m_movementsVector.size();
 }
 
 void CMover::MoveIt(int pos)
 {
     CMovements move = m_movementsVector.at(pos);
-    GPDReper rep = m_part.SolidReper;
+    GPDReper rep = m_part->SolidReper;
     if (move.GetMovementType()==EMovementTypes::CIRCULAR)
     {
-        rep.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
-            m_part.UpdateSolidPosition(rep);
+       GPDReper mReper;
+       mReper.R.setCoords(move.GetPoint().nx,move.GetPoint().ny,move.GetPoint().nz);
+       mReper.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
+       rep.Transform(GPDReper::getGlobalReper(), mReper);
+       
     }
-    
+    else
+        if (move.GetMovementType()==EMovementTypes::LINEAR)
+        {
+            GPDVector vec = move.GetAxis()*move.GetShift();
+            rep.R += vec;
+            //rep.moveOnVector(vec);
+            //mReper.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
+            //rep.Transform(GPDReper::getGlobalReper(), mReper);
+        }
+    m_part->UpdateSolidPosition(rep);
 }
 
 /////////////////////////////////////

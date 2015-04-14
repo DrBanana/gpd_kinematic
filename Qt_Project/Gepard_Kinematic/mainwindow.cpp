@@ -67,13 +67,15 @@ void MainWindow::on_actionMoveIt_triggered()
 {
     Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
-    CMover m = CMover(*mathModel->Solids[0]);
+    CMover m = CMover(mathModel->Solids[0]);
     GPDVector vect;
-    vect.x =0;
+    vect.x =1;
     vect.y =0;
-    vect.z =1;
-    CMovements mm = CMovements(EMovementTypes::CIRCULAR,vect,1.0,0,1);
-    m.AddMovement(mm);
+    vect.z =0;
+    GPDPoint point = GPDPoint(0,0,0);
+    //CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
+    CMovements ml = CMovements(EMovementTypes::LINEAR,point,"",vect,20.0,0,1);
+    m.AddMovement(ml);
     m.MoveIt(0);
     g_manager.HideSolid(mathModel->Solids[0]);
     g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));

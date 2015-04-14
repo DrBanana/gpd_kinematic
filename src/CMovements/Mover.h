@@ -17,28 +17,23 @@ class CMover
 {
 private:
     
-     //ссылко на деталь
-     
     GPDSolid *m_part;
-    
-     //коллекция движения для тела
- 
-   vector<CMovements> m_movementsVector;
+    vector<CMovements> m_movementsVector;
 public:
     
-     //	конструктор
-     
-	CMover(GPDSolid *);
+
+    CMover(GPDSolid *);
     virtual ~CMover(void);
     
-     //	задать деталь
-     
-	void SetPart(GPDSolid*);
+    /*
+     *	задать деталь
+     */
+    void SetPart(GPDSolid*);
     
-     //	добавить перемещение
-     
-	int AddMovement(CMovements);
-
+    /*
+     *	добавить перемещение
+     */
+    int AddMovement(CMovements);
     int AddMovement(EMovementTypes, QString,GPDVector,double,int=0,int=1);
 
     ////////////////////////////////
