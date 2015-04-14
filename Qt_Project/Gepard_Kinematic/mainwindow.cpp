@@ -79,3 +79,17 @@ void MainWindow::on_actionMoveIt_triggered()
     g_manager.HideSolid(mathModel->Solids[0]);
     g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
 }
+
+void MainWindow::on_actionOpenTimeLine_triggered()
+{
+    //Таймлайн
+    timeLineWidget = new TimeLine(20);
+    timeLineWidget->show();
+
+    //Доквиджет для таймлайна
+    tLineWidget = new QDockWidget(this);
+    this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
+    tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    tLineWidget->setWidget(timeLineWidget);
+    tLineWidget->show();
+}

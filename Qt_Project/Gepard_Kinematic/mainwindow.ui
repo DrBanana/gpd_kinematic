@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>803</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -34,6 +34,8 @@
    <addaction name="actionOpenStep"/>
    <addaction name="separator"/>
    <addaction name="actionMoveIt"/>
+   <addaction name="separator"/>
+   <addaction name="actionOpenTimeLine"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpenStep">
@@ -47,6 +49,11 @@
    </property>
    <property name="toolTip">
     <string>MoveIt</string>
+   </property>
+  </action>
+  <action name="actionOpenTimeLine">
+   <property name="text">
+    <string>OpenTimeLine</string>
    </property>
   </action>
  </widget>
