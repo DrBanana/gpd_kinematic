@@ -1,8 +1,9 @@
 #include "CMovements.h"
+#include <string>
 
 using namespace Gepard::BasicMath;
 using namespace Gepard::Topology_Geometry;
-
+using namespace std;
 // CMovements::CMovements(EMovementTypes movType, 
 //                         QString name ,
 //                         GPDVector axis, 
@@ -25,7 +26,7 @@ using namespace Gepard::Topology_Geometry;
 
 CMovements::CMovements(EMovementTypes movType,
                         GPDPoint point,
-                        QString name ,
+						string name,
                         GPDVector axis, 
                         double shift, 
                         int start, 
@@ -64,13 +65,13 @@ void CMovements::SetMovementType(EMovementTypes movType)
     m_moveType=movType;
 }
 
-void CMovements::SetMoveName(QString newName)
+void CMovements::SetMoveName(std::string newName)
 {
     m_name.clear();
     m_name = newName;
 }
 
-QString CMovements::GetMoveName()
+std::string CMovements::GetMoveName()
 {
     return m_name;
 }

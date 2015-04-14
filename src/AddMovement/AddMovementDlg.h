@@ -59,6 +59,7 @@ public slots:
 	void flagNothing();
 
 	void addMovement();
+	void clearMovement();
 	//Виртуальная функция обратного вызова - реакции на действия пользователя
 	void renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message) override;
 	void showAxis();
@@ -69,6 +70,8 @@ signals:
     void addMovementSignal(Gepard::Topology_Geometry::GPDSolid *solidPtr);
 
 private:
+	QLabel * tempLabel;
+
 
 	QPalette * redPalette;
 	QPalette * greenPalette;
@@ -119,7 +122,9 @@ private:
 	bool moveFlag;
 
 	Gepard::BasicMath::GPDReper fReper;
+	Gepard::Topology_Geometry::GPDSolid * newPart;
 
 	CMover * newMove;
+	CMovements * newMovement;
 
 };

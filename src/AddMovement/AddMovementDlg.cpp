@@ -59,7 +59,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	moveAddButton = new QPushButton(tr("Add"));       //Добавить движение
 	moveDropButton = new QPushButton(tr("Drop"));      //Сбросить данные диалога
 
-	moveList = new QTableWidget(1,3);
+	moveList = new QTableWidget(0,3);
 	moveListHeader = new QHeaderView(Qt::Horizontal);
 	moveList->setHorizontalHeader(moveListHeader);
 	moveListLabels << "Movement" << "Type" << "Shift/Angle°";
@@ -182,6 +182,9 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 
 				partNameOutput->setText(GetSolidName(solidPtr));
 				//ui.lineEdit_Object->setText(GetSolidName(solidPtr));
+
+				newPart = solidPtr;
+				newMove = new CMover(newPart);
 
 				currentMode = NOTHING;
 			}
@@ -331,12 +334,54 @@ void AddMovementDlg::flagNothing()
 
 void AddMovementDlg::addMovement()
 {
-	CMovements newMovement = CMovements();
+	tempLabel = new QLabel();
+	GPDPoint * newPoint = new GPDPoint(shiftStart.x, shiftStart.y, shiftStart.z);
+
+	newMovement = new CMovements();
+
+	newMovement->SetMoveName(moveNameInput->text().toStdString());
+	newMovement->SetShift(shift);
+	newMovement->SetAxis(shiftEnd);
+	newMovement->SetPoint(*newPoint);
+	newMovement->SetStart(startStepInput->text().toInt());
+	newMovement->SetEnd(endStepInput->text().toInt());
+
+	newMove->AddMovement(*newMovement);
 
 	if (moveFlag == true) 
 	{
-		
+		newMovement->SetMovementType(LINEAR);
+		tempLabel->setText(tr("LINEAR"));
 	}
+		else if (moveFlag == false)
+		{
+			newMovement->SetMovementType(CIRCULAR);
+			tempLabel->setText(tr("CIRCULAR"));
+		}
 
+	moveList->setRowCount(moveList->rowCount() + 1);
+	int row = moveList->rowCount()-1;
+
+	moveList->setCellWidget(row, 1, tempLabel);
+
+	tempLabel->setText(QString::fromStdString(newMovement->GetMoveName()));
+	moveList->setCellWidget(row, 0, tempLabel);
+
+
+	tempLabel->setText(QString::number(newMovement->GetShift()));
+	moveList->setCellWidget(row, 2, tempLabel);
+
+	clearMovement();
+}
+
+void AddMovementDlg::clearMovement()
+{
+	linearRadio->setChecked(true);
+	moveNameInput->clear();
+	shiftInput->clear();
+	axisOutput->clear();
+	axisOutputRed();
+	startStepInput->setText(tr("0"));
+	startStepInput->setText(tr("1"));
 }
 

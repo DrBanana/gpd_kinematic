@@ -2,7 +2,8 @@
 #define CMOVEMENTS_H
 
 #include "..\includes\gepard.h"
-#include <QString>
+#include <string>
+using namespace std;
 
 
 //using namespace Gepard::BasicMath;
@@ -24,7 +25,7 @@ private:
     //Тип движения из enum EMovementTypes
     EMovementTypes m_moveType;
     //Имя движения
-    QString m_name;
+    string m_name;
     //Смещение или угол на который надо повернуть деталь
     double m_shift; 
     //Ось вдоль которой будет происходить смещение или ось вокруг которой будет вращаться тело
@@ -43,7 +44,7 @@ public:
       */
     CMovements(EMovementTypes = EMovementTypes::LINEAR,
                 Gepard::BasicMath::GPDPoint = Gepard::BasicMath::GPDPoint(0,0,0),
-                QString = " ",
+				string = " ",
                 Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
                 double = 0.0,
                 int = 0,
@@ -81,11 +82,11 @@ public:
     double GetShift();
 
     // Задать имя
-    void SetMoveName(QString);
+	void SetMoveName(string);
 
     //Получить имя
 
-    QString GetMoveName();
+	string GetMoveName();
     
     /*
      *	задать ось

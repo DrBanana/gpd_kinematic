@@ -22,7 +22,7 @@ m_movementsVector.push_back(movement);
 return m_movementsVector.size();
 }
 
-int CMover::AddMovement(EMovementTypes movType, GPDPoint point, QString name, GPDVector axis, double shift, int start, int end)
+int CMover::AddMovement(EMovementTypes movType, GPDPoint point, string name, GPDVector axis, double shift, int start, int end)
 {
     m_movementsVector.push_back(CMovements(movType,point,name,axis,shift,start,end));
     return m_movementsVector.size();

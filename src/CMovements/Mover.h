@@ -34,7 +34,7 @@ public:
      *	добавить перемещение
      */
     int AddMovement(CMovements);
-    int AddMovement(EMovementTypes,Gepard::BasicMath::GPDPoint, QString,Gepard::BasicMath::GPDVector,double,int=0,int=1);
+    int AddMovement(EMovementTypes,Gepard::BasicMath::GPDPoint, string,Gepard::BasicMath::GPDVector,double,int=0,int=1);
 
     ////////////////////////////////
     // Method:    GetMovementAt
