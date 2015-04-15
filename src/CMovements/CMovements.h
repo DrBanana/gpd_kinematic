@@ -44,7 +44,7 @@ public:
       */
     CMovements(EMovementTypes = EMovementTypes::LINEAR,
                 Gepard::BasicMath::GPDPoint = Gepard::BasicMath::GPDPoint(0,0,0),
-				string = " ",
+                string = " ",
                 Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
                 double = 0.0,
                 int = 0,
@@ -82,11 +82,11 @@ public:
     double GetShift();
 
     // Задать имя
-	void SetMoveName(string);
+    void SetMoveName(string);
 
     //Получить имя
 
-	string GetMoveName();
+    string GetMoveName();
     
     /*
      *	задать ось
