@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     GRenderWin *gRender = new GRenderWin(true, true, this);
     setCentralWidget(gRender);
+
+    connect(ui->actionOpen_project, SIGNAL(triggered()), SLOT(on_actionOpenProject_triggered()));
 }
 
 MainWindow::~MainWindow()
@@ -74,6 +76,7 @@ void MainWindow::on_actionMoveIt_triggered()
         for (int i =0;i<cnt;i++)
         {
             m.MoveIt(i);
+            
         }
 //    m.MoveIt(0);
     g_manager.HideSolid(mathModel->Solids[0]);
@@ -92,4 +95,22 @@ void MainWindow::on_actionOpenTimeLine_triggered()
     tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
     tLineWidget->setWidget(timeLineWidget);
     tLineWidget->show();
+}
+
+void MainWindow::on_actionOpenProject_triggered()
+{
+    QString filename = QFileDialog::getOpenFileName( this, tr("Open file"), QDir::currentPath(),tr("GePARD project file")+" (*.gpd);;");
+    if( filename.isNull() ) return;
+
+    auto cam0 = GeometryRenderManager::GetCamera(0);
+    auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+    
+    int import_ret = g_manager.importGPD(filename.toStdString(), cam0Render);
+
+    if (import_ret!=0)
+    {
+        qDebug()<<"Файл не был загружен!";
+        g_manager.GetMathModelPtr()->CloseModel();
+    }
 }
