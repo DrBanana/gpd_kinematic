@@ -48,6 +48,29 @@ void CMover::MoveIt(int pos)
     m_part->UpdateSolidPosition(rep);
 }
 
+void CMover::MoveAll()
+{
+    int cnt = GetSizeOfmovementsVector();
+    GPDReper rep = m_part->SolidReper;
+    for (int i=0;i<cnt;i++)
+    {
+        CMovements move = m_movementsVector.at(i);
+        if (move.GetMovementType()==EMovementTypes::CIRCULAR)
+        {
+            GPDReper mReper;
+            mReper.R.setCoords(move.GetPoint().nx,move.GetPoint().ny,move.GetPoint().nz);
+            mReper.morphByAngleAndAxis(move.GetAxis(),move.GetShift());
+            rep.Transform(GPDReper::getGlobalReper(), mReper);
+        }
+        else
+            if (move.GetMovementType()==EMovementTypes::LINEAR)
+            {
+                GPDVector vec = move.GetAxis()*move.GetShift();
+                rep.R += vec;
+            }
+            m_part->UpdateSolidPosition(rep);
+    }
+ }
 /////////////////////////////////////
 // Method:    GetMovementAt
 // FullName:  CMover::GetMovementAt
@@ -73,10 +96,10 @@ int CMover::GetSizeOfmovementsVector()
 
 void CMover::SetMovementsVector(vector<CMovements>  newVector)
 {
-	m_movementsVector.swap(newVector);
+    m_movementsVector.swap(newVector);
 }
 
 GPDSolid *CMover::GetPart()
 {
-	return m_part;
+    return m_part;
 }
