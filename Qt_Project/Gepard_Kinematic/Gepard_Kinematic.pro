@@ -25,12 +25,25 @@ LIBS += -LC:/BOOST/lib
 SOURCES += main.cpp\
         mainwindow.cpp\
         ../../src/QtGRenderWidget.cpp\
-        ../../src/GRenderWin.cpp
+        ../../src/GRenderWin.cpp\
+        ../../src/AddMovement/AddMovementDlg.cpp\
+        ../../src/CMovements/CMovements.cpp\
+        ../../src/CMovements/Mover.cpp\
+        ../../src/ProgressBar/progressbardlg.cpp\
+        ../../src/TimeLine/timeline.cpp\
+        ../../src/TimeLine/tRunPrmWin.cpp
+
 
 HEADERS  += mainwindow.h\
          ../../includes/gepard.h\
         ../../src/QtGRenderWidget.h\
-        ../../src/GRenderWin.h
+        ../../src/GRenderWin.h\
+        ../../src/AddMovement/AddMovementDlg.h\
+        ../../src/CMovements/CMovements.h\
+        ../../src/CMovements/Mover.h\
+        ../../src/ProgressBar/progressbardlg.h\
+        ../../src/TimeLine/timeline.h\
+        ../../src/TimeLine/tRunPrmWin.h
 
 #тип проекта
 win32:contains(QMAKE_HOST.arch, x86_64) {
@@ -52,7 +65,7 @@ win32:contains(QMAKE_HOST.arch, x86_64) {
 LIBS += -lGepard6_Core -lfreetype -lftgl_static -lglew32 -llibpng16 -lsdai_ap203 -lstepcore -lstepdai -lstepeditor -lsteputils
 
 FORMS    += mainwindow.ui
-
+FORMS    += ../../src/ProgressBar/progressbardlg.ui
 
 CONFIG(debug, debug|release) {
     DESTDIR = ../../Build/Debug
