@@ -284,6 +284,7 @@ void AddMovementDlg::showAll()
 	moveListLabel->show();
 	moveList->show();
 	moverAdd->show();
+	moveList->setHorizontalHeaderLabels(moveListLabels);
 }
 
 void AddMovementDlg::partNameOutputRed()
@@ -398,6 +399,7 @@ void AddMovementDlg::addMovement()
 
 	//Пишем движение в массив
 	newMovements.push_back(newMovement);
+
 }
 
 void AddMovementDlg::clearMovement()
@@ -430,8 +432,8 @@ void AddMovementDlg::closeEvent(QCloseEvent * event)
 	newPart = nullptr;
 
 	newMovements.clear();
-	moveListLabels.clear();
-
+	moveList->clear();
+	moveList->setRowCount(0);
 	partNameOutput->clear();
 	partNameOutput->setPalette(*redPalette);
 
@@ -449,6 +451,9 @@ void AddMovementDlg::sendMover()
 	emit moverToLine(newMover);
 
 	qDebug() << "Mover added";
+
+	//Закрываем диалог
+	this->close();
 }
 
 

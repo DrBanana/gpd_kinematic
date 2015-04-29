@@ -110,7 +110,7 @@ private:
 	QPushButton * moveDropButton;      //Сбросить данные диалога
 	QPushButton * moverAdd;
 
-	QTableWidget * moveList;
+	QTableWidget * moveList;           //Таблица движений
 	QHeaderView * moveListHeader;
 	QStringList  moveListLabels;
 

@@ -4,7 +4,7 @@
 using namespace Gepard::Callbacks;
 
 
-TimeLine::TimeLine(int defSegments, Gepard::GeometryManager g_manager, QWidget *parent)
+TimeLine::TimeLine(int defSegments,/* Gepard::GeometryManager g_manager,*/ QWidget *parent)
     : QWidget(parent)
 {
 	
@@ -14,7 +14,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager g_manager, QWidget *
 
 	tlRowCount = 0;
 
-    fRowHeight = 25; //Высота ячейки с линейкой
+	fRowHeight = 25; //Высота ячейки с линейкой
 	tlRowHeight = 30; //Высота строки
 	tlRectSize = 15;
 
@@ -54,7 +54,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager g_manager, QWidget *
     graphicsWindow->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     graphicsWindow->show();
 
-    graphicsWindow->setDragMode(QGraphicsView::ScrollHandDrag);
+    //graphicsWindow->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Устанавливаем graphicView в таблицу
 	TableViewer->setCellWidget(0, 1, graphicsWindow);
@@ -96,7 +96,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager g_manager, QWidget *
 
     //Устанавливаем размеры ячеек
 	TableViewer->setColumnWidth(1, w + segmentSize / 2);
-	TableViewer->setRowHeight(0, fRowHeight + 10);
+	TableViewer->setRowHeight(0, fRowHeight+5);
     
 	//Объявляем виджеты окон
 	addMovementDialog = new AddMovementDlg(segmentsAmount);
@@ -269,8 +269,8 @@ void TimeLine::actionRun()
 
 
 			//Обновляем
- 			g_manager.HideSolid(rowVect[i].partMover.GetPart());
-			g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+// 			g_manager.HideSolid(rowVect[i].partMover.GetPart());
+//			g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 		}
 		
 	}
