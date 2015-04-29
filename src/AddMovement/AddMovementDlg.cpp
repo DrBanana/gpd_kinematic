@@ -16,6 +16,8 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 {
 	stepCount = steps;
 
+	newAxis = nullptr;
+
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
 	//Палитра
@@ -58,11 +60,12 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	axisDropButton = new QPushButton(tr("-"));      //Сбросить ось
 	moveAddButton = new QPushButton(tr("Add"));       //Добавить движение
 	moveDropButton = new QPushButton(tr("Drop"));      //Сбросить данные диалога
+	moverAdd = new QPushButton(tr("Add Mover"));
 
-	moveList = new QTableWidget(0,3);
+	moveList = new QTableWidget(0,5);
 	moveListHeader = new QHeaderView(Qt::Horizontal);
 	moveList->setHorizontalHeader(moveListHeader);
-	moveListLabels << "Movement" << "Type" << "Shift/Angle°";
+	moveListLabels << "Movement" << "Type" << "Shift/Angle°" << "Start" << "End";
 	moveList->setHorizontalHeaderLabels(moveListLabels);
 	moveList->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
@@ -106,6 +109,8 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	mainLay->addWidget(moveListLabel, 10, 0, 1, 1);
 	//строка 11
 	mainLay->addWidget(moveList, 11, 0, 1, 4);
+	//12
+	mainLay->addWidget(moverAdd, 12,0,1,1);
 
 	this->setLayout(mainLay);
 
@@ -113,6 +118,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	this->hideAll();
 
 	linearRadio->setChecked(true);
+	moveFlag = true;
 	startStepInput->setText(tr("0"));
 	endStepInput->setText(tr("1"));
 
@@ -126,7 +132,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 
 	connect(moveAddButton, SIGNAL(clicked()), this, SLOT(addMovement()));
 
-
+	connect(moverAdd, SIGNAL(clicked()), this, SLOT(sendMover()));
 	//changePalette(partNameOutput, greenPalette);
 
 	currentMode = NOTHING;
@@ -184,7 +190,6 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 				//ui.lineEdit_Object->setText(GetSolidName(solidPtr));
 
 				newPart = solidPtr;
-				newMove = new CMover(newPart);
 
 				currentMode = NOTHING;
 			}
@@ -254,6 +259,7 @@ void AddMovementDlg::hideAll()
 	moveDropButton->hide();
 	moveListLabel->hide();
 	moveList->hide();
+	moverAdd->hide();
 }
 
 void AddMovementDlg::showAll()
@@ -277,6 +283,7 @@ void AddMovementDlg::showAll()
 	moveDropButton->show();
 	moveListLabel->show();
 	moveList->show();
+	moverAdd->show();
 }
 
 void AddMovementDlg::partNameOutputRed()
@@ -334,44 +341,63 @@ void AddMovementDlg::flagNothing()
 
 void AddMovementDlg::addMovement()
 {
-	tempLabel = new QLabel();
+	QLabel * tempLabel = new QLabel();
+	QLabel * tempLabel2 = new QLabel();
+	QLabel * tempLabel3 = new QLabel();
+	QLabel * tempLabel4 = new QLabel();
+	QLabel * tempLabel5 = new QLabel();
+
 	GPDPoint * newPoint = new GPDPoint(shiftStart.x, shiftStart.y, shiftStart.z);
 
-	newMovement = new CMovements();
+	
 
-	newMovement->SetMoveName(moveNameInput->text().toStdString());
-	newMovement->SetShift(shift);
-	newMovement->SetAxis(shiftEnd);
-	newMovement->SetPoint(*newPoint);
-	newMovement->SetStart(startStepInput->text().toInt());
-	newMovement->SetEnd(endStepInput->text().toInt());
+	CMovements newMovement;   //Новое движение
 
-	newMove->AddMovement(*newMovement);
+	//Пишем в него данные
+	newMovement.SetMoveName(moveNameInput->text().toStdString());
+	newMovement.SetShift(shift);
+	newMovement.SetAxis(shiftEnd);
+	newMovement.SetPoint(*newPoint);
+	newMovement.SetStart(startStepInput->text().toInt());
+	newMovement.SetEnd(endStepInput->text().toInt());
 
+
+	//ПРоверяем какое движение выбрал пользователь
 	if (moveFlag == true) 
 	{
-		newMovement->SetMovementType(LINEAR);
+		newMovement.SetMovementType(LINEAR);
 		tempLabel->setText(tr("LINEAR"));
 	}
 		else if (moveFlag == false)
 		{
-			newMovement->SetMovementType(CIRCULAR);
+			newMovement.SetMovementType(CIRCULAR);
 			tempLabel->setText(tr("CIRCULAR"));
 		}
 
+	//Создаем новую строку в таблице
 	moveList->setRowCount(moveList->rowCount() + 1);
 	int row = moveList->rowCount()-1;
 
+	//Пишем в таблицу данные
+ 	tempLabel2->setText(QString::fromStdString(newMovement.GetMoveName()));
+ 	moveList->setCellWidget(row, 0, tempLabel2);
+ 
 	moveList->setCellWidget(row, 1, tempLabel);
+ 
+ 	tempLabel3->setText(QString::number(newMovement.GetShift()));
+ 	moveList->setCellWidget(row, 2, tempLabel3);
 
-	tempLabel->setText(QString::fromStdString(newMovement->GetMoveName()));
-	moveList->setCellWidget(row, 0, tempLabel);
-
-
-	tempLabel->setText(QString::number(newMovement->GetShift()));
-	moveList->setCellWidget(row, 2, tempLabel);
-
+	int a = newMovement.GetStart();
+	tempLabel4->setText(QString::number(a/*newMovement.GetStart()*/));
+	moveList->setCellWidget(row, 3, tempLabel4);
+	
+	tempLabel5->setText(QString::number(newMovement.GetEnd()));
+	moveList->setCellWidget(row, 4, tempLabel5);
+	//Чистим форму
 	clearMovement();
+
+	//Пишем движение в массив
+	newMovements.push_back(newMovement);
 }
 
 void AddMovementDlg::clearMovement()
@@ -382,6 +408,47 @@ void AddMovementDlg::clearMovement()
 	axisOutput->clear();
 	axisOutputRed();
 	startStepInput->setText(tr("0"));
-	startStepInput->setText(tr("1"));
+	endStepInput->setText(tr("1"));
+	setLinear();
 }
+
+AddMovementDlg::~AddMovementDlg()
+{
+	
+}
+
+void AddMovementDlg::closeEvent(QCloseEvent * event)
+{
+	if (newAxis != nullptr)
+	{
+		GCamera * cam0 = GeometryRenderManager::GetCamera(0);
+		GPDGeometryRender * cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+		cam0Render->DeleteSpecialGObject((SpecialGObject*)newAxis);
+	}
+
+	newPart = nullptr;
+
+	newMovements.clear();
+	moveListLabels.clear();
+
+	partNameOutput->clear();
+	partNameOutput->setPalette(*redPalette);
+
+	hideAll();
+
+	event->accept();
+}
+
+void AddMovementDlg::sendMover()
+{
+	CMover newMover(newPart);  //Создаем новый мувер
+
+	newMover.SetMovementsVector(newMovements);  //Даем ему массив движений
+
+	emit moverToLine(newMover);
+
+	qDebug() << "Mover added";
+}
+
 

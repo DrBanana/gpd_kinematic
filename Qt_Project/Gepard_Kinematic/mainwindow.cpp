@@ -84,12 +84,12 @@ void MainWindow::on_actionOpenTimeLine_triggered()
 {
     //Таймлайн
     timeLineWidget = new TimeLine(20);
-    timeLineWidget->show();
-
-    //Доквиджет для таймлайна
-    tLineWidget = new QDockWidget(this);
-    this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
-    tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    tLineWidget->setWidget(timeLineWidget);
-    tLineWidget->show();
-}
+     timeLineWidget->show();
+ 
+     //Доквиджет для таймлайна
+      tLineWidget = new QDockWidget(this);
+      this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
+      tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+      tLineWidget->setWidget(timeLineWidget);
+      tLineWidget->show();
+ }

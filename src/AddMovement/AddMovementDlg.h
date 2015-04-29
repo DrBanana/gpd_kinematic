@@ -36,12 +36,15 @@ class AddMovementDlg : public QDialog,
 public:
 
     AddMovementDlg(int, QWidget *parent = 0);
+	~AddMovementDlg();
 
 	
     
 
 	QString GetSolidName(Gepard::Topology_Geometry::GPDSolid *);
 	QString GetFaceName(Gepard::Topology_Geometry::GPDFace *);
+
+	void closeEvent(QCloseEvent *) override;
 
 public slots:
 
@@ -65,12 +68,14 @@ public slots:
 	void showAxis();
 	void deleteAxis(GAxis *);
 
+	void sendMover();
+
 signals:
 
-    void addMovementSignal(Gepard::Topology_Geometry::GPDSolid *solidPtr);
+	void moverToLine(CMover);
 
 private:
-	QLabel * tempLabel;
+	
 
 
 	QPalette * redPalette;
@@ -103,6 +108,7 @@ private:
 	QPushButton * axisDropButton;      //Сбросить ось
 	QPushButton * moveAddButton;       //Добавить движение
 	QPushButton * moveDropButton;      //Сбросить данные диалога
+	QPushButton * moverAdd;
 
 	QTableWidget * moveList;
 	QHeaderView * moveListHeader;
@@ -113,8 +119,6 @@ private:
 	Gepard::BasicMath::GPDVector shiftEnd;
 	Gepard::BasicMath::GPDVector shiftStart;
 
-	GAxis * newAxis;
-
 	enum modeFlag{ PART, FACE, NOTHING };
 
 	modeFlag currentMode;
@@ -122,9 +126,11 @@ private:
 	bool moveFlag;
 
 	Gepard::BasicMath::GPDReper fReper;
-	Gepard::Topology_Geometry::GPDSolid * newPart;
 
-	CMover * newMove;
-	CMovements * newMovement;
+	Gepard::Topology_Geometry::GPDSolid * newPart;  //Указатель на деталь
+	GAxis * newAxis;                                //На ось
+
+
+	vector<CMovements> newMovements;
 
 };

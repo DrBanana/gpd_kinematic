@@ -70,3 +70,13 @@ int CMover::GetSizeOfmovementsVector()
 {
     return m_movementsVector.size();
 }
+
+void CMover::SetMovementsVector(vector<CMovements>  newVector)
+{
+	m_movementsVector.swap(newVector);
+}
+
+GPDSolid CMover::GetPart()
+{
+	return *m_part;
+}
