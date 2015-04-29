@@ -61,7 +61,7 @@ class TimeLine : public QWidget
 	Q_OBJECT
 
 public:
-	TimeLine(int, QWidget *parent = 0);
+	TimeLine(int, Gepard::GeometryManager, QWidget *parent = 0);
 	~TimeLine();
 
 public slots:

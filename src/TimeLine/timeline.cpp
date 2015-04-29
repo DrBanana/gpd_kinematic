@@ -4,7 +4,7 @@
 using namespace Gepard::Callbacks;
 
 
-TimeLine::TimeLine(int defSegments,  QWidget *parent)
+TimeLine::TimeLine(int defSegments, Gepard::GeometryManager g_manager, QWidget *parent)
     : QWidget(parent)
 {
 	
@@ -269,8 +269,8 @@ void TimeLine::actionRun()
 
 
 			//Обновляем
-// 			g_manager.HideSolid();
-// 			g_manager.ShowSolidInRender(mathModel->Solids[0], GeometryRenderManager::GetCamera(0));
+ 			g_manager.HideSolid(rowVect[i].partMover.GetPart());
+			g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 		}
 		
 	}
