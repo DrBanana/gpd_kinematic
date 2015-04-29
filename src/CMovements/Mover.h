@@ -30,10 +30,10 @@ public:
      */
     void SetPart(Gepard::Topology_Geometry::GPDSolid*);
 
-    /*
-    * ѕолучить ссылку на деталь
-    */
-    Gepard::Topology_Geometry::GPDSolid* GetPart();
+	/*
+	* ѕолучить ссылку на деталь
+	*/
+	Gepard::Topology_Geometry::GPDSolid * GetPart();
 
     /*
      *	добавить перемещение
@@ -55,10 +55,10 @@ public:
 
     int GetSizeOfmovementsVector();
 
-    void SetMovementsVector(vector<CMovements>);
+	void SetMovementsVector(vector<CMovements>);
    
     void MoveIt(int);
-    void MoveAll();
+
 };
 
 #endif //MOVER_H

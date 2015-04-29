@@ -61,7 +61,7 @@ class TimeLine : public QWidget
 	Q_OBJECT
 
 public:
-	TimeLine(int, QWidget *parent = 0);
+	TimeLine(int, Gepard::GeometryManager *, QWidget *parent = 0);
 	~TimeLine();
 
 public slots:
@@ -101,6 +101,8 @@ protected:
 private:
 	//Ui::TimeLineClass ui;
 	
+	Gepard::GeometryManager * TimeLine_g_manager;
+
 	QTableWidget * TableViewer;
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;

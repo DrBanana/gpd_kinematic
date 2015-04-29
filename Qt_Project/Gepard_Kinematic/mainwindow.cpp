@@ -92,16 +92,16 @@ void MainWindow::on_actionMoveIt_triggered()
 
 void MainWindow::on_actionOpenTimeLine_triggered()
 {
-    //Таймлайн
-    timeLineWidget = new TimeLine(20);
-    timeLineWidget->show();
+	//Таймлайн
+	timeLineWidget = new TimeLine(20, &g_manager);
+	timeLineWidget->show();
 
-    //Доквиджет для таймлайна
-    tLineWidget = new QDockWidget(this);
-    this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
-    tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-    tLineWidget->setWidget(timeLineWidget);
-    tLineWidget->show();
+	//Доквиджет для таймлайна
+	tLineWidget = new QDockWidget(this);
+	this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
+	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+	tLineWidget->setWidget(timeLineWidget);
+	tLineWidget->show();
 }
 
 void MainWindow::on_actionOpenProject_triggered()
