@@ -80,6 +80,14 @@ void CMovements::SetShift(double shift)
 {
     m_shift=shift;
 }
+double CMovements::GetShift()
+{
+    if (m_moveType==CIRCULAR)
+    {
+        return ((m_shift*3.14)/180);
+    }
+    return m_shift;
+}
 
 void CMovements::SetAxis(Gepard::BasicMath::GPDVector axis)
 {
@@ -137,10 +145,7 @@ Gepard::BasicMath::GPDVector CMovements::GetAxis()
     return m_axis;
 }
 
-double CMovements::GetShift()
-{
-    return m_shift;
-}
+
 
 Gepard::BasicMath::GPDPoint CMovements::GetPoint()
 {
