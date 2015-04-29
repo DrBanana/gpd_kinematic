@@ -31,12 +31,28 @@
 
 struct _row
 { 
-	QGraphicsScene *rowGScene;
-	QGraphicsView *rowGView;
+	_row(CMover &_mover, int w, int rowHeight) 
+	: partMover(_mover)
+	//, rowGScene(0, 0, w, rowHeight)
+	{			
+
+	};
+
+	_row(const _row &r)
+		: partMover(r.partMover)
+		//, rowGScene(r.rowGScene.sceneRect())
+	{
+
+	};
+
+	///////////////////////////////////////
+	QGraphicsScene * rowGScene;
+	QGraphicsView * rowGView;
 
 	std::vector <QGraphicsRectItem *> tmovments;
+	std::vector <QGraphicsTextItem *> tnames;
 
-	//CMover * partMover;
+	CMover partMover;
 };
 
 
@@ -45,7 +61,7 @@ class TimeLine : public QWidget
 	Q_OBJECT
 
 public:
-	TimeLine(int,QWidget *parent = 0);
+	TimeLine(int, QWidget *parent = 0);
 	~TimeLine();
 
 public slots:
@@ -56,17 +72,23 @@ public slots:
 	void dropTime();
 
 	//Добавление строк, со строкой добвляется CMover
-	void addRow();
+	void addRow(CMover);
 	void delRow();
 
 	//Добавление разделительных меток на новую сцену
-	void addTimeMarks(QGraphicsScene *);
+	void addTimeMarks(QGraphicsScene &);
+
+	//Добавление гравических элементов
+
+	void addGraphicMarks(vector<QGraphicsRectItem *>, vector<QGraphicsTextItem *>,CMover, QGraphicsScene &);
 
 	//Запуск
 	void actionRunWithPrms();
+	void actionRun();
 
 	//окно добавления движения
 	void actionAdd();
+
 
 signals:
 
@@ -93,16 +115,18 @@ private:
 	QAction * aRunParams;     //Запуск с параметрами
 	QAction * aMover;         //Добавить двигатель + установить движения 
 
-	AddMovementDlg * addMovement;
+	AddMovementDlg * addMovementDialog;
 
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
 	int segmentsAmount; //Текущее количество сегментов (после запуска равно общему числу сегментов)
 
 	int fRowHeight; //Высота верхней строки со шкалой
+	int tlRowHeight; //Высота строки
 
 	qreal timeStep; //Шаг
 
-	int rowCount; //число строк не считая линейку
+	int tlRowCount; //число строк не считая линейку
+	int tlRectSize; //Размер прямоугольника движения
 
 	int w; //ширина сцены по дефлоту
 	int h; //высота сцены

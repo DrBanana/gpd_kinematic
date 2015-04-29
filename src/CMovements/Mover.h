@@ -29,7 +29,12 @@ public:
      *	задать деталь
      */
     void SetPart(Gepard::Topology_Geometry::GPDSolid*);
-    
+
+	/*
+	* Получить ссылку на деталь
+	*/
+	Gepard::Topology_Geometry::GPDSolid* GetPart();
+
     /*
      *	добавить перемещение
      */
@@ -49,8 +54,11 @@ public:
     CMovements* GetFirstMovement();
 
     int GetSizeOfmovementsVector();
+
+	void SetMovementsVector(vector<CMovements>);
    
     void MoveIt(int);
+
 };
 
 #endif //MOVER_H
