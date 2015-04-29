@@ -62,9 +62,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Release\moc_GRenderWin.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
@@ -77,17 +74,8 @@
     <ClCompile Include="Debug\moc_QtGRenderWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="Release\moc_mainwindow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_mainwindow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\CMovements\CMovements.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TimeLine\timeline.cpp">
-      <Filter>Source Files\TimeLine</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_progressbardlg.cpp">
       <Filter>Generated Files\Release</Filter>
@@ -119,11 +107,23 @@
     <ClCompile Include="..\..\src\AddMovement\AddMovementDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\TimeLine\timeline.cpp">
+      <Filter>Source Files\TimeLine</Filter>
+    </ClCompile>
     <ClCompile Include="Debug\moc_timeline.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Release\moc_timeline.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,9 +131,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\src\QtGRenderWidget.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_mainwindow.h">
@@ -145,9 +142,6 @@
     <CustomBuild Include="..\..\src\CMovements\CMovements.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="..\..\src\TimeLine\timeline.h">
-      <Filter>Header Files\TimeLine</Filter>
-    </CustomBuild>
     <CustomBuild Include="..\..\src\ProgressBar\progressbardlg.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
@@ -158,6 +152,12 @@
       <Filter>Header Files\TimeLine</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\src\AddMovement\AddMovementDlg.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\TimeLine\timeline.h">
+      <Filter>Header Files\TimeLine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="mainwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

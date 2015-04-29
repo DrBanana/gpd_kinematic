@@ -1,16 +1,22 @@
 #include "timeline.h"
 
-TimeLine::TimeLine(int defSegments, QWidget *parent)
+#include <Gepard/Callbacks/CB_GeometryRender.h>
+using namespace Gepard::Callbacks;
+
+
+TimeLine::TimeLine(int defSegments,  QWidget *parent)
     : QWidget(parent)
 {
-
+	
     segmentSize = 50;
     timeStep=1;
     //ui.setupUi(this);
 
-    rowCount = 0;
+	tlRowCount = 0;
 
     fRowHeight = 25; //Высота ячейки с линейкой
+	tlRowHeight = 30; //Высота строки
+	tlRectSize = 15;
 
     w = segmentSize*defSegments+segmentSize; //Ширина сцены по дефолту.
     h = 50;
@@ -18,24 +24,26 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     this->resize(1200, 200);
 
     //Объявляем виджеты
+
     TableViewer = new QTableWidget(1, 2, this);
+
     TableViewer->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel); //Скролл по пикселям
-    TableViewer->setColumnWidth(1, w);
+	TableViewer->setColumnWidth(1, w);
 
     QHeaderView * hHeader = new QHeaderView(Qt::Horizontal); //Свой горизонтальный хэдер с блэк-джеком и фиксированым размером
-    TableViewer->setHorizontalHeader(hHeader);               //Устанавливаем хэдер в TableViewer
+	TableViewer->setHorizontalHeader(hHeader);               //Устанавливаем хэдер в TableViewer
     hHeader->setSectionResizeMode(1, QHeaderView::Fixed);       //Теперь когда он видит таблицу можно явно указать номер секции 
                                                                 //и указать режим изменения размера, только программно
 
     QHeaderView * vHeader = new QHeaderView(Qt::Vertical);
     vHeader->setSectionResizeMode(QHeaderView::Fixed);           //менять размер всех строк тока программно
-    TableViewer->setVerticalHeader(vHeader);
+	TableViewer->setVerticalHeader(vHeader);
 
 	//Скроем хэдер
 	TableViewer->horizontalHeader()->hide();
 
 
-    TableViewer->show(); 
+	TableViewer->show();
 
 
 	//сцена
@@ -46,10 +54,10 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     graphicsWindow->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     graphicsWindow->show();
 
-    //graphicsWindow->setDragMode(QGraphicsView::ScrollHandDrag);
+    graphicsWindow->setDragMode(QGraphicsView::ScrollHandDrag);
 
     //Устанавливаем graphicView в таблицу
-    TableViewer->setCellWidget(0, 1, graphicsWindow);
+	TableViewer->setCellWidget(0, 1, graphicsWindow);
     
 	//МенюБар
 	mainMenu = new QMenuBar();
@@ -77,35 +85,6 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     this->setLayout(mainLay);
     
 
-    //Второе окно, с кнопочками
-    win = new QWidget();
-    win->resize(40, 80);
-    
-    QPushButton * addButton = new QPushButton(tr("+"));  //Добавить
-    addButton->show();
-
-    QPushButton * delButton = new QPushButton(tr("-"));         //Удалить
-    delButton->show();
-
-    QPushButton * dropButton = new QPushButton(tr("drop"));  //Сброс
-    dropButton->show();
-
-    QPushButton * addButton2 = new QPushButton(tr("++"));
-    addButton2->show();
-
-
-    //Компонуем кнопки
-
-    QBoxLayout * boxLay = new QVBoxLayout(win);
-
-    boxLay->addWidget(addButton, 1);
-    boxLay->addWidget(delButton, 1);
-    boxLay->addWidget(dropButton, 1);
-    boxLay->addWidget(addButton2, 1);
-
-    win->setLayout(boxLay);
-    win->show();                  //Показываем кнопки
-
     //Сбрасываем шаги
     TimeLine::dropTime();
 
@@ -116,16 +95,21 @@ TimeLine::TimeLine(int defSegments, QWidget *parent)
     }
 
     //Устанавливаем размеры ячеек
-    TableViewer->setColumnWidth(1, w+segmentSize/2);
-    TableViewer->setRowHeight(0, fRowHeight+10);
+	TableViewer->setColumnWidth(1, w + segmentSize / 2);
+	TableViewer->setRowHeight(0, fRowHeight + 10);
     
+	//Объявляем виджеты окон
+	addMovementDialog = new AddMovementDlg(segmentsAmount);
+	prmWin = new tRunPrmWin(segmentsAmount);
+
 
     //связываем сигналы-слоты
-    connect(addButton, SIGNAL(clicked()), this, SLOT(addRow()));
-    connect(delButton, SIGNAL(clicked()), this, SLOT(delRow()));
-    connect(dropButton, SIGNAL(clicked()), this, SLOT(dropTime()));
+
 	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
+	connect(aRun, SIGNAL(triggered()), this, SLOT(actionRun()));
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
+	connect(addMovementDialog, SIGNAL(moverToLine(CMover)), this, SLOT(addRow(CMover)));
+
 
 }
 
@@ -186,87 +170,156 @@ void TimeLine::dropTime()
     TimeLine::addTime();
 }
 
-void TimeLine::addTimeMarks(QGraphicsScene * scene)
+void TimeLine::addTimeMarks(QGraphicsScene  &scene)
 {
     int paintFrom = 0;
     QPen _pen2(Qt::gray, 1, Qt::DashLine);
 
     for (int i = 0; i < segmentsAmount+1; i++)
     {
-        scene->addLine(paintFrom,0, paintFrom, scene->height(), _pen2);
+        scene.addLine(paintFrom,0, paintFrom, scene.height(), _pen2);
         paintFrom += segmentSize;
     }
 
     //Проверка номеров
     QGraphicsTextItem * ptext;
-    ptext = scene->addText(QString::number(rowCount));
+	ptext = scene.addText(QString::number(tlRowCount));
     ptext->setPos(5, 5);
 
 }
 
-void TimeLine::addRow()
+void TimeLine::addRow(CMover moverFromDialog)
 {
-    _row newRow;
+	
+	_row newRow(moverFromDialog, w, tlRowHeight);
 
-    TableViewer->setRowCount(TableViewer->rowCount()+1); //Прибавляем строку (текущее 0 + 1, 2+1...)
+	rowVect.push_back(newRow);  //Пишем структуру в массив
 
-    int thisRow = rowCount;  //Текущая строка
+	//Создаем сцену и вьювер для структуры
+	rowVect[tlRowCount].rowGScene = new QGraphicsScene();
+	rowVect[tlRowCount].rowGView = new QGraphicsView();
 
-    //Создаем новые виджеты для структуры
-    QGraphicsScene * scene = new QGraphicsScene(0, 0, w, fRowHeight*2);
-    QGraphicsView * view = new QGraphicsView();
+	
+	int a = TableViewer->rowCount();
+ 
+ 	//TableViewer->setRowCount(TableViewer->rowCount() + 1); //Прибавляем строку (текущее 0 + 1, 2+1...)
+	TableViewer->insertRow(a);
+ 
+	int b = TableViewer->rowCount();
+ 	
+	TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, rowVect[tlRowCount].rowGView); //Помещаем вьювер графики в новую строку
 
-	//Назначаем объекты структуре
-    newRow.rowGScene = scene;
-    newRow.rowGView = view;
-    newRow.rowGView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+	rowVect[tlRowCount].rowGScene->setSceneRect(0, 0, w, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize);
+ 	addTimeMarks(*rowVect[tlRowCount].rowGScene);
+ 	
+ 	rowVect[tlRowCount].rowGView->setScene(rowVect[tlRowCount].rowGScene);
+ 	rowVect[tlRowCount].rowGView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+ 	rowVect[tlRowCount].rowGView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+ 	rowVect[tlRowCount].rowGView->show();
+ 	
+	//Установим высоту строки в зависимости от количества движений
+	int height = moverFromDialog.GetSizeOfmovementsVector()*tlRectSize;
+	TableViewer->setRowHeight(TableViewer->rowCount() - 1, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize + 5);
+	
+	//Добавляем прямоугольники
 
-	//Грузим CMover в структуру строки
-	//CMover * pMover = new CMover();
+	addGraphicMarks(newRow.tmovments, newRow.tnames, moverFromDialog, *rowVect[tlRowCount].rowGScene);
 
+	tlRowCount++;
 
-
-    rowVect.push_back(newRow);  //Пишем структуру в массив
-
-    TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, rowVect[thisRow].rowGView); //Помещаем вьювер графики в новую строку
-
-    rowVect[thisRow].rowGView->setScene(rowVect[thisRow].rowGScene);  //Устанавливаем в новый графиквьювер новую сцену
-    TimeLine::addTimeMarks(rowVect[thisRow].rowGScene);//Рисуем разделительные метки на сцене
-
-    rowVect[thisRow].rowGView->show();
-
-    TableViewer->setRowHeight(TableViewer->rowCount() - 1, fRowHeight * 2+3);  //+3 пикселя что-бы ячейка была чуть выше высоты сцены, да бы не появлялся боковой скроллбар
-
-    rowCount++;
-
-    
+	qDebug() << "Mover recieved";
 }
 
 void TimeLine::delRow()
 {
-    if (rowCount == 0) return;
+	if (tlRowCount == 0) return;
 
     rowVect.pop_back();
 
-    TableViewer->setRowCount(TableViewer->rowCount() - 1);
+	TableViewer->setRowCount(TableViewer->rowCount() - 1);
 
-    rowCount--;
+	tlRowCount--;
 }
 
 TimeLine::~TimeLine()
 {
-	//win->close();
-	delete(win);
+	delete(prmWin);
+	delete(addMovementDialog);
 }
 
 void TimeLine::actionRunWithPrms()
 {
-	prmWin = new tRunPrmWin(segmentsAmount);
 	prmWin->show();
+}
+
+void TimeLine::actionRun()
+{
+
+	int rowCnt = rowVect.size();
+	
+
+	for (int i = 0; i < rowCnt; i++)
+	{
+
+		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();
+
+		for (int j = 0; j < movementsCnt; j++)
+		{
+			rowVect[i].partMover.MoveIt(j);
+
+
+			//Обновляем
+// 			g_manager.HideSolid();
+// 			g_manager.ShowSolidInRender(mathModel->Solids[0], GeometryRenderManager::GetCamera(0));
+		}
+		
+	}
+
+
+
+
 }
 
 void TimeLine::actionAdd()
 {
-	addMovement = new AddMovementDlg(segmentsAmount);
-	addMovement->show();
+	addMovementDialog->show();
+}
+
+void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphicsTextItem *> Names, CMover prtMover, QGraphicsScene &scene)
+{
+	int mCount = prtMover.GetSizeOfmovementsVector();
+	QRectF mRectItem;
+	QGraphicsRectItem * mRect;
+	QGraphicsTextItem mNameItem;
+	CMovements * movement;
+	int height = tlRectSize;
+	int width = (movement->GetEnd() - movement->GetStart())*segmentSize;
+	int vStart;   //Начало по вертикали
+	int hStart;   //Начало по горизонтали
+
+
+	QPen pen(Qt::black, 1 , Qt::SolidLine);
+	QBrush brush(QColor(0,0,255,125), Qt::SolidPattern);
+	
+
+	for (int i = 0; i < mCount; i++)
+	{
+		movement = prtMover.GetMovementAt(i);
+
+		width = (movement->GetEnd() - movement->GetStart())*segmentSize;  //Сколько шагов занимает движение и его длинна в пикселях
+		vStart = i * height;   //Первый элемент в верху, второй ниже на 15 пикс и тд.
+		hStart = movement->GetStart()*segmentSize;
+
+		mRectItem.setRect(hStart, vStart, width, height);
+
+		mRect = scene.addRect(mRectItem, pen, brush);
+		Marks.push_back(mRect);
+		//Marks.push_back(scene.addRect(mRectItem, pen, brush));
+
+		Marks[i]->setBrush(brush);
+
+
+		Names.push_back(scene.addText(QString::fromStdString(movement->GetMoveName())));
+		Names[i]->setParentItem(Marks[i]);
+	}
 }

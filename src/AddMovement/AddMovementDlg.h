@@ -36,95 +36,101 @@ class AddMovementDlg : public QDialog,
 public:
 
     AddMovementDlg(int, QWidget *parent = 0);
+	~AddMovementDlg();
 
-    
+	
     
 
-    QString GetSolidName(Gepard::Topology_Geometry::GPDSolid *);
-    QString GetFaceName(Gepard::Topology_Geometry::GPDFace *);
+	QString GetSolidName(Gepard::Topology_Geometry::GPDSolid *);
+	QString GetFaceName(Gepard::Topology_Geometry::GPDFace *);
+
+	void closeEvent(QCloseEvent *) override;
 
 public slots:
 
-    void setLinear();
-    void setRadial();
-    void hideAll();
-    void showAll();
-    void partNameOutputRed();
-    void partNameOutputGreen();
-    void axisOutputRed();
-    void axisOutputGreen();
-    //Переключение флага
-    void flagPart();
-    void flagFace();
-    void flagNothing();
+	void setLinear();
+	void setRadial();
+	void hideAll();
+	void showAll();
+	void partNameOutputRed();
+	void partNameOutputGreen();
+	void axisOutputRed();
+	void axisOutputGreen();
+	//Переключение флага
+	void flagPart();
+	void flagFace();
+	void flagNothing();
 
-    void addMovement();
-    void clearMovement();
-    //Виртуальная функция обратного вызова - реакции на действия пользователя
-    void renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message) override;
-    void showAxis();
-    void deleteAxis(GAxis *);
+	void addMovement();
+	void clearMovement();
+	//Виртуальная функция обратного вызова - реакции на действия пользователя
+	void renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message) override;
+	void showAxis();
+	void deleteAxis(GAxis *);
+
+	void sendMover();
 
 signals:
 
-    void addMovementSignal(Gepard::Topology_Geometry::GPDSolid *solidPtr);
+	void moverToLine(CMover);
 
 private:
-    QLabel * tempLabel;
+	
 
 
-    QPalette * redPalette;
-    QPalette * greenPalette;
-    QGridLayout * mainLay;
+	QPalette * redPalette;
+	QPalette * greenPalette;
+	QGridLayout * mainLay;
 
-    QLabel * mainLabel;                //Выбор детали
-    QLabel * partLabel;                //Деталь:
-    QLabel * moveTypeLabel;            //Тип движения:
-    QLabel * moveNameLabel;            //Имя: (Движения)
-    QLabel * shiftLabel;               //Смещение: или Угол:
-    QLabel * axisLabel;                //Вектор:
-    QLabel * startStepLabel;           //Стартовый шаг:
-    QLabel * endStepLabel;             //Конечный шаг:
-    QLabel * moveListLabel;            //Список движений
+	QLabel * mainLabel;                //Выбор детали
+	QLabel * partLabel;                //Деталь:
+	QLabel * moveTypeLabel;            //Тип движения:
+	QLabel * moveNameLabel;            //Имя: (Движения)
+	QLabel * shiftLabel;               //Смещение: или Угол:
+	QLabel * axisLabel;                //Вектор:
+	QLabel * startStepLabel;           //Стартовый шаг:
+	QLabel * endStepLabel;             //Конечный шаг:
+	QLabel * moveListLabel;            //Список движений
 
-    QRadioButton * linearRadio;        //Линейное
-    QRadioButton * radialRadio;        //Вращательное
+	QRadioButton * linearRadio;        //Линейное
+	QRadioButton * radialRadio;        //Вращательное
 
-    QLineEdit * partNameOutput;        //Вывод детали
-    QLineEdit * moveNameInput;        //Ввод движения
-    QLineEdit * shiftInput;            //Ввод смещения
-    QLineEdit * axisOutput;            //Вывод оси
-    QLineEdit * startStepInput;        //Ввод стартового шага
-    QLineEdit * endStepInput;          //Ввод конечного шага
+	QLineEdit * partNameOutput;        //Вывод детали
+	QLineEdit * moveNameInput;        //Ввод движения
+	QLineEdit * shiftInput;            //Ввод смещения
+	QLineEdit * axisOutput;            //Вывод оси
+	QLineEdit * startStepInput;        //Ввод стартового шага
+	QLineEdit * endStepInput;          //Ввод конечного шага
 
-    QPushButton * partAddButton;       //Добавть деталь
-    QPushButton * partDropButton;      //Сбросить деталь
-    QPushButton * axisAddButton;       //Добавить ось
-    QPushButton * axisDropButton;      //Сбросить ось
-    QPushButton * moveAddButton;       //Добавить движение
-    QPushButton * moveDropButton;      //Сбросить данные диалога
+	QPushButton * partAddButton;       //Добавть деталь
+	QPushButton * partDropButton;      //Сбросить деталь
+	QPushButton * axisAddButton;       //Добавить ось
+	QPushButton * axisDropButton;      //Сбросить ось
+	QPushButton * moveAddButton;       //Добавить движение
+	QPushButton * moveDropButton;      //Сбросить данные диалога
+	QPushButton * moverAdd;
 
-    QTableWidget * moveList;
-    QHeaderView * moveListHeader;
-    QStringList  moveListLabels;
+	QTableWidget * moveList;
+	QHeaderView * moveListHeader;
+	QStringList  moveListLabels;
 
-    int stepCount; //Общее число шагов
-    int shift;
-    Gepard::BasicMath::GPDVector shiftEnd;
-    Gepard::BasicMath::GPDVector shiftStart;
+	int stepCount; //Общее число шагов
+	int shift;
+	Gepard::BasicMath::GPDVector shiftEnd;
+	Gepard::BasicMath::GPDVector shiftStart;
 
-    GAxis * newAxis;
+	enum modeFlag{ PART, FACE, NOTHING };
 
-    enum modeFlag{ PART, FACE, NOTHING };
+	modeFlag currentMode;
 
-    modeFlag currentMode;
+	bool moveFlag;
 
-    bool moveFlag;
+	Gepard::BasicMath::GPDReper fReper;
 
-    Gepard::BasicMath::GPDReper fReper;
-    Gepard::Topology_Geometry::GPDSolid * newPart;
+	Gepard::Topology_Geometry::GPDSolid * newPart;  //Указатель на деталь
+	GAxis * newAxis;                                //На ось
 
-    CMover * newMove;
-    CMovements * newMovement;
+
+	vector<CMovements> newMovements;
 
 };

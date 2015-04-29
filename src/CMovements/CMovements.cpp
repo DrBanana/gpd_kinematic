@@ -93,10 +93,12 @@ int CMovements::GetStart()
 
 void CMovements::SetStart(int start)
 {
-    if (start>m_end)
-    {
-        return;
-    }
+
+	//Èç-çà ïğîâåğêè íåâîçìîæíî óñòàíîâèòü íà÷àëî áîëüøå 0, ò.ê. ñîçäàåòñÿ ıêçåìïëÿğ ñî çíà÷åíèåì m_end = 1, ïğè óñòàíîâåê m_start > 1 íè÷åãî íå ïğîèçîéäåò
+//     if (start>m_end)
+//     {
+//         return;
+//     }
     m_start=start;
 }
 
