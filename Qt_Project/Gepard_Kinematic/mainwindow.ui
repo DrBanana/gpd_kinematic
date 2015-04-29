@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>803</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>
@@ -32,6 +32,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionOpenStep"/>
+   <addaction name="separator"/>
+   <addaction name="actionOpen_project"/>
    <addaction name="separator"/>
    <addaction name="actionMoveIt"/>
    <addaction name="separator"/>
@@ -54,6 +56,14 @@
   <action name="actionOpenTimeLine">
    <property name="text">
     <string>OpenTimeLine</string>
+   </property>
+  </action>
+  <action name="actionOpen_project">
+   <property name="text">
+    <string>Open project</string>
+   </property>
+   <property name="toolTip">
+    <string>Открыть проект</string>
    </property>
   </action>
  </widget>

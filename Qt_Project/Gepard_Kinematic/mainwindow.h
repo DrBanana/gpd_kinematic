@@ -25,7 +25,8 @@ public:
 private slots:
     void on_actionOpenStep_triggered();
     void on_actionMoveIt_triggered();
-	void on_actionOpenTimeLine_triggered();
+    void on_actionOpenTimeLine_triggered();
+    void on_actionOpenProject_triggered();
 
 private:
     Ui::MainWindow *ui;

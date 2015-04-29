@@ -26,7 +26,7 @@ using namespace std;
 
 CMovements::CMovements(EMovementTypes movType,
                         GPDPoint point,
-						string name,
+                        string name,
                         GPDVector axis, 
                         double shift, 
                         int start, 
