@@ -1,13 +1,17 @@
 #include "timeline.h"
 
 #include <Gepard/Callbacks/CB_GeometryRender.h>
+#include <Gepard/GeometryManager.h>
+
 using namespace Gepard::Callbacks;
 
 
-TimeLine::TimeLine(int defSegments,/* Gepard::GeometryManager g_manager,*/ QWidget *parent)
+TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget *parent)
     : QWidget(parent)
 {
 	
+	TimeLine_g_manager = g_manager;
+
     segmentSize = 50;
     timeStep=1;
     //ui.setupUi(this);
@@ -269,8 +273,8 @@ void TimeLine::actionRun()
 
 
 			//Обновляем
-// 			g_manager.HideSolid(rowVect[i].partMover.GetPart());
-//			g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+			TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
+			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 		}
 		
 	}

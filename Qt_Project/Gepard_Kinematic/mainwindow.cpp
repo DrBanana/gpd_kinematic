@@ -93,7 +93,7 @@ void MainWindow::on_actionMoveIt_triggered()
 void MainWindow::on_actionOpenTimeLine_triggered()
 {
 	//Таймлайн
-	timeLineWidget = new TimeLine(20);
+	timeLineWidget = new TimeLine(20, &g_manager);
 	timeLineWidget->show();
 
 	//Доквиджет для таймлайна

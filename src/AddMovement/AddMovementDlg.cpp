@@ -357,7 +357,7 @@ void AddMovementDlg::addMovement()
 	//ѕишем в него данные
 	newMovement.SetMoveName(moveNameInput->text().toStdString());
 	newMovement.SetShift(shift);
-	newMovement.SetAxis(shiftEnd);
+	newMovement.SetAxis((shiftEnd-shiftStart).getNormalized());
 	newMovement.SetPoint(*newPoint);
 	newMovement.SetStart(startStepInput->text().toInt());
 	newMovement.SetEnd(endStepInput->text().toInt());
@@ -434,8 +434,10 @@ void AddMovementDlg::closeEvent(QCloseEvent * event)
 	newMovements.clear();
 	moveList->clear();
 	moveList->setRowCount(0);
+	clearMovement();
 	partNameOutput->clear();
 	partNameOutput->setPalette(*redPalette);
+	
 
 	hideAll();
 
