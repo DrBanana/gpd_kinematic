@@ -28,6 +28,43 @@ int CMover::AddMovement(EMovementTypes movType, GPDPoint point, string name, GPD
     return m_movementsVector.size();
 }
 
+int CMover::GetStepsCntForMovement(int movementId)
+{
+    return m_movementsVector.at(movementId).GetStepsCnt();
+}
+
+void CMover::OneStepMove(int movement,int stp)
+{
+    CMovements move = m_movementsVector.at(movement);
+    int steps = move.GetStepsCnt();
+    if (stp>steps||stp<0)
+    {
+        return;
+    }
+    
+    GPDReper rep = m_part->SolidReper;
+    int start = move.GetStart();
+    int end = move.GetEnd();
+    double _oneStepShift = move.GetMovePerStep();
+
+    double _resultShift=_oneStepShift*(stp+1);
+
+    if (move.GetMovementType()==EMovementTypes::CIRCULAR)
+    {
+        GPDReper mReper;
+        mReper.R.setCoords(move.GetPoint().nx,move.GetPoint().ny,move.GetPoint().nz);
+        mReper.morphByAngleAndAxis(move.GetAxis(), _resultShift);
+        rep.Transform(GPDReper::getGlobalReper(), mReper);
+    }
+    else
+        if (move.GetMovementType()==EMovementTypes::LINEAR)
+        {
+            GPDVector vec = move.GetAxis()*_resultShift;
+            rep.R += vec;
+        }
+        m_part->UpdateSolidPosition(rep);
+}
+
 void CMover::MoveIt(int pos)
 {
     CMovements move = m_movementsVector.at(pos);
