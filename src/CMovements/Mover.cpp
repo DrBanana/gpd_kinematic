@@ -76,7 +76,7 @@ void CMover::SetMovementsVector(vector<CMovements>  newVector)
 	m_movementsVector.swap(newVector);
 }
 
-GPDSolid CMover::GetPart()
+GPDSolid *CMover::GetPart()
 {
-	return *m_part;
+	return m_part;
 }

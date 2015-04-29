@@ -33,7 +33,7 @@ public:
 	/*
 	* ѕолучить ссылку на деталь
 	*/
-	Gepard::Topology_Geometry::GPDSolid GetPart();
+	Gepard::Topology_Geometry::GPDSolid* GetPart();
 
     /*
      *	добавить перемещение

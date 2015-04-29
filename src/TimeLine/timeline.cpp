@@ -1,5 +1,7 @@
 #include "timeline.h"
 
+#include <Gepard/Callbacks/CB_GeometryRender.h>
+using namespace Gepard::Callbacks;
 
 
 TimeLine::TimeLine(int defSegments,  QWidget *parent)
@@ -265,9 +267,15 @@ void TimeLine::actionRun()
 		{
 			rowVect[i].partMover.MoveIt(j);
 
+
+			//Обновляем
+// 			g_manager.HideSolid();
+// 			g_manager.ShowSolidInRender(mathModel->Solids[0], GeometryRenderManager::GetCamera(0));
 		}
 		
 	}
+
+
 
 
 }
