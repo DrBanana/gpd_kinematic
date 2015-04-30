@@ -120,7 +120,7 @@ public:
     
      //	получить сдвиг на один шаг
      
-    int GetMovePerStep();
+    double GetMovePerStep();
     
      //	получить количество шагов
      

@@ -59,8 +59,8 @@ public:
    
     void MoveIt(int);
     void MoveAll();
-
-
+    void OneStepMove(int movement,int stp);
+    int GetStepsCntForMovement(int movementId);
 };
 
 #endif //MOVER_H

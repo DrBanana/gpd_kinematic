@@ -39,7 +39,7 @@ CMovements::CMovements(EMovementTypes movType,
     m_start(start),
     m_end(end)
 {
-    if (end>start)
+    if (end<start)
     {
         m_start=0;
         m_end=1;
@@ -124,10 +124,10 @@ int CMovements::GetEnd()
     return m_end;
 }
 
-int CMovements::GetMovePerStep()
+double CMovements::GetMovePerStep()
 {
-    int len = m_end-m_start;
-    return m_shift/len;
+    double len = m_end-m_start;
+    return (GetShift()/len);
 }
 
 int CMovements::GetStepsCnt()

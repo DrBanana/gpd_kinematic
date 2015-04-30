@@ -55,14 +55,14 @@ void MainWindow::on_actionMoveIt_triggered()
 {
     Gepard::MathModel *mathModel = g_manager.GetMathModelPtr();
 
-    CMover m = CMover(mathModel->Solids[0]);
+    CMover m (mathModel->Solids[0]);
     GPDVector vect;
     vect.x =0;
     vect.y =0;
     vect.z =-1;
-    GPDPoint point = GPDPoint(0,0,0);
+    GPDPoint point(0,0,0);
     //CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
-    CMovements ml = CMovements(EMovementTypes::LINEAR,point,"",vect,20.0,0,1);
+    CMovements ml(EMovementTypes::LINEAR,point,"",vect,20.0,0,5);
 //     CMovements mr = CMovements();
 //     mr.SetAxis(GPDVector(0,-1,0));
 //     mr.SetMovementType(CIRCULAR);
@@ -74,34 +74,44 @@ void MainWindow::on_actionMoveIt_triggered()
      //m.AddMovement(mr);
      //m.AddMovement(mc);
        int cnt = m.GetSizeOfmovementsVector();
+       
         for (int i =0;i<cnt;i++)
         {
-            m.MoveIt(i);
+            int _cnt = m.GetStepsCntForMovement(i);
+            for (int j=0;j<_cnt;j++)
+            {
+                m.OneStepMove(i,j);
+                g_manager.HideSolid(mathModel->Solids[0]);
+                mathModel->PrepareGeometry();
+                g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
+                //break;
+                //Sleep(1000);
+            }
         }
 //    m.MoveIt(0);
-    g_manager.HideSolid(mathModel->Solids[0]);
-    g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
-    Gepard::Analysis::KeyCharacteristicsPtrArray* kca = mathModel->GetKCArrayPtr();
-    
-    kca->set_start();
-    while (auto curKC = kca->get_next())
-    {
-        (*curKC)->Analize();
-    }
+//         g_manager.HideSolid(mathModel->Solids[0]);
+//         g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
+//     Gepard::Analysis::KeyCharacteristicsPtrArray* kca = mathModel->GetKCArrayPtr();
+//     
+//     kca->set_start();
+//     while (auto curKC = kca->get_next())
+//     {
+//         (*curKC)->Analize();
+//     }
 }
 
 void MainWindow::on_actionOpenTimeLine_triggered()
 {
-	//Таймлайн
-	timeLineWidget = new TimeLine(20, &g_manager);
-	timeLineWidget->show();
+    //Таймлайн
+    timeLineWidget = new TimeLine(20, &g_manager);
+    timeLineWidget->show();
 
-	//Доквиджет для таймлайна
-	tLineWidget = new QDockWidget(this);
-	this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
-	tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
-	tLineWidget->setWidget(timeLineWidget);
-	tLineWidget->show();
+    //Доквиджет для таймлайна
+    tLineWidget = new QDockWidget(this);
+    this->addDockWidget(Qt::BottomDockWidgetArea, tLineWidget);
+    tLineWidget->setAllowedAreas(Qt::BottomDockWidgetArea);
+    tLineWidget->setWidget(timeLineWidget);
+    tLineWidget->show();
 }
 
 void MainWindow::on_actionOpenProject_triggered()
