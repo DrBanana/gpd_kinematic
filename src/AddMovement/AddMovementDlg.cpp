@@ -55,9 +55,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	endStepInput = new QLineEdit();          //Ввод конечного шага
 
 	partAddButton = new QPushButton(tr("+"));       //Добавть деталь
-	partDropButton = new QPushButton(tr("-"));      //Сбросить деталь
 	axisAddButton = new QPushButton(tr("+"));       //Добавить ось
-	axisDropButton = new QPushButton(tr("-"));      //Сбросить ось
 	moveAddButton = new QPushButton(tr("Add"));       //Добавить движение
 	moveDropButton = new QPushButton(tr("Drop"));      //Сбросить данные диалога
 	moverAdd = new QPushButton(tr("Add Mover"));
@@ -79,7 +77,6 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	mainLay->addWidget(partLabel, 1, 0, 1, 1);
 	mainLay->addWidget(partNameOutput, 1, 1, 1, 1);
 	mainLay->addWidget(partAddButton, 1, 2, 1, 1);
-	mainLay->addWidget(partDropButton, 1, 3, 1, 1);
 	//строка 2
 	mainLay->addWidget(moveTypeLabel, 2, 0, 1, 1);
 	//строка 3
@@ -95,7 +92,6 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	mainLay->addWidget(axisLabel, 6, 0, 1, 1);
 	mainLay->addWidget(axisOutput, 6, 1, 1, 1);
 	mainLay->addWidget(axisAddButton, 6, 2, 1, 1);
-	mainLay->addWidget(axisDropButton, 6, 3, 1, 1);
 	//строка 7
 	mainLay->addWidget(startStepLabel, 7, 0, 1, 1);
 	mainLay->addWidget(startStepInput, 7, 1, 1, 1);
@@ -250,7 +246,6 @@ void AddMovementDlg::hideAll()
 	axisLabel->hide();
 	axisOutput->hide();
 	axisAddButton->hide();
-	axisDropButton->hide();
 	startStepLabel->hide();
 	startStepInput->hide();
 	endStepLabel->hide();
@@ -274,7 +269,6 @@ void AddMovementDlg::showAll()
 	axisLabel->show();
 	axisOutput->show();
 	axisAddButton->show();
-	axisDropButton->show();
 	startStepLabel->show();
 	startStepInput->show();
 	endStepLabel->show();
@@ -409,6 +403,7 @@ void AddMovementDlg::clearMovement()
 	shiftInput->clear();
 	axisOutput->clear();
 	axisOutputRed();
+
 	startStepInput->setText(tr("0"));
 	endStepInput->setText(tr("1"));
 	setLinear();

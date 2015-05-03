@@ -103,9 +103,7 @@ private:
 	QLineEdit * endStepInput;          //Ввод конечного шага
 
 	QPushButton * partAddButton;       //Добавть деталь
-	QPushButton * partDropButton;      //Сбросить деталь
 	QPushButton * axisAddButton;       //Добавить ось
-	QPushButton * axisDropButton;      //Сбросить ось
 	QPushButton * moveAddButton;       //Добавить движение
 	QPushButton * moveDropButton;      //Сбросить данные диалога
 	QPushButton * moverAdd;

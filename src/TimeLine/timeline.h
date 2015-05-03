@@ -23,8 +23,10 @@
 #include <qlineedit.h>
 #include<qheaderview.h>
 #include <QMenuBar>
+#include <QGraphicsSceneMouseEvent>
 
 #include"tRunPrmWin.h"
+#include"tDelWin.h"
 #include <AddMovement/AddMovementDlg.h>
 //#include"CMovements/CMovements.h"
 //#include"CMovements/Mover.h"
@@ -73,7 +75,8 @@ public slots:
 
 	//Добавление строк, со строкой добвляется CMover
 	void addRow(CMover);
-	void delRow();
+	void delRowDialog();
+	void delRow(int);
 
 	//Добавление разделительных меток на новую сцену
 	void addTimeMarks(QGraphicsScene &);
@@ -89,6 +92,8 @@ public slots:
 	//окно добавления движения
 	void actionAdd();
 
+	void mouseDoubleClickEvent(QMouseEvent * event) override;
+
 
 signals:
 
@@ -103,11 +108,14 @@ private:
 	
 	Gepard::GeometryManager * TimeLine_g_manager;
 
+	QGraphicsSceneMouseEvent * doubleclick_event;  //Эвент мыши в рамках сцены
+
 	QTableWidget * TableViewer;
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
 	QMenuBar * mainMenu;
 	tRunPrmWin * prmWin;
+	tDelWin * delWin;
 
 	QWidget *win;
 	//Экшны меню
@@ -116,6 +124,7 @@ private:
 	QAction * aRun;           //Запуск
 	QAction * aRunParams;     //Запуск с параметрами
 	QAction * aMover;         //Добавить двигатель + установить движения 
+	QAction * aRemove;
 
 	AddMovementDlg * addMovementDialog;
 
