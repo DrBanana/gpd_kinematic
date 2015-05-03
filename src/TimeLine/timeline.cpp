@@ -116,9 +116,10 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 
 	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
 	connect(aRun, SIGNAL(triggered()), this, SLOT(actionRun()));
-	connect(aRemove, SIGNAL(triggered()), this, SLOT(delRow()));
+	connect(aRemove, SIGNAL(triggered()), this, SLOT(delRowDialog()));
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
 	connect(addMovementDialog, SIGNAL(moverToLine(CMover)), this, SLOT(addRow(CMover)));
+	connect(delWin, SIGNAL(accept(int)), this, SLOT(delRow(int)));
 
 
 }
@@ -234,11 +235,28 @@ void TimeLine::addRow(CMover moverFromDialog)
 	qDebug() << "Mover recieved";
 }
 
-void TimeLine::delRow()
+void TimeLine::delRowDialog()
 {
 	if (rowVect.size() == 0) { return; }
 
 	delWin->show();
+}
+
+void TimeLine::delRow(int numRow)
+{
+	std::vector <_row> tempVect;
+
+	for (int i = 0; i < rowVect.size(); i++)
+	{
+		if (i != numRow - 1) 
+		{
+			tempVect.push_back(rowVect[i]);
+		}
+	}
+
+	TableViewer->removeRow(numRow);
+
+	tempVect.swap(rowVect);
 }
 
 TimeLine::~TimeLine()

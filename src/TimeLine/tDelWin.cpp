@@ -19,6 +19,7 @@ tDelWin::tDelWin(int newRowCount, QWidget *parent /*= 0*/)
 	this->setLayout(mainLay);
 
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+	connect(okButton, SIGNAL(clicked()), this, SLOT(sendNum()));
 
 }
 
@@ -29,6 +30,20 @@ tDelWin::~tDelWin()
 
 void tDelWin::showEvent(QShowEvent * event)
 {
+	
 	mainLabel->setText(tr("Insert string number from 1 to ") + QString::number(rowCount));
+}
+
+void tDelWin::closeEvent(QCloseEvent *)
+{
+
+}
+
+void tDelWin::sendNum()
+{
+	int num = numLine->text().toInt();
+	emit accept(num);
+
+	this->close();
 }
 

@@ -18,9 +18,15 @@ public:
 	~tDelWin();
 
 	void showEvent(QShowEvent *) override;
+	void closeEvent(QCloseEvent *) override;
 
-	protected slots:
+public slots:
 
+	void sendNum();
+
+signals :
+
+	void accept(int);
 
 private:
 

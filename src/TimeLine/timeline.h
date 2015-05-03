@@ -75,7 +75,8 @@ public slots:
 
 	//Добавление строк, со строкой добвляется CMover
 	void addRow(CMover);
-	void delRow();
+	void delRowDialog();
+	void delRow(int);
 
 	//Добавление разделительных меток на новую сцену
 	void addTimeMarks(QGraphicsScene &);
