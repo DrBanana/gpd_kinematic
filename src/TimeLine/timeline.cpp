@@ -28,6 +28,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
     this->resize(1200, 200);
 
     //Объявляем виджеты
+	doubleclick_event = new QGraphicsSceneMouseEvent();
 
     TableViewer = new QTableWidget(1, 2, this);
 
@@ -72,6 +73,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	aRunParams = new QAction(tr("Run with params"), mRun);   //Экшн запуск
 	aRun = new QAction(tr("Run"), mRun);                     //Экшн запуск с параметрами
 	aMover = new QAction(tr("Add part mover"), mAdd);
+	aRemove = new QAction(tr("Remove row"), mainMenu);
 	
 	mainMenu->addMenu(mRun);                //Менюшку в бар
 	mRun->addAction(aRun);                  //Экшн в менюшку
@@ -79,6 +81,8 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 
 	mainMenu->addMenu(mAdd);
 	mAdd->addAction(aMover);
+
+	mainMenu->addAction(aRemove);
    
 	
 	//Компоновка таймлайна
@@ -105,12 +109,14 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	//Объявляем виджеты окон
 	addMovementDialog = new AddMovementDlg(segmentsAmount);
 	prmWin = new tRunPrmWin(segmentsAmount);
+	delWin = new tDelWin(rowVect.size());
 
 
     //связываем сигналы-слоты
 
 	connect(aRunParams, SIGNAL(triggered()), this, SLOT(actionRunWithPrms()));
 	connect(aRun, SIGNAL(triggered()), this, SLOT(actionRun()));
+	connect(aRemove, SIGNAL(triggered()), this, SLOT(delRow()));
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
 	connect(addMovementDialog, SIGNAL(moverToLine(CMover)), this, SLOT(addRow(CMover)));
 
@@ -184,12 +190,6 @@ void TimeLine::addTimeMarks(QGraphicsScene  &scene)
         scene.addLine(paintFrom,0, paintFrom, scene.height(), _pen2);
         paintFrom += segmentSize;
     }
-
-    //Проверка номеров
-    QGraphicsTextItem * ptext;
-	ptext = scene.addText(QString::number(tlRowCount));
-    ptext->setPos(5, 5);
-
 }
 
 void TimeLine::addRow(CMover moverFromDialog)
@@ -236,13 +236,9 @@ void TimeLine::addRow(CMover moverFromDialog)
 
 void TimeLine::delRow()
 {
-	if (tlRowCount == 0) return;
+	if (rowVect.size() == 0) { return; }
 
-    rowVect.pop_back();
-
-	TableViewer->setRowCount(TableViewer->rowCount() - 1);
-
-	tlRowCount--;
+	delWin->show();
 }
 
 TimeLine::~TimeLine()
@@ -292,9 +288,9 @@ void TimeLine::actionAdd()
 void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphicsTextItem *> Names, CMover prtMover, QGraphicsScene &scene)
 {
 	int mCount = prtMover.GetSizeOfmovementsVector();
-	QRectF mRectItem;
-	QGraphicsRectItem * mRect;
-	QGraphicsTextItem mNameItem;
+	QRectF mRectF;                                       //Геометрия маркера
+	QGraphicsRectItem * mRectItem;                       //Указатель на маркер
+	QGraphicsTextItem mNameItem;                         //Имя маркера
 	CMovements * movement;
 	int height = tlRectSize;
 	int width = (movement->GetEnd() - movement->GetStart())*segmentSize;
@@ -314,16 +310,25 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 		vStart = i * height;   //Первый элемент в верху, второй ниже на 15 пикс и тд.
 		hStart = movement->GetStart()*segmentSize;
 
-		mRectItem.setRect(hStart, vStart, width, height);
+		mRectF.setRect(hStart, vStart, width, height);  //Устанавливаем размеры геометрии маркера
 
-		mRect = scene.addRect(mRectItem, pen, brush);
-		Marks.push_back(mRect);
-		//Marks.push_back(scene.addRect(mRectItem, pen, brush));
+		mRectItem = scene.addRect(mRectF, pen, brush); //Добавляем RectItem на сцену и пишем указатель на него
+		mRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
+
+		Marks.push_back(mRectItem);                      //Пишем указатель в массив
 
 		Marks[i]->setBrush(brush);
-
-
+		
 		Names.push_back(scene.addText(QString::fromStdString(movement->GetMoveName())));
 		Names[i]->setParentItem(Marks[i]);
 	}
 }
+
+void TimeLine::mouseDoubleClickEvent(QMouseEvent * event)
+{
+	addMovementDialog->show();
+
+	event->accept();
+}
+
+
