@@ -348,7 +348,7 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 		//mNameItem->setParentItem(tRectItem);
 	
 		QPointF Point = mRectF.bottomLeft();
-		mNameItem->setPos(Point.rx(),0);
+		mNameItem->setPos(Point.rx(),Point.ry()-tlRectSize);
 		//Names[i]->setParentItem(Marks[i]);
 		
 		Marks.push_back(tRectItem);                      //Пишем указатель в массив
