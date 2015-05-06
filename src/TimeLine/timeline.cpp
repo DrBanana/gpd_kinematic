@@ -307,8 +307,9 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 {
 	int mCount = prtMover.GetSizeOfmovementsVector();
 	QRectF mRectF;                                       //Геометрия маркера
-	QGraphicsRectItem * mRectItem;                       //Указатель на маркер
-	QGraphicsTextItem mNameItem;                         //Имя маркера
+	//QGraphicsRectItem * mRectItem;                       //Указатель на маркер
+	tGraphicsRectItem * tRectItem;                       //Указатель на маркер
+	QGraphicsTextItem * mNameItem;                         //Имя маркера
 	CMovements * movement;
 	int height = tlRectSize;
 	int width = (movement->GetEnd() - movement->GetStart())*segmentSize;
@@ -318,6 +319,7 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 
 	QPen pen(Qt::black, 1 , Qt::SolidLine);
 	QBrush brush(QColor(0,0,255,125), Qt::SolidPattern);
+	QBrush brush2(QColor(255, 0, 0, 125), Qt::SolidPattern);
 	
 
 	for (int i = 0; i < mCount; i++)
@@ -330,15 +332,27 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 
 		mRectF.setRect(hStart, vStart, width, height);  //Устанавливаем размеры геометрии маркера
 
-		mRectItem = scene.addRect(mRectF, pen, brush); //Добавляем RectItem на сцену и пишем указатель на него
-		mRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
+		//mRectItem = scene.addRect(mRectF, pen, brush); //Добавляем RectItem на сцену и пишем указатель на него
+		tRectItem = new tGraphicsRectItem(mRectF);
+		tRectItem->setBrush(brush2);
+		tRectItem->setPen(pen);
+		tRectItem->setRect(mRectF);
+		scene.addItem(tRectItem);  //Почему так работает???
 
-		Marks.push_back(mRectItem);                      //Пишем указатель в массив
+		//mRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
+		tRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
 
-		Marks[i]->setBrush(brush);
+		//Marks[i]->setBrush(brush2);
 		
-		Names.push_back(scene.addText(QString::fromStdString(movement->GetMoveName())));
-		Names[i]->setParentItem(Marks[i]);
+		mNameItem = scene.addText(QString::fromStdString(movement->GetMoveName()));
+		//mNameItem->setParentItem(tRectItem);
+	
+		QPointF Point = mRectF.bottomLeft();
+		mNameItem->setPos(Point.rx(),0);
+		//Names[i]->setParentItem(Marks[i]);
+		
+		Marks.push_back(tRectItem);                      //Пишем указатель в массив
+		Names.push_back(mNameItem);
 	}
 }
 

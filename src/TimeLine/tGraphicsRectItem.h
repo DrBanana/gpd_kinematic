@@ -2,10 +2,12 @@
 #define TGRAPHICSRECTITEM_H
 
 #include<QGraphicsRectItem>
+#include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 class tGraphicsRectItem : public QGraphicsRectItem
 {
-	Q_OBJECT
+	//Q_OBJECT
 
 public:
 
@@ -19,11 +21,11 @@ protected:
 
 public slots:
 
-
+	void sendSignal();
 
 signals :
 
-	void doubleClicked();
+	void doubleClicked(int a);
 
 private:
 

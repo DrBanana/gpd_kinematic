@@ -26,6 +26,7 @@
 #include <QGraphicsSceneMouseEvent>
 
 #include"tRunPrmWin.h"
+#include "tGraphicsRectItem.h"
 #include"tDelWin.h"
 #include <AddMovement/AddMovementDlg.h>
 //#include"CMovements/CMovements.h"
