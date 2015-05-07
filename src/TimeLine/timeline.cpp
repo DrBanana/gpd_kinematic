@@ -12,6 +12,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	
 	TimeLine_g_manager = g_manager;
 
+	segments = defSegments;
     segmentSize = 50;
     timeStep=1;
     //ui.setupUi(this);
@@ -26,6 +27,8 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
     h = 50;
 
     this->resize(1200, 200);
+
+	splitSecond = nullptr;
 
     //Объявляем виджеты
 	doubleclick_event = new QGraphicsSceneMouseEvent();
@@ -83,12 +86,21 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	mAdd->addAction(aMover);
 
 	mainMenu->addAction(aRemove);
-   
+
+	//Тулбар
+	tBar = new QToolBar();
+
+	aRight = new QAction(tr(">"), tBar);
+	aLeft = new QAction(tr("<"), tBar);
+
+	tBar->addAction(aLeft);
+	tBar->addAction(aRight);
 	
 	//Компоновка таймлайна
-    QBoxLayout *mainLay = new QVBoxLayout();
-    
-    mainLay->addWidget(TableViewer, 1, 0);
+    QGridLayout *mainLay = new QGridLayout();
+
+	mainLay->addWidget(tBar, 0, 0, 1, 1);
+	mainLay->addWidget(TableViewer, 1, 0, 1, 1);
 	mainLay->setMenuBar(mainMenu);
     this->setLayout(mainLay);
     
@@ -101,6 +113,9 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
     {
         TimeLine::addTime();
     }
+
+	//Добавляем сплиттеры
+	TimeLine::addSplitters();
 
     //Устанавливаем размеры ячеек
 	TableViewer->setColumnWidth(1, w + segmentSize / 2);
@@ -120,6 +135,8 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
 	connect(addMovementDialog, SIGNAL(moverToLine(CMover)), this, SLOT(addRow(CMover)));
 	connect(delWin, SIGNAL(accept(int)), this, SLOT(delRow(int)));
+	connect(aRight, SIGNAL(triggered()), this, SLOT(moveSplitterRight()));
+	connect(aLeft, SIGNAL(triggered()), this, SLOT(moveSplitterLeft()));
 
 
 }
@@ -137,7 +154,7 @@ void TimeLine::addTime()
     QPen _pen(Qt::black, 1);
     QPen _pen2(Qt::gray, 1, Qt::DashLine);
     QGraphicsTextItem * ptext;
-
+	
     //Рисуем 1 сегмент 
     graphS->addLine(paintFrom, 0, paintFrom, fRowHeight, _pen2); //Направляющая в начале
     graphS->addLine(paintFrom + segmentSize, 0, paintFrom + segmentSize, fRowHeight, _pen2); //Направляющая в конце
@@ -373,4 +390,61 @@ void TimeLine::showEdit(CMovements * numMovement)
 
 }
 
+void TimeLine::addSplitters()
+{
+	//добавим разделители
+
+	QPen _pen3(QColor(255, 0, 0, 255), 1);
+
+	QRectF * rect = new QRectF(-2, 0, 4, fRowHeight);
+
+	splitFirst = graphS->addRect(*rect, _pen3);
+	splitSecond = graphS->addRect(*rect, _pen3);
+
+	splitFirst->setFlags(QGraphicsItem::ItemIsSelectable);
+	splitSecond->setFlags(QGraphicsItem::ItemIsSelectable);
+
+	splitFirst->setPos(0, 0);
+	splitSecond->setPos(segmentSize, 0);
+
+	delete(rect);
+}
+
+
+void TimeLine::moveSplitterLeft()
+{
+
+	QPointF point;
+
+	if (splitFirst->isSelected() == true)
+	{
+		point = splitFirst->pos();
+		if (point.rx() == 0) { return; }
+		splitFirst->setPos(point.rx()-segmentSize, 0);
+	}
+	else if (splitSecond->isSelected() == true)
+	{
+		point = splitSecond->pos();
+		if (point.rx() == 0) { return; }
+		splitSecond->setPos(point.rx() - segmentSize, 0);
+	}
+}
+
+void TimeLine::moveSplitterRight()
+{
+	QPointF point;
+
+	if (splitFirst->isSelected() == true)
+	{
+		point = splitFirst->pos();
+		if (point.rx() == segments*segmentSize) { return; }
+		splitFirst->setPos(point.rx() + segmentSize, 0);
+	}
+	else if (splitSecond->isSelected() == true)
+	{
+		point = splitSecond->pos();
+		if (point.rx() == segments*segmentSize) { return; }
+		splitSecond->setPos(point.rx() + segmentSize, 0);
+	}
+}
 

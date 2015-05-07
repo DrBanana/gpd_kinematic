@@ -24,6 +24,9 @@
 #include<qheaderview.h>
 #include <QMenuBar>
 #include <QGraphicsSceneMouseEvent>
+#include <QToolButton>
+#include <QToolBar>
+#include <QGraphicsLineItem>
 
 #include"tRunPrmWin.h"
 #include "tGraphicsRectItem.h"
@@ -99,6 +102,12 @@ public slots:
 	//Показать окно редактирования
 	void showEdit(CMovements *);
 
+	//Добавить ограничивающие маркеры
+	void addSplitters();
+	//Двигать маркеры
+	void moveSplitterLeft();
+	void moveSplitterRight();
+
 
 signals:
 
@@ -118,12 +127,14 @@ private:
 	QTableWidget * TableViewer;
 	QGraphicsScene * graphS;
 	QGraphicsView * graphicsWindow;
-	QMenuBar * mainMenu;
+
 	tRunPrmWin * prmWin;
 	tDelWin * delWin;
 	tEditWin * editWin;
+	AddMovementDlg * addMovementDialog;
 
 	//Экшны меню
+	QMenuBar * mainMenu;
 	QMenu * mRun;             //Меню запуска
 	QMenu * mAdd;             //Меню добавления
 	QAction * aRun;           //Запуск
@@ -131,8 +142,16 @@ private:
 	QAction * aMover;         //Добавить двигатель + установить движения 
 	QAction * aRemove;
 
-	AddMovementDlg * addMovementDialog;
+	//Тулбар и кнопки
+	QToolBar * tBar;
+	QAction * aRight;
+	QAction * aLeft;
 
+	//Ограничители симуляции
+	QGraphicsRectItem * splitFirst;
+	QGraphicsRectItem * splitSecond;
+
+	int segments;  //Количество сегментов
 	int segmentSize; //Размер сегмента по дефолту, в пикселях
 	int segmentsAmount; //Текущее количество сегментов (после запуска равно общему числу сегментов)
 
