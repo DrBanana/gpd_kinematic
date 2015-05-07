@@ -4,15 +4,20 @@
 #include<QGraphicsRectItem>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QWidget>
 
-class tGraphicsRectItem : public QGraphicsRectItem
+#include"CMovements/Mover.h"
+
+class tGraphicsRectItem : public QWidget, public QGraphicsRectItem
 {
-	//Q_OBJECT
+	Q_OBJECT
 
 public:
 
 	tGraphicsRectItem(const QRectF & rect, QGraphicsItem * parent = 0);
 	~tGraphicsRectItem();
+
+	CMovements * movement;
 
 
 protected:
@@ -21,11 +26,11 @@ protected:
 
 public slots:
 
-	void sendSignal();
+	//void sendSignal();
 
 signals :
 
-	void doubleClicked(int a);
+	void doubleClicked(CMovements *);
 
 private:
 

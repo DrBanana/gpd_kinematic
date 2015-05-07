@@ -341,6 +341,7 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 
 		//mRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
 		tRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
+		tRectItem->movement = movement;
 
 		//Marks[i]->setBrush(brush2);
 		
@@ -351,6 +352,8 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 		mNameItem->setPos(Point.rx(),Point.ry()-tlRectSize);
 		//Names[i]->setParentItem(Marks[i]);
 		
+		connect(tRectItem,SIGNAL(doubleClicked(CMovements* )), this, SLOT(showEdit(CMovements*)));
+
 		Marks.push_back(tRectItem);                      //Пишем указатель в массив
 		Names.push_back(mNameItem);
 	}
@@ -361,6 +364,13 @@ void TimeLine::mouseDoubleClickEvent(QMouseEvent * event)
 	addMovementDialog->show();
 
 	event->accept();
+}
+
+void TimeLine::showEdit(CMovements * numMovement)
+{
+	editWin = new tEditWin(numMovement);
+	editWin->show();
+
 }
 
 

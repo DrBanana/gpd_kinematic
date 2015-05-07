@@ -4,15 +4,14 @@
 
 tGraphicsRectItem::tGraphicsRectItem(const QRectF & rect, QGraphicsItem * parent)
 {
-
+	movement = nullptr;
 }
 
 
 void tGraphicsRectItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-	int a=0;
 
-	//emit doubleClicked(a);
+	emit doubleClicked(movement);
 
 	event->accept();
 }

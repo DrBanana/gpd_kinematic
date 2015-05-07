@@ -137,6 +137,21 @@
     <ClCompile Include="..\..\src\TimeLine\tGraphicsRectItem.cpp">
       <Filter>Source Files\TimeLine</Filter>
     </ClCompile>
+    <ClCompile Include="Debug\moc_tGraphicsRectItem.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_tGraphicsRectItem.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TimeLine\tEditWin.cpp">
+      <Filter>Source Files\TimeLine</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_tEditWin.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_tEditWin.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\src\GRenderWin.h">
@@ -176,6 +191,9 @@
       <Filter>Header Files\TimeLine</Filter>
     </CustomBuild>
     <CustomBuild Include="..\..\src\TimeLine\tGraphicsRectItem.h">
+      <Filter>Header Files\TimeLine</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\src\TimeLine\tEditWin.h">
       <Filter>Header Files\TimeLine</Filter>
     </CustomBuild>
   </ItemGroup>

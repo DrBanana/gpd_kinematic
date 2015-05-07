@@ -20,97 +20,97 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 
 	this->setWindowFlags(Qt::WindowStaysOnTopHint);
 
-	//Палитра
+	//РџР°Р»РёС‚СЂР°
 	redPalette = new QPalette();
 	redPalette->setColor(QPalette::Base, QColor(255,0,0,120));
 	greenPalette = new QPalette();
 	greenPalette->setColor(QPalette::Base, QColor(0, 255, 0, 120));
 
-	//Определяем виджеты 
+	//РћРїСЂРµРґРµР»СЏРµРј РІРёРґР¶РµС‚С‹ 
 	
-	mainLabel = new QLabel(tr("Chiose part"));                //Выбор детали
-	partLabel = new QLabel(tr("Part: "));                //Деталь:
-	moveTypeLabel = new QLabel(tr("Move Type"));            //Тип движения:
-	moveNameLabel = new QLabel(tr("Name: "));            //Имя: (Движения)
+	mainLabel = new QLabel(tr("Chiose part"));                //Р’С‹Р±РѕСЂ РґРµС‚Р°Р»Рё
+	partLabel = new QLabel(tr("Part: "));                //Р”РµС‚Р°Р»СЊ:
+	moveTypeLabel = new QLabel(tr("Move Type"));            //РўРёРї РґРІРёР¶РµРЅРёСЏ:
+	moveNameLabel = new QLabel(tr("Name: "));            //РРјСЏ: (Р”РІРёР¶РµРЅРёСЏ)
 
-	shiftLabel = new QLabel(tr("Shift: "));               //Смещение: или Угол:
+	shiftLabel = new QLabel(tr("Shift: "));               //РЎРјРµС‰РµРЅРёРµ: РёР»Рё РЈРіРѕР»:
 
-	axisLabel = new QLabel(tr("Axis: "));                //Вектор:
-	startStepLabel = new QLabel(tr("Start step from 0 "));           //Стартовый шаг:
-	endStepLabel = new QLabel(tr("End step to ").append(QString::number(stepCount)));  //Конечный шаг:
-	moveListLabel = new QLabel(tr("Move list"));            //Список движений
+	axisLabel = new QLabel(tr("Axis: "));                //Р’РµРєС‚РѕСЂ:
+	startStepLabel = new QLabel(tr("Start step from 0 "));           //РЎС‚Р°СЂС‚РѕРІС‹Р№ С€Р°Рі:
+	endStepLabel = new QLabel(tr("End step to ").append(QString::number(stepCount)));  //РљРѕРЅРµС‡РЅС‹Р№ С€Р°Рі:
+	moveListLabel = new QLabel(tr("Move list"));            //РЎРїРёСЃРѕРє РґРІРёР¶РµРЅРёР№
 
-	linearRadio = new QRadioButton(tr("Linear"));        //Линейное
-	radialRadio = new QRadioButton(tr("Radial"));         //Вращательное
+	linearRadio = new QRadioButton(tr("Linear"));        //Р›РёРЅРµР№РЅРѕРµ
+	radialRadio = new QRadioButton(tr("Radial"));         //Р’СЂР°С‰Р°С‚РµР»СЊРЅРѕРµ
 
-	partNameOutput = new QLineEdit();        //Вывод детали
+	partNameOutput = new QLineEdit();        //Р’С‹РІРѕРґ РґРµС‚Р°Р»Рё
 	partNameOutput->setReadOnly(true);
 	partNameOutput->setPalette(*redPalette);
-	moveNameInput = new QLineEdit();        //Ввод движения
-	shiftInput = new QLineEdit();            //Ввод смещения
-	axisOutput = new QLineEdit();            //Вывод оси
+	moveNameInput = new QLineEdit();        //Р’РІРѕРґ РґРІРёР¶РµРЅРёСЏ
+	shiftInput = new QLineEdit();            //Р’РІРѕРґ СЃРјРµС‰РµРЅРёСЏ
+	axisOutput = new QLineEdit();            //Р’С‹РІРѕРґ РѕСЃРё
 	axisOutput->setReadOnly(true);
 	axisOutput->setPalette(*redPalette);
-	startStepInput = new QLineEdit();        //Ввод стартового шага
-	endStepInput = new QLineEdit();          //Ввод конечного шага
+	startStepInput = new QLineEdit();        //Р’РІРѕРґ СЃС‚Р°СЂС‚РѕРІРѕРіРѕ С€Р°РіР°
+	endStepInput = new QLineEdit();          //Р’РІРѕРґ РєРѕРЅРµС‡РЅРѕРіРѕ С€Р°РіР°
 
-	partAddButton = new QPushButton(tr("+"));       //Добавть деталь
-	axisAddButton = new QPushButton(tr("+"));       //Добавить ось
-	moveAddButton = new QPushButton(tr("Add"));       //Добавить движение
-	moveDropButton = new QPushButton(tr("Drop"));      //Сбросить данные диалога
+	partAddButton = new QPushButton(tr("+"));       //Р”РѕР±Р°РІС‚СЊ РґРµС‚Р°Р»СЊ
+	axisAddButton = new QPushButton(tr("+"));       //Р”РѕР±Р°РІРёС‚СЊ РѕСЃСЊ
+	moveAddButton = new QPushButton(tr("Add"));       //Р”РѕР±Р°РІРёС‚СЊ РґРІРёР¶РµРЅРёРµ
+	moveDropButton = new QPushButton(tr("Drop"));      //РЎР±СЂРѕСЃРёС‚СЊ РґР°РЅРЅС‹Рµ РґРёР°Р»РѕРіР°
 	moverAdd = new QPushButton(tr("Add Mover"));
 
 	moveList = new QTableWidget(0,5);
 	moveListHeader = new QHeaderView(Qt::Horizontal);
 	moveList->setHorizontalHeader(moveListHeader);
-	moveListLabels << "Movement" << "Type" << "Shift/Angle°" << "Start" << "End";
+	moveListLabels << "Movement" << "Type" << "Shift/AngleВ°" << "Start" << "End";
 	moveList->setHorizontalHeaderLabels(moveListLabels);
 	moveList->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
 
-	//Компонуем
+	//РљРѕРјРїРѕРЅСѓРµРј
 	mainLay = new QGridLayout(this);
 
-	//строка 0
+	//СЃС‚СЂРѕРєР° 0
 	mainLay->addWidget(mainLabel, 0, 0, 1, 4);
-	//строка 1
+	//СЃС‚СЂРѕРєР° 1
 	mainLay->addWidget(partLabel, 1, 0, 1, 1);
 	mainLay->addWidget(partNameOutput, 1, 1, 1, 1);
 	mainLay->addWidget(partAddButton, 1, 2, 1, 1);
-	//строка 2
+	//СЃС‚СЂРѕРєР° 2
 	mainLay->addWidget(moveTypeLabel, 2, 0, 1, 1);
-	//строка 3
+	//СЃС‚СЂРѕРєР° 3
 	mainLay->addWidget(linearRadio, 3, 0, 1, 2);
 	mainLay->addWidget(radialRadio, 3, 2, 1, 2);
-	//строка 4
+	//СЃС‚СЂРѕРєР° 4
 	mainLay->addWidget(moveNameLabel, 4, 0, 1, 1);
 	mainLay->addWidget(moveNameInput, 4, 1, 1, 1);
-	//строка 5
+	//СЃС‚СЂРѕРєР° 5
 	mainLay->addWidget(shiftLabel, 5, 0, 1, 1);
 	mainLay->addWidget(shiftInput, 5, 1, 1, 1);
-	//строка 6
+	//СЃС‚СЂРѕРєР° 6
 	mainLay->addWidget(axisLabel, 6, 0, 1, 1);
 	mainLay->addWidget(axisOutput, 6, 1, 1, 1);
 	mainLay->addWidget(axisAddButton, 6, 2, 1, 1);
-	//строка 7
+	//СЃС‚СЂРѕРєР° 7
 	mainLay->addWidget(startStepLabel, 7, 0, 1, 1);
 	mainLay->addWidget(startStepInput, 7, 1, 1, 1);
-	//строка 8
+	//СЃС‚СЂРѕРєР° 8
 	mainLay->addWidget(endStepLabel, 8, 0, 1, 1);
 	mainLay->addWidget(endStepInput, 8, 1, 1, 1);
-	//строка 9
+	//СЃС‚СЂРѕРєР° 9
 	mainLay->addWidget(moveAddButton, 9, 0, 1, 1);
 	mainLay->addWidget(moveDropButton, 9, 1, 1, 1);
-	//строка 10
+	//СЃС‚СЂРѕРєР° 10
 	mainLay->addWidget(moveListLabel, 10, 0, 1, 1);
-	//строка 11
+	//СЃС‚СЂРѕРєР° 11
 	mainLay->addWidget(moveList, 11, 0, 1, 4);
 	//12
 	mainLay->addWidget(moverAdd, 12,0,1,1);
 
 	this->setLayout(mainLay);
 
-	//Прячем ненужное
+	//РџСЂСЏС‡РµРј РЅРµРЅСѓР¶РЅРѕРµ
 	this->hideAll();
 
 	linearRadio->setChecked(true);
@@ -118,13 +118,13 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	startStepInput->setText(tr("0"));
 	endStepInput->setText(tr("1"));
 
-	connect(partAddButton, SIGNAL(clicked()), this, SLOT(flagPart()));            //Выбираем деталь
-	connect(axisAddButton, SIGNAL(clicked()), this, SLOT(flagFace()));            //Выбираем поверхность
-	connect(linearRadio, SIGNAL(clicked()), this, SLOT(setLinear()));             //Установить параметры линейного движения
-	connect(radialRadio, SIGNAL(clicked()), this, SLOT(setRadial()));             //Радиального
-	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(showAll()));               //Показать форму при установлении детали
-	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(partNameOutputGreen()));   //Изменить палитру
-	connect(axisOutput, SIGNAL(textChanged(const QString&)), this, SLOT(axisOutputGreen()));           //Изменить палитру
+	connect(partAddButton, SIGNAL(clicked()), this, SLOT(flagPart()));            //Р’С‹Р±РёСЂР°РµРј РґРµС‚Р°Р»СЊ
+	connect(axisAddButton, SIGNAL(clicked()), this, SLOT(flagFace()));            //Р’С‹Р±РёСЂР°РµРј РїРѕРІРµСЂС…РЅРѕСЃС‚СЊ
+	connect(linearRadio, SIGNAL(clicked()), this, SLOT(setLinear()));             //РЈСЃС‚Р°РЅРѕРІРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ Р»РёРЅРµР№РЅРѕРіРѕ РґРІРёР¶РµРЅРёСЏ
+	connect(radialRadio, SIGNAL(clicked()), this, SLOT(setRadial()));             //Р Р°РґРёР°Р»СЊРЅРѕРіРѕ
+	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(showAll()));               //РџРѕРєР°Р·Р°С‚СЊ С„РѕСЂРјСѓ РїСЂРё СѓСЃС‚Р°РЅРѕРІР»РµРЅРёРё РґРµС‚Р°Р»Рё
+	connect(partNameOutput, SIGNAL(textChanged(const QString&)), this, SLOT(partNameOutputGreen()));   //РР·РјРµРЅРёС‚СЊ РїР°Р»РёС‚СЂСѓ
+	connect(axisOutput, SIGNAL(textChanged(const QString&)), this, SLOT(axisOutputGreen()));           //РР·РјРµРЅРёС‚СЊ РїР°Р»РёС‚СЂСѓ
 
 	connect(moveAddButton, SIGNAL(clicked()), this, SLOT(addMovement()));
 
@@ -135,7 +135,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 }
 
 
-// Виртуальная функция обратного вызова - реакции на действия пользователя
+// Р’РёСЂС‚СѓР°Р»СЊРЅР°СЏ С„СѓРЅРєС†РёСЏ РѕР±СЂР°С‚РЅРѕРіРѕ РІС‹Р·РѕРІР° - СЂРµР°РєС†РёРё РЅР° РґРµР№СЃС‚РІРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 
 void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage _message)
 {
@@ -170,14 +170,14 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 			{
 				GPDSolid *solidPtr = _facePtr->parentSolidPtr;
 
-				//выделить тело:
+				//РІС‹РґРµР»РёС‚СЊ С‚РµР»Рѕ:
 				GCamera* cam0 = GeometryRenderManager::GetCamera(0);
 				GPDGeometryRender* render0 = (GPDGeometryRender*)cam0;
 				render0->SetSolidSelection(solidPtr);	
 				
 				//_facePtr->GetFaceReper();
-				//Вот так можно вызвать сигнал добавления:
-				//ВЫЗЫЫВААЙ ЕГО ПО КНОПОЧКЕ "ДОБАВИТЬ ДВИЖЕНИЕ"
+				//Р’РѕС‚ С‚Р°Рє РјРѕР¶РЅРѕ РІС‹Р·РІР°С‚СЊ СЃРёРіРЅР°Р» РґРѕР±Р°РІР»РµРЅРёСЏ:
+				//Р’Р«Р—Р«Р«Р’РђРђР™ Р•Р“Рћ РџРћ РљРќРћРџРћР§РљР• "Р”РћР‘РђР’РРўР¬ Р”Р’РР–Р•РќРР•"
 				//emit addMovementSignal(solidPtr);
 
 				qDebug() << "Solid name:" << GetSolidName(solidPtr) << " = " << solidPtr;
@@ -229,13 +229,13 @@ void AddMovementDlg::setLinear()
 
 void AddMovementDlg::setRadial()
 {
-	shiftLabel->setText(tr("Angle°"));
+	shiftLabel->setText(tr("AngleВ°"));
 	moveFlag = false;
 }
 
 void AddMovementDlg::hideAll()
 {
-	//Прячем ненужное
+	//РџСЂСЏС‡РµРј РЅРµРЅСѓР¶РЅРѕРµ
 	moveTypeLabel->hide();
 	linearRadio->hide();
 	radialRadio->hide();
@@ -346,9 +346,9 @@ void AddMovementDlg::addMovement()
 
 	
 
-	CMovements newMovement;   //Новое движение
+	CMovements newMovement;   //РќРѕРІРѕРµ РґРІРёР¶РµРЅРёРµ
 
-	//Пишем в него данные
+	//РџРёС€РµРј РІ РЅРµРіРѕ РґР°РЅРЅС‹Рµ
 	newMovement.SetMoveName(moveNameInput->text().toStdString());
 	newMovement.SetShift(shift);
 	newMovement.SetAxis((shiftEnd-shiftStart).getNormalized());
@@ -357,7 +357,7 @@ void AddMovementDlg::addMovement()
 	newMovement.SetEnd(endStepInput->text().toInt());
 
 
-	//ПРоверяем какое движение выбрал пользователь
+	//РџР РѕРІРµСЂСЏРµРј РєР°РєРѕРµ РґРІРёР¶РµРЅРёРµ РІС‹Р±СЂР°Р» РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ
 	if (moveFlag == true) 
 	{
 		newMovement.SetMovementType(LINEAR);
@@ -369,11 +369,11 @@ void AddMovementDlg::addMovement()
 			tempLabel->setText(tr("CIRCULAR"));
 		}
 
-	//Создаем новую строку в таблице
+	//РЎРѕР·РґР°РµРј РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РІ С‚Р°Р±Р»РёС†Рµ
 	moveList->setRowCount(moveList->rowCount() + 1);
 	int row = moveList->rowCount()-1;
 
-	//Пишем в таблицу данные
+	//РџРёС€РµРј РІ С‚Р°Р±Р»РёС†Сѓ РґР°РЅРЅС‹Рµ
  	tempLabel2->setText(QString::fromStdString(newMovement.GetMoveName()));
  	moveList->setCellWidget(row, 0, tempLabel2);
  
@@ -388,10 +388,10 @@ void AddMovementDlg::addMovement()
 	
 	tempLabel5->setText(QString::number(newMovement.GetEnd()));
 	moveList->setCellWidget(row, 4, tempLabel5);
-	//Чистим форму
+	//Р§РёСЃС‚РёРј С„РѕСЂРјСѓ
 	clearMovement();
 
-	//Пишем движение в массив
+	//РџРёС€РµРј РґРІРёР¶РµРЅРёРµ РІ РјР°СЃСЃРёРІ
 	newMovements.push_back(newMovement);
 
 }
@@ -441,15 +441,15 @@ void AddMovementDlg::closeEvent(QCloseEvent * event)
 
 void AddMovementDlg::sendMover()
 {
-	CMover newMover(newPart);  //Создаем новый мувер
+	CMover newMover(newPart);  //РЎРѕР·РґР°РµРј РЅРѕРІС‹Р№ РјСѓРІРµСЂ
 
-	newMover.SetMovementsVector(newMovements);  //Даем ему массив движений
+	newMover.SetMovementsVector(newMovements);  //Р”Р°РµРј РµРјСѓ РјР°СЃСЃРёРІ РґРІРёР¶РµРЅРёР№
 
 	emit moverToLine(newMover);
 
 	qDebug() << "Mover added";
 
-	//Закрываем диалог
+	//Р—Р°РєСЂС‹РІР°РµРј РґРёР°Р»РѕРі
 	this->close();
 }
 

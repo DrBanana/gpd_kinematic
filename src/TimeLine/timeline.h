@@ -29,6 +29,7 @@
 #include "tGraphicsRectItem.h"
 #include"tDelWin.h"
 #include <AddMovement/AddMovementDlg.h>
+#include "tEditWin.h"
 //#include"CMovements/CMovements.h"
 //#include"CMovements/Mover.h"
 
@@ -95,6 +96,9 @@ public slots:
 
 	void mouseDoubleClickEvent(QMouseEvent * event) override;
 
+	//Показать окно редактирования
+	void showEdit(CMovements *);
+
 
 signals:
 
@@ -117,8 +121,8 @@ private:
 	QMenuBar * mainMenu;
 	tRunPrmWin * prmWin;
 	tDelWin * delWin;
+	tEditWin * editWin;
 
-	QWidget *win;
 	//Экшны меню
 	QMenu * mRun;             //Меню запуска
 	QMenu * mAdd;             //Меню добавления
