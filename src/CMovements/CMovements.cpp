@@ -25,19 +25,21 @@ using namespace std;
 // }
 
 CMovements::CMovements(EMovementTypes movType,
-                        GPDPoint point,
                         string name,
+						double shift,
+						GPDPoint point,
                         GPDVector axis, 
-                        double shift, 
                         int start, 
-                        int end)
+                        int end,
+						string axisName)
     : m_moveType(movType),
-    m_point(point),
     m_name(name),
+	m_shift(shift),
+	m_point(point),
     m_axis(axis),
-    m_shift(shift),
     m_start(start),
-    m_end(end)
+    m_end(end),
+	m_axisName(axisName)
 {
     if (end<start)
     {
@@ -54,6 +56,8 @@ CMovements::CMovements( const CMovements& copy)
     m_end=copy.m_end;
     m_shift=copy.m_shift;
     m_start=copy.m_start;
+	m_axisName = copy.m_axisName;
+
 }
 
 CMovements::~CMovements()
@@ -155,6 +159,17 @@ Gepard::BasicMath::GPDPoint CMovements::GetPoint()
 void CMovements::SetPoint( GPDPoint point)
 {
     m_point=point;
+}
+
+void CMovements::setAxisName(string newName)
+{
+	m_axisName.clear();
+	m_axisName = newName;
+}
+
+std::string CMovements::getAxisName()
+{
+	return m_axisName;
 }
 
 

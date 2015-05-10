@@ -137,6 +137,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	connect(delWin, SIGNAL(accept(int)), this, SLOT(delRow(int)));
 	connect(aRight, SIGNAL(triggered()), this, SLOT(moveSplitterRight()));
 	connect(aLeft, SIGNAL(triggered()), this, SLOT(moveSplitterLeft()));
+	connect(editWin, SIGNAL(movementEdited()), this, SLOT(editMovement()));
 
 
 }
@@ -215,39 +216,47 @@ void TimeLine::addRow(CMover moverFromDialog)
 	
 	_row newRow(moverFromDialog, w, tlRowHeight);
 
-	rowVect.push_back(newRow);  //Пишем структуру в массив
-
 	//Создаем сцену и вьювер для структуры
-	rowVect[tlRowCount].rowGScene = new QGraphicsScene();
-	rowVect[tlRowCount].rowGView = new QGraphicsView();
-
-	
-	int a = TableViewer->rowCount();
+	newRow.rowGScene = new QGraphicsScene();
+	newRow.rowGView = new QGraphicsView();
  
  	//TableViewer->setRowCount(TableViewer->rowCount() + 1); //Прибавляем строку (текущее 0 + 1, 2+1...)
-	TableViewer->insertRow(a);
- 
-	int b = TableViewer->rowCount();
+	TableViewer->insertRow(TableViewer->rowCount());
  	
-	TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, rowVect[tlRowCount].rowGView); //Помещаем вьювер графики в новую строку
+	TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, newRow.rowGView); //Помещаем вьювер графики в новую строку
 
-	rowVect[tlRowCount].rowGScene->setSceneRect(0, 0, w, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize);
- 	addTimeMarks(*rowVect[tlRowCount].rowGScene);
+	newRow.rowGScene->setSceneRect(0, 0, w, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize);
+
+ 	addTimeMarks(*newRow.rowGScene);  //Вспомогательные линии
  	
- 	rowVect[tlRowCount].rowGView->setScene(rowVect[tlRowCount].rowGScene);
- 	rowVect[tlRowCount].rowGView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
- 	rowVect[tlRowCount].rowGView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
- 	rowVect[tlRowCount].rowGView->show();
+ 	newRow.rowGView->setScene(newRow.rowGScene);
+ 	newRow.rowGView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+ 	newRow.rowGView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+ 	newRow.rowGView->show();
  	
 	//Установим высоту строки в зависимости от количества движений
 	int height = moverFromDialog.GetSizeOfmovementsVector()*tlRectSize;
 	TableViewer->setRowHeight(TableViewer->rowCount() - 1, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize + 5);
 	
 	//Добавляем прямоугольники
+	addGraphicMarks(newRow.tmovments, newRow.tnames, moverFromDialog, *newRow.rowGScene);
 
-	addGraphicMarks(newRow.tmovments, newRow.tnames, moverFromDialog, *rowVect[tlRowCount].rowGScene);
+	rowVect.push_back(newRow);  //Пишем структуру в массив
 
 	tlRowCount++;
+
+	//Данные мувера сохраняются при добавлении новой строки, однако данные массива tRectItem'ов пропадают после завершения функции 
+	//и удаления newRow, указатель в векторе все равно указывает на память внутри newRow которая удаляется когда завершается функция
+
+	//Исправлялка косяка с потере данных, не выход конечно, но пока так работает
+	for (int i = 0; i < rowVect.size(); i++)
+	{
+		for (int j = 0; j < rowVect[i].partMover.GetSizeOfmovementsVector(); j++)
+		{
+			rowVect[i].tmovments[j]->movement = rowVect[i].partMover.GetMovementAt(j);
+		}
+		
+	}
 
 	qDebug() << "Mover recieved";
 }
@@ -320,7 +329,7 @@ void TimeLine::actionAdd()
 	addMovementDialog->show();
 }
 
-void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphicsTextItem *> Names, CMover prtMover, QGraphicsScene &scene)
+void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, vector<QGraphicsTextItem *> &Names, CMover &prtMover, QGraphicsScene &scene)
 {
 	int mCount = prtMover.GetSizeOfmovementsVector();
 	QRectF mRectF;                                       //Геометрия маркера
@@ -329,7 +338,7 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 	QGraphicsTextItem * mNameItem;                         //Имя маркера
 	CMovements * movement;
 	int height = tlRectSize;
-	int width = (movement->GetEnd() - movement->GetStart())*segmentSize;
+	int width = 0;
 	int vStart;   //Начало по вертикали
 	int hStart;   //Начало по горизонтали
 
@@ -354,13 +363,11 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 		tRectItem->setBrush(brush2);
 		tRectItem->setPen(pen);
 		tRectItem->setRect(mRectF);
-		scene.addItem(tRectItem);  //Почему так работает???
 
-		//mRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
 		tRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
 		tRectItem->movement = movement;
 
-		//Marks[i]->setBrush(brush2);
+		scene.addItem(tRectItem);
 		
 		mNameItem = scene.addText(QString::fromStdString(movement->GetMoveName()));
 		//mNameItem->setParentItem(tRectItem);
@@ -373,6 +380,7 @@ void TimeLine::addGraphicMarks(vector<QGraphicsRectItem *> Marks, vector<QGraphi
 
 		Marks.push_back(tRectItem);                      //Пишем указатель в массив
 		Names.push_back(mNameItem);
+
 	}
 }
 
@@ -385,6 +393,7 @@ void TimeLine::mouseDoubleClickEvent(QMouseEvent * event)
 
 void TimeLine::showEdit(CMovements * numMovement)
 {
+
 	editWin = new tEditWin(numMovement);
 	editWin->show();
 
@@ -446,5 +455,10 @@ void TimeLine::moveSplitterRight()
 		if (point.rx() == segments*segmentSize) { return; }
 		splitSecond->setPos(point.rx() + segmentSize, 0);
 	}
+}
+
+void TimeLine::editMovement()
+{
+
 }
 
