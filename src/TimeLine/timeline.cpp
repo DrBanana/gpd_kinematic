@@ -137,8 +137,6 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	connect(delWin, SIGNAL(accept(int)), this, SLOT(delRow(int)));
 	connect(aRight, SIGNAL(triggered()), this, SLOT(moveSplitterRight()));
 	connect(aLeft, SIGNAL(triggered()), this, SLOT(moveSplitterLeft()));
-	connect(editWin, SIGNAL(movementEdited()), this, SLOT(editMovement()));
-
 
 }
 
@@ -239,7 +237,7 @@ void TimeLine::addRow(CMover moverFromDialog)
 	TableViewer->setRowHeight(TableViewer->rowCount() - 1, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize + 5);
 	
 	//Добавляем прямоугольники
-	addGraphicMarks(newRow.tmovments, newRow.tnames, moverFromDialog, *newRow.rowGScene);
+	addGraphicMarks(newRow.tmovments, moverFromDialog, *newRow.rowGScene);
 
 	rowVect.push_back(newRow);  //Пишем структуру в массив
 
@@ -329,7 +327,7 @@ void TimeLine::actionAdd()
 	addMovementDialog->show();
 }
 
-void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, vector<QGraphicsTextItem *> &Names, CMover &prtMover, QGraphicsScene &scene)
+void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMover, QGraphicsScene &scene)
 {
 	int mCount = prtMover.GetSizeOfmovementsVector();
 	QRectF mRectF;                                       //Геометрия маркера
@@ -356,7 +354,7 @@ void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, vector<QGraph
 		vStart = i * height;   //Первый элемент в верху, второй ниже на 15 пикс и тд.
 		hStart = movement->GetStart()*segmentSize;
 
-		mRectF.setRect(hStart, vStart, width, height);  //Устанавливаем размеры геометрии маркера
+		mRectF.setRect(0, 0, width, height);  //Устанавливаем размеры геометрии маркера
 
 		//mRectItem = scene.addRect(mRectF, pen, brush); //Добавляем RectItem на сцену и пишем указатель на него
 		tRectItem = new tGraphicsRectItem(mRectF);
@@ -368,18 +366,25 @@ void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, vector<QGraph
 		tRectItem->movement = movement;
 
 		scene.addItem(tRectItem);
+		tRectItem->setPos(hStart, vStart);
+
 		
-		mNameItem = scene.addText(QString::fromStdString(movement->GetMoveName()));
-		//mNameItem->setParentItem(tRectItem);
+		tRectItem->mName = scene.addText(QString::fromStdString(movement->GetMoveName()));
 	
-		QPointF Point = mRectF.bottomLeft();
-		mNameItem->setPos(Point.rx(),Point.ry()-tlRectSize);
+		QPointF Point = tRectItem->pos();
+		tRectItem->mName->setPos(Point);
 		//Names[i]->setParentItem(Marks[i]);
 		
+		
 		connect(tRectItem,SIGNAL(doubleClicked(CMovements* )), this, SLOT(showEdit(CMovements*)));
+		
+
+		//Получаем ссылку на редактируемое движение, редактируем, затем не можем понять какой tRectItem перерисовать, нужно:
+		//1. Хранить tRect в CMovement'е, только как получать ссылку на CMovement при обращении к tRect'у?
+		//2. Перерисовывать при отправке формой редактрирования сигнала о то, что было произведено редактирование.
 
 		Marks.push_back(tRectItem);                      //Пишем указатель в массив
-		Names.push_back(mNameItem);
+
 
 	}
 }
@@ -393,8 +398,10 @@ void TimeLine::mouseDoubleClickEvent(QMouseEvent * event)
 
 void TimeLine::showEdit(CMovements * numMovement)
 {
+	sednderRect = (tGraphicsRectItem*)sender();
 
 	editWin = new tEditWin(numMovement);
+	connect(editWin, SIGNAL(movementEdited()), this, SLOT(resizeMarker()));
 	editWin->show();
 
 }
@@ -457,8 +464,19 @@ void TimeLine::moveSplitterRight()
 	}
 }
 
-void TimeLine::editMovement()
+void TimeLine::resizeMarker()
 {
+	int width = (sednderRect->movement->GetEnd() - sednderRect->movement->GetStart())*segmentSize;  //Сколько шагов занимает движение и его длинна в пикселях
 
+	int hStart = sednderRect->movement->GetStart()*segmentSize;
+
+	QPointF point = sednderRect->pos();
+
+	sednderRect->setRect(0, 0, width, tlRectSize);
+	sednderRect->setPos(hStart, point.ry());
+
+	point = sednderRect->pos();
+
+	sednderRect->mName->setPos(point);
 }
 

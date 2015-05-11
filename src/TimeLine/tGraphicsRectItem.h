@@ -2,13 +2,14 @@
 #define TGRAPHICSRECTITEM_H
 
 #include<QGraphicsRectItem>
+#include<QGraphicsTextItem>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QWidget>
 
 #include"CMovements/Mover.h"
 
-class tGraphicsRectItem : public QWidget, public QGraphicsRectItem
+class tGraphicsRectItem : public QObject, public QGraphicsRectItem
 {
 	Q_OBJECT
 
@@ -18,6 +19,8 @@ public:
 	~tGraphicsRectItem();
 
 	CMovements * movement;
+
+	QGraphicsTextItem * mName;
 
 
 protected:

@@ -48,8 +48,7 @@ struct _row
 	_row(const _row &r)
 		: partMover(r.partMover),
 		  rowGScene(rowGScene),
-		  tmovments(r.tmovments),
-		  tnames(r.tnames)
+		  tmovments(r.tmovments)
 
 	{
 
@@ -60,7 +59,6 @@ struct _row
 	QGraphicsView * rowGView;
 
 	std::vector <tGraphicsRectItem *> tmovments;
-	std::vector <QGraphicsTextItem *> tnames;
 
 	CMover partMover;
 };
@@ -87,14 +85,14 @@ public slots:
 	void delRow(int);
 
 	//Редактирование движения
-	void editMovement();
+	void resizeMarker();
 
 	//Добавление разделительных меток на новую сцену
 	void addTimeMarks(QGraphicsScene &);
 
 	//Добавление гравических элементов
 
-	void addGraphicMarks(vector<tGraphicsRectItem *>&, vector<QGraphicsTextItem *>&,CMover&, QGraphicsScene &);
+	void addGraphicMarks(vector<tGraphicsRectItem *>&,CMover&, QGraphicsScene &);
 
 	//Запуск
 	void actionRunWithPrms();
@@ -173,6 +171,8 @@ private:
 	int h; //высота сцены
 
 	std::vector <_row> rowVect;  //Вектор строк
+
+	tGraphicsRectItem * sednderRect;
 	
 };
 
