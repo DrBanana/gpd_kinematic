@@ -5,6 +5,7 @@
 tGraphicsRectItem::tGraphicsRectItem(const QRectF & rect, QGraphicsItem * parent)
 {
 	movement = nullptr;
+	mName = nullptr;
 }
 
 

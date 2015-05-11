@@ -36,6 +36,8 @@ private:
     int m_start;
     //конец движения на таймлайне
     int m_end;
+	//Имя оси
+	string m_axisName;
 public:
     
      /*
@@ -43,12 +45,14 @@ public:
       *  если start<end, то ставит значения по умолчанию
       */
     CMovements(EMovementTypes = EMovementTypes::LINEAR,
+				string = " ",
+				double = 0.0,
                 Gepard::BasicMath::GPDPoint = Gepard::BasicMath::GPDPoint(0,0,0),
-                string = " ",
-                Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
-                double = 0.0,
+				Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
                 int = 0,
-                int = 1);
+                int = 1,
+				string = " "
+				);
     /*
      *  конструктор, инициализирующий все параметры по умолчанию
      *  если start<end, то ставит значения по умолчанию
@@ -133,6 +137,10 @@ public:
      *	Получить точку
      */
     void SetPoint(Gepard::BasicMath::GPDPoint);
+
+	//имя оси
+	void setAxisName(string);
+	string getAxisName();
 };
 
 #endif //CMOVEMENTS_H

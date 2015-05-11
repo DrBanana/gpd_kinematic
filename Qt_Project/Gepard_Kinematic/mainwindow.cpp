@@ -62,7 +62,7 @@ void MainWindow::on_actionMoveIt_triggered()
     vect.z =-1;
     GPDPoint point(0,0,0);
     //CMovements mc = CMovements(EMovementTypes::CIRCULAR,point,"",vect,1.0,0,1);
-    CMovements ml(EMovementTypes::LINEAR,point,"",vect,20.0,0,5);
+	CMovements ml(EMovementTypes::LINEAR, "", 20.0, point, vect, 0, 5, "");
 //     CMovements mr = CMovements();
 //     mr.SetAxis(GPDVector(0,-1,0));
 //     mr.SetMovementType(CIRCULAR);

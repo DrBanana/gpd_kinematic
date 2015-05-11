@@ -153,6 +153,7 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 			if (currentMode == FACE) 
 			{
 				axisOutput->setText(GetFaceName(_facePtr));
+				
 
 				fReper = _facePtr->GetFaceReper();
 				
@@ -355,7 +356,7 @@ void AddMovementDlg::addMovement()
 	newMovement.SetPoint(*newPoint);
 	newMovement.SetStart(startStepInput->text().toInt());
 	newMovement.SetEnd(endStepInput->text().toInt());
-
+	newMovement.setAxisName(axisOutput->text().toStdString());
 
 	//ПРоверяем какое движение выбрал пользователь
 	if (moveFlag == true) 
