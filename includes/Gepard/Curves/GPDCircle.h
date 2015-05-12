@@ -25,12 +25,13 @@ namespace Gepard
             /**
             *	Построить окружность с заданным числом точек
             */
-            void calcCircle( unsigned int numPoints=0 );
+            void calcCircle( unsigned int numPoints=0, bool checkPrec = true );
 
             /**
-             * Построить кривую с заданным числом точек
-             */
-            void calcCurve(unsigned int numPoints=0) override;
+            * Построить кривую с заданным числом точек
+            * (кроме случая, когда точки получаются почти равны с точностью precDelta)
+            */
+            void calcCurve(unsigned int numPoints = 0, bool checkPrec = true) override;
 
             /**
              *  Задать параметры для кривой

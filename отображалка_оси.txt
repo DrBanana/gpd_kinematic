@@ -1,0 +1,21 @@
+#include <Gepard/Callbacks/CB_GeometryRender.h>
+#include <Gepard/Visualization/SpecialObjects/GAxis.h"
+#include <Gepard/Visualization/GColor.h"
+
+using namespace Gepard::Visualization;
+.......
+
+
+
+ GCamera* cam0 = GeometryRenderManager::GetCamera(0);
+ GPDGeometryRender* cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+
+GAxis *my_axis = cam0Render->DrawAxis( x0, y0, z0, x1, y1, z1, GColor(r,g,b), "ОСЬ");
+
+... 
+
+Дальше эту ось (my_axis) где-нить сохраняешь. И когда она становится не нужна, можно ее удалить вот так:
+
+cam0Render ->DeleteSpecialGObject((SpecialGObject*)my_axis);
+

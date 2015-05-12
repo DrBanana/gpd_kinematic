@@ -5,11 +5,12 @@
 
 #include "CMovements\CMovements.h"
 #include "..\includes\gepard.h"
+
 #include <algorithm>
 #include <vector>  
+#include <functional>
 
 using namespace std;
-
 
  //Класс "двигатель"
  
@@ -61,6 +62,13 @@ public:
     void MoveAll();
     void OneStepMove(int movement,int stp);
     int GetStepsCntForMovement(int movementId);
+
+    //Получить текущую функцию изменения тела
+    Gepard::BasicMath::TModifyPointsFunc getModFunc(int movement, int stp);
+
+    //посчитать новый репер тела в зависимости от движения
+    void CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRep, Gepard::BasicMath::GPDReper &newRep);
+
 };
 
 #endif //MOVER_H

@@ -197,14 +197,14 @@ void TimeLine::dropTime()
     TimeLine::addTime();
 }
 
-void TimeLine::addTimeMarks(QGraphicsScene  &scene)
+void TimeLine::addTimeMarks(QGraphicsScene  *scene)
 {
     int paintFrom = 0;
     QPen _pen2(Qt::gray, 1, Qt::DashLine);
 
     for (int i = 0; i < segmentsAmount+1; i++)
     {
-        scene.addLine(paintFrom,0, paintFrom, scene.height(), _pen2);
+        scene->addLine(paintFrom,0, paintFrom, scene->height(), _pen2);
         paintFrom += segmentSize;
     }
 }
@@ -225,7 +225,7 @@ void TimeLine::addRow(CMover moverFromDialog)
 
 	newRow.rowGScene->setSceneRect(0, 0, w, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize);
 
- 	addTimeMarks(*newRow.rowGScene);  //Вспомогательные линии
+ 	addTimeMarks(newRow.rowGScene);  //Вспомогательные линии
  	
  	newRow.rowGView->setScene(newRow.rowGScene);
  	newRow.rowGView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -237,7 +237,8 @@ void TimeLine::addRow(CMover moverFromDialog)
 	TableViewer->setRowHeight(TableViewer->rowCount() - 1, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize + 5);
 	
 	//Добавляем прямоугольники
-	addGraphicMarks(newRow.tmovments, moverFromDialog, *newRow.rowGScene);
+	//addGraphicMarks(newRow.tmovments, moverFromDialog, *newRow.rowGScene);
+    addGraphicMarks(newRow);
 
 	rowVect.push_back(newRow);  //Пишем структуру в массив
 
@@ -327,9 +328,10 @@ void TimeLine::actionAdd()
 	addMovementDialog->show();
 }
 
-void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMover, QGraphicsScene &scene)
+//void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMover, QGraphicsScene &scene)
+void TimeLine::addGraphicMarks(_row &r)
 {
-	int mCount = prtMover.GetSizeOfmovementsVector();
+    int mCount = r.partMover.GetSizeOfmovementsVector();
 	QRectF mRectF;                                       //Геометрия маркера
 	//QGraphicsRectItem * mRectItem;                       //Указатель на маркер
 	tGraphicsRectItem * tRectItem;                       //Указатель на маркер
@@ -348,7 +350,7 @@ void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMo
 
 	for (int i = 0; i < mCount; i++)
 	{
-		movement = prtMover.GetMovementAt(i);
+		movement = r.partMover.GetMovementAt(i);
 
 		width = (movement->GetEnd() - movement->GetStart())*segmentSize;  //Сколько шагов занимает движение и его длинна в пикселях
 		vStart = i * height;   //Первый элемент в верху, второй ниже на 15 пикс и тд.
@@ -365,11 +367,11 @@ void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMo
 		tRectItem->setFlags(QGraphicsItem::ItemIsSelectable);
 		tRectItem->movement = movement;
 
-		scene.addItem(tRectItem);
+		r.rowGScene->addItem(tRectItem);
 		tRectItem->setPos(hStart, vStart);
 
 		
-		tRectItem->mName = scene.addText(QString::fromStdString(movement->GetMoveName()));
+		tRectItem->mName = r.rowGScene->addText(QString::fromStdString(movement->GetMoveName()));
 	
 		QPointF Point = tRectItem->pos();
 		tRectItem->mName->setPos(Point);
@@ -383,8 +385,8 @@ void TimeLine::addGraphicMarks(vector<tGraphicsRectItem *> &Marks, CMover &prtMo
 		//1. Хранить tRect в CMovement'е, только как получать ссылку на CMovement при обращении к tRect'у?
 		//2. Перерисовывать при отправке формой редактрирования сигнала о то, что было произведено редактирование.
 
-		Marks.push_back(tRectItem);                      //Пишем указатель в массив
-
+		//Marks.push_back(tRectItem);                      //Пишем указатель в массив
+        r.tmovments.push_back(tRectItem);
 
 	}
 }

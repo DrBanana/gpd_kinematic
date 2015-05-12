@@ -1,0 +1,31 @@
+Задача: Нужно изменить положение тела в пространстве (в графическом контексте).
+
+Исходные данные:
+1. У нас имеется старый репер тела (см. CMover::OneStepMove) ->   GPDReper rep = m_part->SolidReper;
+2. У нас имеется новый вычисленный репер тела (GPDReper newRep = rep (вычисленный)).
+
+Пишем лямбда-функцию изменения положения тела объекта.
+
+#include <Gepard/BasicMath/GPDPoint2D.h>
+
+///ЭТО ВСЕ ПИШЕТСЯ ПРЯМО В ТЕЛЕ ФУНКЦИИ! ТАМ, ГДЕ НАДО ИЗМЕНИТЬ ПОЛОЖЕНИЕ ТЕЛА!!!
+
+
+std::function<void(GPDPoint2d, GPDPoint &)> modifyFunc = [&rep, &newRep](GPDPoint2d p2d, GPDPoint &P)
+{
+	P.Transform(GPDReper::getGlobalReper(), const_cast<GPDReper&>(rep));
+	P.Transform(const_cast<GPDReper&>(newRep), GPDReper::getGlobalReper());
+};
+
+
+  auto cam0 = GeometryRenderManager::GetCamera(0);
+  auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+  
+  if (cam0Render->isSolidExist(solid_ptr)) 
+  {
+	   for (auto fItr  = _SolidPtr->Faces.std_begin();
+                 fItr != _SolidPtr->Faces.std_end(); fItr++ )
+        {
+			cam0Render->ModifyObject((void*)&(*fItr),modifyFunc);
+        }//for
+  }//if

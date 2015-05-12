@@ -343,17 +343,15 @@ void AddMovementDlg::addMovement()
 	QLabel * tempLabel4 = new QLabel();
 	QLabel * tempLabel5 = new QLabel();
 
-	GPDPoint * newPoint = new GPDPoint(shiftStart.x, shiftStart.y, shiftStart.z);
-
-	
-
+	GPDPoint newPoint(shiftStart.x, shiftStart.y, shiftStart.z);
+    
 	CMovements newMovement;   //Новое движение
 
 	//Пишем в него данные
 	newMovement.SetMoveName(moveNameInput->text().toStdString());
 	newMovement.SetShift(shift);
 	newMovement.SetAxis((shiftEnd-shiftStart).getNormalized());
-	newMovement.SetPoint(*newPoint);
+	newMovement.SetPoint(newPoint);
 	newMovement.SetStart(startStepInput->text().toInt());
 	newMovement.SetEnd(endStepInput->text().toInt());
 	newMovement.setAxisName(axisOutput->text().toStdString());

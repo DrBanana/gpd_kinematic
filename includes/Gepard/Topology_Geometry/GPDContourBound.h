@@ -16,8 +16,13 @@
 #include "../Visualization/Triangulation/Tri_MapSector.h"
 
 #include <BOOST/unordered_map.hpp>
+#include <Boost/unordered_set.hpp>
 #include <functional>
 #include <set>
+
+
+//#define GPD_CHECK_POINT_DISCRETE2 //Тестовая функция проверки на видимость
+
 
 namespace Gepard
 {
@@ -71,12 +76,7 @@ namespace Gepard
             /**
              *  Хэш-таблица связывает указатель на точку с парой (№контура, индекс точки)
              */
-            boost::unordered_map<GPDPoint2dPtr, PointEdgeIndex> P2Edges2D_Hash;
-
-            /**
-             *	Тип контура (внутренний/внешний)
-             */
-            //FACE_BOUND_TYPE BoundType;
+            boost::unordered_map<GPDPoint2dPtr, PointEdgeIndex> P2Edges2D_Hash;      
 
             /**
              *  Функция инициализации контура, резервируется место для контуров
@@ -119,7 +119,12 @@ namespace Gepard
              *  Вычисляет точки пересечения контуров, заменяет начальные и конечные точки у кривых (3D)
              *  И запускает функцию пересчета геометрии
              */
-            void CutContoursAndRecalcGeometry();
+            void CutContoursAndRecalcGeometry();            
+
+            /**
+             *  Подготовить замкнутый сортированный контур на параметрической плоскости	
+             */
+            void PrepareClosedEdgeLoop();
 
         private:
             /**
@@ -290,6 +295,19 @@ namespace Gepard
              */
             std::list<GPDPoint2dPtr> BoundContour2D;
 
+#ifdef GPD_CHECK_POINT_DISCRETE2
+            public:
+            /**
+             *	Сортированный замкнутый цикл на параметрической плоскости, состоящий из ребер (выкинуты лишние точки)
+             */
+            std::list<GPDPoint2dn> ClosedEdgeLoop;
+
+            /**
+             *	Точки, относящиеся к перемычкам
+             */
+            boost::unordered_set<GPDPoint2dnPtr> bridge_points;
+#endif
+
             /**
              *  Хэш-таблица связывает указатель на точку с итератором на контур карты BoundContour2D
              *  - Для поиска соседей точки (контур всегда замкнут)
@@ -311,6 +329,15 @@ namespace Gepard
                                       std::list<GPDPoint2dPtr>::iterator &prev_itr, 
                                       std::list<GPDPoint2dPtr>::iterator &next_itr);
 
+#ifdef GPD_CHECK_POINT_DISCRETE2
+            /**
+            *  Функция находит соседей указанного итератора на точку
+            *  и возвращает два итератора на список BoundContour2D
+            */
+            void FindPointNeighbours2(std::list<GPDPoint2dn>::iterator cur_itr,
+                                      std::list<GPDPoint2dn>::iterator &prev_itr,
+                                      std::list<GPDPoint2dn>::iterator &next_itr);
+#endif
             /**
              *  Функция удаляет лишние точки в контурах секторов (точки, лежащие на одной прямой)
              */
@@ -320,6 +347,11 @@ namespace Gepard
              *  Удалить временные данные
              */
             void ClearTempData();
+
+            /**
+             *	Является ли ребро перемычкой (по индексу)
+             */
+            bool isBridge(unsigned int edge_index);
 
         };
 

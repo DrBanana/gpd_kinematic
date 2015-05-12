@@ -47,7 +47,8 @@ struct _row
 
 	_row(const _row &r)
 		: partMover(r.partMover),
-		  rowGScene(rowGScene),
+		  rowGScene(r.rowGScene),
+          rowGView(r.rowGView),
 		  tmovments(r.tmovments)
 
 	{
@@ -88,11 +89,12 @@ public slots:
 	void resizeMarker();
 
 	//Добавление разделительных меток на новую сцену
-	void addTimeMarks(QGraphicsScene &);
+	void addTimeMarks(QGraphicsScene *);
 
 	//Добавление гравических элементов
 
-	void addGraphicMarks(vector<tGraphicsRectItem *>&,CMover&, QGraphicsScene &);
+	//void addGraphicMarks(vector<tGraphicsRectItem *>&,CMover&, QGraphicsScene &);
+    void addGraphicMarks(_row &r);
 
 	//Запуск
 	void actionRunWithPrms();

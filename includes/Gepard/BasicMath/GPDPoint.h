@@ -45,6 +45,7 @@ namespace Gepard
 
             GPDPoint(double X, double Y, double Z, double NX, double NY, double NZ);
             GPDPoint(double X, double Y, double Z);
+
             /**
              * Получить расстояние между точками
              */
@@ -61,9 +62,9 @@ namespace Gepard
             bool isNormalNull();
 
             /**
-             *  Точки одинаковы (с погрешностью minimumPrecision)
+             *  Точки одинаковы (с погрешностью minimumPrecision*prec)
              */
-            bool isApproxEquals(GPDPoint &P);
+            bool isApproxEquals(GPDPoint &P, double prec=1.0);            
 
             /**
              * Перевести в вектор ТЕКУЩУЮ точку

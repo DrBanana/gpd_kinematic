@@ -75,15 +75,32 @@ void MainWindow::on_actionMoveIt_triggered()
      //m.AddMovement(mc);
        int cnt = m.GetSizeOfmovementsVector();
        
+       Gepard::GPDSolid *solidPtr = mathModel->Solids[0];
+
+       auto cam0 = GeometryRenderManager::GetCamera(0);
+       auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
         for (int i =0;i<cnt;i++)
         {
             int _cnt = m.GetStepsCntForMovement(i);
             for (int j=0;j<_cnt;j++)
             {
                 m.OneStepMove(i,j);
-                g_manager.HideSolid(mathModel->Solids[0]);
-                mathModel->PrepareGeometry();
-                g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
+                auto f = m.getModFunc(i, j);
+
+                if (cam0Render->isSolidExist(solidPtr))
+                {
+                    for (auto fItr  = solidPtr->Faces.std_begin();
+                              fItr != solidPtr->Faces.std_end(); fItr++)
+                    {
+                        cam0Render->ModifyObject((void*)&(*fItr), f);
+                    }//for
+                    cam0Render->RepaintContent();
+                }//if
+
+                //g_manager.HideSolid(mathModel->Solids[0]);
+                //mathModel->PrepareGeometry();
+                //g_manager.ShowSolidInRender(mathModel->Solids[0],GeometryRenderManager::GetCamera(0));
                 //break;
                 //Sleep(1000);
             }

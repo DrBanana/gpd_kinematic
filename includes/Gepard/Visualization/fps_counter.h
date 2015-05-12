@@ -33,7 +33,11 @@ namespace Gepard
 
             unsigned int getFPS()
             {
+            #ifdef WIN64
+                _current_time = GetTickCount64();
+            #elif defined(WIN32)
                 _current_time = GetTickCount();
+            #endif
                 unsigned long _timeInterval = _current_time - _base_time;
                 if (_timeInterval > 1000)
                 {

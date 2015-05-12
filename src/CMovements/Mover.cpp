@@ -33,36 +33,61 @@ int CMover::GetStepsCntForMovement(int movementId)
     return m_movementsVector.at(movementId).GetStepsCnt();
 }
 
-void CMover::OneStepMove(int movement,int stp)
+//посчитать новый репер тела в зависимости от движения
+void CMover::CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRep, Gepard::BasicMath::GPDReper &newRep)
 {
     CMovements move = m_movementsVector.at(movement);
     int steps = move.GetStepsCnt();
-    if (stp>steps||stp<0)
+    if (stp > steps || stp < 0)
     {
         return;
     }
-    
+
     GPDReper rep = m_part->SolidReper;
+    oldRep = rep;
     int start = move.GetStart();
     int end = move.GetEnd();
     double _oneStepShift = move.GetMovePerStep();
 
-    double _resultShift=_oneStepShift*(stp+1);
+    double _resultShift = _oneStepShift*(stp + 1);
 
-    if (move.GetMovementType()==EMovementTypes::CIRCULAR)
+    if (move.GetMovementType() == EMovementTypes::CIRCULAR)
     {
         GPDReper mReper;
-        mReper.R.setCoords(move.GetPoint().nx,move.GetPoint().ny,move.GetPoint().nz);
+        mReper.R.setCoords(move.GetPoint().nx, move.GetPoint().ny, move.GetPoint().nz);
         mReper.morphByAngleAndAxis(move.GetAxis(), _resultShift);
         rep.Transform(GPDReper::getGlobalReper(), mReper);
     }
     else
-        if (move.GetMovementType()==EMovementTypes::LINEAR)
-        {
-            GPDVector vec = move.GetAxis()*_resultShift;
-            rep.R += vec;
-        }
-        m_part->UpdateSolidPosition(rep);
+    if (move.GetMovementType() == EMovementTypes::LINEAR)
+    {
+        GPDVector vec = move.GetAxis()*_resultShift;
+        rep.R += vec;
+    }
+
+    newRep = rep;
+}
+
+//Получить текущую функцию изменения тела
+Gepard::BasicMath::TModifyPointsFunc CMover::getModFunc(int movement, int stp)
+{    
+    GPDReper repOld, repNew;
+    CalcReper(movement, stp, repOld, repNew);
+
+    TModifyPointsFunc f = [repOld, repNew](Gepard::BasicMath::GPDPoint2d, Gepard::BasicMath::GPDPoint &P)
+    {
+        P.Transform(GPDReper::getGlobalReper(), const_cast<GPDReper&>(repOld));
+        P.Transform(const_cast<GPDReper&>(repNew), GPDReper::getGlobalReper());
+    };
+
+    return f;
+}
+
+void CMover::OneStepMove(int movement,int stp)
+{
+    GPDReper repOld, repNew;
+    CalcReper(movement, stp, repOld, repNew);
+    m_part->UpdateSolidPosition(repNew);
 }
 
 void CMover::MoveIt(int pos)

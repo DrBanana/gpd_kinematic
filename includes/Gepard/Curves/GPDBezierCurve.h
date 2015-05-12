@@ -48,12 +48,13 @@ namespace Gepard
             /**
             *	ѕостроить кривую Ѕезье с заданным числом точек
             */
-            void calcBezier( unsigned int numPoints=0 );
-
+            void calcBezier( unsigned int numPoints=0, bool checkPrec = true );
+                        
             /**
-             * ѕостроить кривую с заданным числом точек
-             */
-            void calcCurve( unsigned int numPoints=0 ) override;
+            * ѕостроить кривую с заданным числом точек
+            * (кроме случа€, когда точки получаютс€ почти равны с точностью precDelta)
+            */
+            void calcCurve(unsigned int numPoints = 0, bool checkPrec = true) override;
 
              /**
              *  «адать параметры дл€ кривой

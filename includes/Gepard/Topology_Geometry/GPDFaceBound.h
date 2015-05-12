@@ -179,6 +179,11 @@ namespace Gepard
              */
             bool isBridge(Gepard::Curves::GPDCurve3DPtr c3d);
 
+            /**
+             *	Является ли ребро перемычкой (по индексу ребра)
+             */
+            bool isBridge(unsigned int edge_index);
+
 
             //перегруженный оператор вывода
             friend ostream& GPDFaceBound::operator<<(ostream& os, GPDFaceBound &bound)

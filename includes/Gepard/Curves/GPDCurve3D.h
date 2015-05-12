@@ -46,9 +46,10 @@ namespace Gepard
             CURVE_3D_TYPE getCurveType();
 
             /**
-             * ѕостроить кривую с заданным числом точек
+             * ѕостроить кривую с заданным числом точек 
+             * (кроме случа€, когда точки получаютс€ почти равны с точностью precDelta)
              */
-            virtual void calcCurve(unsigned int numPoints=0);
+            virtual void calcCurve(unsigned int numPoints=0, bool checkPrec=true);
 
             /**
              *  ѕреобразовать в линию
@@ -157,6 +158,11 @@ namespace Gepard
              *	Ќакрывающие параллелепипед дл€ кривой
              */
             Gepard::BasicMath::BoundingBox boundingBox;
+
+            /**
+             *	ƒобавить точку с учетом точности
+             */
+            void addPointPrec(Gepard::BasicMath::GPDPoint &p, bool forceAdd=false);
 
         private:
              /**

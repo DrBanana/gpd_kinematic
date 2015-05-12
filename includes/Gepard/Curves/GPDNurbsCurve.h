@@ -31,9 +31,10 @@ namespace Gepard
 		    ~GPDNurbsCurve();
 
             /**
-            * Построить кривую с заданным числом точек
+            * Построить кривую с заданным числом точек 
+            * (кроме случая, когда точки получаются почти равны с точностью precDelta)
             */
-            void calcCurve(unsigned int numPoints = 0) override;
+            void calcCurve(unsigned int numPoints = 0, bool checkPrec=true) override;
 
             /**
             *	Установка параметров по умолчанию

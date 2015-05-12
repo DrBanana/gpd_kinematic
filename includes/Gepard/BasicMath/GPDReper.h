@@ -114,10 +114,11 @@ namespace Gepard
             * O1' - точка, вокруг которой поворачиваем
             */
             //void morphByVectorAroundPoint(GPDPoint A, GPDPoint B, GPDPoint O1);
+
             /**
             ‘ункци€ переносит репер на вектор
             */
-            GPDReper moveOnVector(GPDVector Vec);
+            void moveOnVector(GPDVector Vec);
 
             /**
              * ѕреобразование репера по двум углам и оси
