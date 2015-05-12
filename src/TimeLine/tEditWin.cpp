@@ -76,6 +76,12 @@ tEditWin::tEditWin(CMovements* thisMovement, QWidget *parent /*= 0*/)
 	startEdit->setText(QString::number(thisMovement->GetStart()));
 	endEdit->setText(QString::number(thisMovement->GetEnd()));
 
+	//На случай если пользователь не будет менять ось
+	shiftEnd = movement->GetAxis();
+	shiftStart.setNull();
+
+
+	prtPoint = movement->GetPoint();
 
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(okButton, SIGNAL(clicked()), this, SLOT(sendMovement()));
@@ -137,6 +143,12 @@ void tEditWin::showEvent(QShowEvent * event)
 		setCircular();
 	}
 
+	//Рисуем ось
+	GPDPoint startPoint = movement->GetPoint();
+	GPDVector endPoint = movement->GetAxis();
+
+	showAxis(startPoint.x, startPoint.y, startPoint.z, endPoint.x*movement->GetShift(), endPoint.y*movement->GetShift(), endPoint.z*movement->GetShift());
+
 	event->accept();
 
 }
@@ -171,8 +183,20 @@ void tEditWin::showAxis()
 
 	cam0Render->DeleteSpecialGObject((SpecialGObject*)newAxis);
 
-	newAxis = cam0Render->DrawAxis(shiftStart.x, shiftStart.y, shiftStart.z, shiftEnd.x, shiftEnd.y, shiftEnd.z, GColor(0, 0, 1), "Axis");
+	newAxis = cam0Render->DrawAxis(shiftStart.x, shiftStart.y, shiftStart.z, shiftEnd.x, shiftEnd.y, shiftEnd.z, GColor(0, 0, 0), "Axis");
 }
+
+void tEditWin::showAxis(int x0, int y0, int z0, int x1, int y1, int z1)
+{
+	GCamera * cam0 = GeometryRenderManager::GetCamera(0);
+	GPDGeometryRender * cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+	cam0Render->DeleteSpecialGObject((SpecialGObject*)newAxis);
+
+	newAxis = cam0Render->DrawAxis(x0, y0, z0, x1, y1, z1, GColor(0, 0, 0), "Axis");
+}
+
+
 
 void tEditWin::deleteAxis(GAxis * Axis)
 {
@@ -185,13 +209,11 @@ void tEditWin::deleteAxis(GAxis * Axis)
 void tEditWin::sendMovement()
 {
 
-	GPDPoint * newPoint = new GPDPoint(shiftStart.x, shiftStart.y, shiftStart.z);
-
 	//Пишем в него данные
 	movement->SetMoveName(nameEdit->text().toStdString());
 	movement->SetShift(shiftEdit->text().toDouble());
-	movement->SetAxis((shiftEnd - shiftStart).getNormalized());
-	movement->SetPoint(*newPoint);
+	movement->SetAxis((shiftEnd - shiftStart).getNormalized());  //Тут - то все и портится...
+	movement->SetPoint(prtPoint);
 	movement->SetStart(startEdit->text().toInt());
 	movement->SetEnd(endEdit->text().toInt());
 	movement->setAxisName(axisEdit->text().toStdString());

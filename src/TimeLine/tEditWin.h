@@ -50,6 +50,7 @@ public slots:
 	QString GetFaceName(Gepard::Topology_Geometry::GPDFace *);
 
 	void showAxis();
+	void showAxis(int, int, int, int, int, int);
 	void deleteAxis(GAxis *);
 
 signals:
@@ -90,6 +91,8 @@ private:
 
 	Gepard::BasicMath::GPDVector shiftEnd;
 	Gepard::BasicMath::GPDVector shiftStart;
+
+	Gepard::BasicMath::GPDPoint prtPoint;
 };
 
 #endif //TEDITWIN_H

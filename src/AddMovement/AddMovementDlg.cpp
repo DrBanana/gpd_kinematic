@@ -309,7 +309,7 @@ void AddMovementDlg::showAxis()
 
 	cam0Render->DeleteSpecialGObject((SpecialGObject*)newAxis);
 
-	newAxis = cam0Render->DrawAxis(shiftStart.x, shiftStart.y, shiftStart.z, shiftEnd.x, shiftEnd.y, shiftEnd.z, GColor(0, 0, 1), "Axis");
+	newAxis = cam0Render->DrawAxis(shiftStart.x, shiftStart.y, shiftStart.z, shiftEnd.x, shiftEnd.y, shiftEnd.z, GColor(0, 0, 0), "Axis");
 }
 
 void AddMovementDlg::deleteAxis(GAxis *Axis)

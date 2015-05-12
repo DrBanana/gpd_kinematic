@@ -292,7 +292,7 @@ TimeLine::~TimeLine()
 
 void TimeLine::actionRunWithPrms()
 {
-	prmWin->show();
+	//prmWin->show();
 }
 
 void TimeLine::actionRun()
