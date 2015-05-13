@@ -68,7 +68,7 @@ public:
     /*
      *	конструктор копирования
      */
-    CMovements(const CMovements&);
+   // CMovements(const CMovements&);
     virtual ~CMovements();
     /*
      *	Задать тип движения
@@ -84,6 +84,8 @@ public:
      *	получить смещение или угол в зависимости от типа движения
      */
     double GetShift();
+
+	double GetDegrees();
 
     // Задать имя
     void SetMoveName(string);

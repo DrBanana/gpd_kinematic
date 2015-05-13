@@ -242,6 +242,10 @@ void TimeLine::addRow(CMover moverFromDialog)
 
 	rowVect.push_back(newRow);  //Пишем структуру в массив
 
+	Gepard::BasicMath::GPDReper newRep = newRow.partMover.GetPart()->SolidReper;
+
+	defaultRepers.push_back(newRep);
+
 	tlRowCount++;
 
 	//Данные мувера сохраняются при добавлении новой строки, однако данные массива tRectItem'ов пропадают после завершения функции 
@@ -298,23 +302,69 @@ void TimeLine::actionRunWithPrms()
 void TimeLine::actionRun()
 {
 
-	int rowCnt = rowVect.size();
-	
+	QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
 
-	for (int i = 0; i < rowCnt; i++)
+	int res = msgBox->exec();
+
+    if (res == QMessageBox::No)
+	{
+		return;
+	}
+
+	//Сбрасываем позиции объектов
+
+	for (int i = 0; i < rowVect.size(); i++)
+	{
+		rowVect[i].partMover.SetPartReper(defaultRepers[i]);
+
+		g_manager.HideSolid(rowVect[i].partMover.GetPart());
+		g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+	}
+	//
+
+	auto cam0 = GeometryRenderManager::GetCamera(0);
+	auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+	int rowCnt = rowVect.size();
+	CMovements * thisMovement;
+	Gepard::GPDSolid *solidPtr;
+	int stepsCnt;
+
+
+	//Главный косяк последовательного движения в том, что мы назначили точки вдол/вокруг которых двигать и не обновляем их, в 
+	//результате чего деталь сдвигается на 50,0,0 а потом крутится относительно точки назначеной тогда когда она была в 
+	//положении 0,0,0 без учета текущего сдвига детали...
+
+	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
 	{
 
 		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();
+		solidPtr = rowVect[i].partMover.GetPart();
 
-		for (int j = 0; j < movementsCnt; j++)
+		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
 		{
-			rowVect[i].partMover.MoveIt(j);
+			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);
 
+			for (int k = 0; k < stepsCnt; k++)
+			{
+				rowVect[i].partMover.OneStepMove(j, k);
 
+				auto f = rowVect[i].partMover.getModFunc(j, k);
+
+				if (cam0Render->isSolidExist(solidPtr))
+				{
+					for (auto fItr = solidPtr->Faces.std_begin(); fItr != solidPtr->Faces.std_end(); fItr++)
+					{
+						cam0Render->ModifyObject((void*)&(*fItr), f);
+					}
+
+					cam0Render->RepaintContent();
+				}
+			}
 			//Обновляем
-			TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
-			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
-		}
+// 			TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
+// 			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+ 		}
 		
 	}
 

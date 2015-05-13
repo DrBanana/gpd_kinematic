@@ -49,14 +49,18 @@ void CMover::CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRe
     int end = move.GetEnd();
     double _oneStepShift = move.GetMovePerStep();
 
-    double _resultShift = _oneStepShift*(stp + 1);
+	double _resultShift = _oneStepShift/*(stp + 1)*/;
 
     if (move.GetMovementType() == EMovementTypes::CIRCULAR)
     {
         GPDReper mReper;
-        mReper.R.setCoords(move.GetPoint().nx, move.GetPoint().ny, move.GetPoint().nz);
+		mReper.R  = move.GetPoint().toVector();
+		mReper.E1 = move.GetAxis();
+		mReper.E2.setCoords(-mReper.E1.y, mReper.E1.x, mReper.E1.z);
+		mReper.E3 = mReper.E1 * mReper.E2;
+		rep.Transform(GPDReper::getGlobalReper(), mReper);
         mReper.morphByAngleAndAxis(move.GetAxis(), _resultShift);
-        rep.Transform(GPDReper::getGlobalReper(), mReper);
+		rep.Transform(mReper, GPDReper::getGlobalReper());
     }
     else
     if (move.GetMovementType() == EMovementTypes::LINEAR)
@@ -164,4 +168,9 @@ void CMover::SetMovementsVector(vector<CMovements>  newVector)
 GPDSolid * CMover::GetPart()
 {
     return m_part;
+}
+
+void CMover::SetPartReper(GPDReper  rep)
+{
+	m_part->UpdateSolidPosition(rep);
 }

@@ -31,6 +31,8 @@ public:
      */
     void SetPart(Gepard::Topology_Geometry::GPDSolid*);
 
+	void SetPartReper(Gepard::BasicMath::GPDReper);
+
     /*
     * Получить ссылку на деталь
     */

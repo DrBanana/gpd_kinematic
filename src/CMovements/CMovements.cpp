@@ -48,17 +48,17 @@ CMovements::CMovements(EMovementTypes movType,
     }
 }
 
-CMovements::CMovements( const CMovements& copy)
-{
-    m_moveType=copy.m_moveType;
-    m_name = copy.m_name;
-    m_axis=copy.m_axis;
-    m_end=copy.m_end;
-    m_shift=copy.m_shift;
-    m_start=copy.m_start;
-	m_axisName = copy.m_axisName;
-
-}
+// CMovements::CMovements( const CMovements& copy)
+// {
+//     m_moveType=copy.m_moveType;
+//     m_name = copy.m_name;
+//     m_axis=copy.m_axis;
+//     m_end=copy.m_end;
+//     m_shift=copy.m_shift;
+//     m_start=copy.m_start;
+// 	m_axisName = copy.m_axisName;
+// 
+// }
 
 CMovements::~CMovements()
 {
@@ -88,10 +88,16 @@ double CMovements::GetShift()
 {
     if (m_moveType==CIRCULAR)
     {
-        return ((m_shift*3.14)/180);
+        return ((m_shift*Gepard::BasicMath::Pi)/180.0);
     }
     return m_shift;
 }
+
+double CMovements::GetDegrees()
+{
+	return m_shift;
+}
+
 
 void CMovements::SetAxis(Gepard::BasicMath::GPDVector axis)
 {
@@ -171,6 +177,7 @@ std::string CMovements::getAxisName()
 {
 	return m_axisName;
 }
+
 
 
 

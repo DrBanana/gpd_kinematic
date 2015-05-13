@@ -27,6 +27,7 @@
 #include <QToolButton>
 #include <QToolBar>
 #include <QGraphicsLineItem>
+#include <QMessageBox>
 
 #include"tRunPrmWin.h"
 #include "tGraphicsRectItem.h"
@@ -174,8 +175,11 @@ private:
 
 	std::vector <_row> rowVect;  //Вектор строк
 
+	std::vector <Gepard::BasicMath::GPDReper> defaultRepers;
+
 	tGraphicsRectItem * sednderRect;
 	
+	Gepard::GeometryManager g_manager;
 };
 
 #endif // TIMELINE_H

@@ -69,7 +69,7 @@ tEditWin::tEditWin(CMovements* thisMovement, QWidget *parent /*= 0*/)
 	//Заполняем поля
 
 	nameEdit->setText(QString::fromStdString(thisMovement->GetMoveName()));
-	shiftEdit->setText(QString::number(thisMovement->GetShift()));
+	shiftEdit->setText(QString::number(thisMovement->GetDegrees()));               
 	axisEdit->setPalette(*greenPalette);
 	axisEdit->setReadOnly(true);
 	axisEdit->setText(QString::fromStdString(thisMovement->getAxisName()));
