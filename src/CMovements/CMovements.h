@@ -38,6 +38,8 @@ private:
     int m_end;
 	//»м€ оси
 	string m_axisName;
+	//”казатель на поверхность
+	Gepard::Topology_Geometry::GPDFace * m_prtFace;
 public:
     
      /*
@@ -51,7 +53,8 @@ public:
 				Gepard::BasicMath::GPDVector = Gepard::BasicMath::GPDVector(0, 0, 0),
                 int = 0,
                 int = 1,
-				string = " "
+				string = " ",
+				Gepard::Topology_Geometry::GPDFace * = nullptr
 				);
     /*
      *  конструктор, инициализирующий все параметры по умолчанию
@@ -143,6 +146,11 @@ public:
 	//им€ оси
 	void setAxisName(string);
 	string getAxisName();
+
+	void setFace(Gepard::Topology_Geometry::GPDFace *);
+	Gepard::Topology_Geometry::GPDFace * getFace();
+
+	void Update();
 };
 
 #endif //CMOVEMENTS_H

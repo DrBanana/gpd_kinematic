@@ -28,7 +28,7 @@ class tEditWin : public QWidget, Gepard::Callbacks::GeometryRenderCallback
 
 public:
 
-	tEditWin(CMovements *, QWidget *parent = 0);
+	tEditWin(CMovements *, int ,QWidget *parent = 0);
 	~tEditWin();
 
 	public slots:
@@ -93,6 +93,8 @@ private:
 	Gepard::BasicMath::GPDVector shiftStart;
 
 	Gepard::BasicMath::GPDPoint prtPoint;
+
+	Gepard::Topology_Geometry::GPDFace* _facePtr;
 };
 
 #endif //TEDITWIN_H

@@ -8,7 +8,7 @@ using namespace Gepard::Callbacks;
 using namespace Gepard::Topology_Geometry;
 using namespace Gepard::BasicMath;
 
-tEditWin::tEditWin(CMovements* thisMovement, QWidget *parent /*= 0*/)
+tEditWin::tEditWin(CMovements* thisMovement, int defSegments,QWidget *parent /*= 0*/)
 	: QWidget(parent)
 {
 	movement = thisMovement;
@@ -82,6 +82,7 @@ tEditWin::tEditWin(CMovements* thisMovement, QWidget *parent /*= 0*/)
 
 
 	prtPoint = movement->GetPoint();
+	_facePtr = movement->getFace();
 
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(okButton, SIGNAL(clicked()), this, SLOT(sendMovement()));
@@ -101,7 +102,7 @@ void tEditWin::renderCallbackEvent(Gepard::Visualization::GCallbackMessage _mess
 
 	if (_message._Object->_type == GODT_FACE)
 	{
-		GPDFace* _facePtr = (GPDFace*)_message._Object->ObjectData;
+		_facePtr = (GPDFace*)_message._Object->ObjectData;
 		if (!_facePtr) return;
 
 		axisEdit->setText(GetFaceName(_facePtr));
@@ -212,11 +213,13 @@ void tEditWin::sendMovement()
 	//ѕишем в него данные
 	movement->SetMoveName(nameEdit->text().toStdString());
 	movement->SetShift(shiftEdit->text().toDouble());
-	movement->SetAxis((shiftEnd - shiftStart).getNormalized());  //“ут - то все и портитс€...
+	movement->SetAxis((shiftEnd - shiftStart).getNormalized());
 	movement->SetPoint(prtPoint);
 	movement->SetStart(startEdit->text().toInt());
 	movement->SetEnd(endEdit->text().toInt());
+	if (movement->GetEnd() > 20) { movement->SetEnd(20); }
 	movement->setAxisName(axisEdit->text().toStdString());
+	movement->setFace(_facePtr);
 
 	emit movementEdited();
 

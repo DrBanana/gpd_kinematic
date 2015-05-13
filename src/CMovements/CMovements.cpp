@@ -31,7 +31,8 @@ CMovements::CMovements(EMovementTypes movType,
                         GPDVector axis, 
                         int start, 
                         int end,
-						string axisName)
+						string axisName,
+						Gepard::Topology_Geometry::GPDFace * prtFace)
     : m_moveType(movType),
     m_name(name),
 	m_shift(shift),
@@ -39,7 +40,8 @@ CMovements::CMovements(EMovementTypes movType,
     m_axis(axis),
     m_start(start),
     m_end(end),
-	m_axisName(axisName)
+	m_axisName(axisName),
+	m_prtFace(prtFace)
 {
     if (end<start)
     {
@@ -176,6 +178,32 @@ void CMovements::setAxisName(string newName)
 std::string CMovements::getAxisName()
 {
 	return m_axisName;
+}
+
+void CMovements::setFace(Gepard::Topology_Geometry::GPDFace * prtFace)
+{
+	m_prtFace = prtFace;
+}
+
+Gepard::Topology_Geometry::GPDFace * CMovements::getFace()
+{
+	return m_prtFace;
+}
+
+void CMovements::Update()
+{
+	Gepard::BasicMath::GPDVector shiftStart;
+	Gepard::Topology_Geometry::GPDReper newRep;
+
+	newRep = m_prtFace->GetFaceReper();
+
+	shiftStart = newRep.R;
+
+	GPDPoint newPoint(shiftStart.x, shiftStart.y, shiftStart.z);
+
+	m_point = newPoint;
+
+	
 }
 
 

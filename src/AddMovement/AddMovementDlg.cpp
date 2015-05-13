@@ -147,7 +147,7 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 	
 		if (_message._Object->_type == GODT_FACE)
 		{
-			GPDFace* _facePtr = (GPDFace*)_message._Object->ObjectData;
+			_facePtr = (GPDFace*)_message._Object->ObjectData;
 			if (!_facePtr) return;
 
 			if (currentMode == FACE) 
@@ -182,6 +182,8 @@ void AddMovementDlg::renderCallbackEvent(Gepard::Visualization::GCallbackMessage
 				//emit addMovementSignal(solidPtr);
 
 				qDebug() << "Solid name:" << GetSolidName(solidPtr) << " = " << solidPtr;
+
+				partName = GetSolidName(solidPtr).toStdString();
 
 				partNameOutput->setText(GetSolidName(solidPtr));
 				//ui.lineEdit_Object->setText(GetSolidName(solidPtr));
@@ -354,7 +356,9 @@ void AddMovementDlg::addMovement()
 	newMovement.SetPoint(newPoint);
 	newMovement.SetStart(startStepInput->text().toInt());
 	newMovement.SetEnd(endStepInput->text().toInt());
+	if (newMovement.GetEnd() > 20) { newMovement.SetEnd(20); }
 	newMovement.setAxisName(axisOutput->text().toStdString());
+	newMovement.setFace(_facePtr);
 
 	//ПРоверяем какое движение выбрал пользователь
 	if (moveFlag == true) 
@@ -443,6 +447,7 @@ void AddMovementDlg::sendMover()
 	CMover newMover(newPart);  //Создаем новый мувер
 
 	newMover.SetMovementsVector(newMovements);  //Даем ему массив движений
+	newMover.setPartName(partName);
 
 	emit moverToLine(newMover);
 

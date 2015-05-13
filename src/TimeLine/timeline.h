@@ -114,6 +114,8 @@ public slots:
 	//ƒвигать маркеры
 	void moveSplitterLeft();
 	void moveSplitterRight();
+	//—брос реперов (лол)
+	void resetState();
 
 
 signals:
@@ -126,6 +128,8 @@ protected:
 
 private:
 	//Ui::TimeLineClass ui;
+
+	QLabel * partName;
 	
 	Gepard::GeometryManager * TimeLine_g_manager;
 

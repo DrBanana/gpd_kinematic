@@ -21,6 +21,7 @@
 #include <QHeaderView>
 #include <QPalette>
 
+#include <string>
 
 using namespace Gepard::Visualization;
 //using namespace Gepard::BasicMath;
@@ -121,12 +122,16 @@ private:
 
 	modeFlag currentMode;
 
+	std::string partName;
+
 	bool moveFlag;
 
 	Gepard::BasicMath::GPDReper fReper;
 
 	Gepard::Topology_Geometry::GPDSolid * newPart;  //Указатель на деталь
 	GAxis * newAxis;                                //На ось
+
+	Gepard::Topology_Geometry::GPDFace* _facePtr;
 
 
 	vector<CMovements> newMovements;

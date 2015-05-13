@@ -223,6 +223,10 @@ void TimeLine::addRow(CMover moverFromDialog)
  	
 	TableViewer->setCellWidget(TableViewer->rowCount() - 1, 1, newRow.rowGView); //Помещаем вьювер графики в новую строку
 
+	partName = new QLabel();
+	partName->setText(QString::fromStdString(moverFromDialog.getPartName()));  //Пишем имя детали в лэйбл
+	TableViewer->setCellWidget(TableViewer->rowCount() - 1, 0, partName); //Помещаем имя детали в таблицу
+
 	newRow.rowGScene->setSceneRect(0, 0, w, moverFromDialog.GetSizeOfmovementsVector() * tlRectSize);
 
  	addTimeMarks(newRow.rowGScene);  //Вспомогательные линии
@@ -243,7 +247,7 @@ void TimeLine::addRow(CMover moverFromDialog)
 	rowVect.push_back(newRow);  //Пишем структуру в массив
 
 	Gepard::BasicMath::GPDReper newRep = newRow.partMover.GetPart()->SolidReper;
-
+	//Добавляем репер по умаолчанию
 	defaultRepers.push_back(newRep);
 
 	tlRowCount++;
@@ -274,18 +278,27 @@ void TimeLine::delRowDialog()
 void TimeLine::delRow(int numRow)
 {
 	std::vector <_row> tempVect;
+	std::vector <Gepard::BasicMath::GPDReper> tempRepVect;
+
+	rowVect[numRow-1].partMover.SetPartReper(defaultRepers[numRow-1]);
+
+	g_manager.HideSolid(rowVect[numRow - 1].partMover.GetPart());
+	g_manager.ShowSolidInRender(rowVect[numRow - 1].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 
 	for (int i = 0; i < rowVect.size(); i++)
 	{
 		if (i != numRow - 1) 
 		{
 			tempVect.push_back(rowVect[i]);
+			tempRepVect.push_back(defaultRepers[i]);
 		}
 	}
 
 	TableViewer->removeRow(numRow);
 
 	tempVect.swap(rowVect);
+	tempRepVect.swap(defaultRepers);
+
 }
 
 TimeLine::~TimeLine()
@@ -297,6 +310,80 @@ TimeLine::~TimeLine()
 void TimeLine::actionRunWithPrms()
 {
 	//prmWin->show();
+
+	QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
+
+	int res = msgBox->exec();
+
+	if (res == QMessageBox::No)
+	{
+		return;
+	}
+
+	//Сбрасываем позиции объектов
+
+	TimeLine::resetState();
+	//
+
+	//Находим положение ограничителей
+	int p1 = splitFirst->x() / segmentSize;  //начальный шаг
+	int p2 = splitSecond->x() / segmentSize; //конечный шаг
+
+	auto cam0 = GeometryRenderManager::GetCamera(0);
+	auto cam0Render = dynamic_cast<GPDGeometryRender*>(cam0);
+
+	int rowCnt = rowVect.size();
+	CMovements * thisMovement;
+	Gepard::GPDSolid *solidPtr;
+	int stepsCnt;
+	int stepStart;
+	int stepEnd;
+
+	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
+	{
+
+		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();   //Число движений мувера
+		solidPtr = rowVect[i].partMover.GetPart();                            //Деталь которую муер двигает
+
+		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
+		{
+			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);   //Число шагов движения
+			thisMovement = rowVect[i].partMover.GetMovementAt(j);
+
+			stepStart = thisMovement->GetStart();
+			stepEnd = thisMovement->GetEnd();
+
+			if (stepStart < p1 && stepEnd <= p1)
+			{
+				rowVect[i].partMover.MoveIt(j);
+				TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
+				TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+			}
+			else if (stepStart<p1 && stepEnd>p1 && stepEnd<p2)
+			{
+				//Делим движение
+
+			}
+			else if (stepStart>=p1 && stepEnd <=p2)
+			{
+				for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
+				{
+					rowVect[i].partMover.OneStepMove(j);
+
+					auto f = rowVect[i].partMover.getModFunc(j, k);
+
+					if (cam0Render->isSolidExist(solidPtr))
+					{
+						for (auto fItr = solidPtr->Faces.std_begin(); fItr != solidPtr->Faces.std_end(); fItr++)
+						{
+							cam0Render->ModifyObject((void*)&(*fItr), f);
+						}
+						cam0Render->RepaintContent();
+					}
+				}
+			}
+		}
+	}
 }
 
 void TimeLine::actionRun()
@@ -313,13 +400,7 @@ void TimeLine::actionRun()
 
 	//Сбрасываем позиции объектов
 
-	for (int i = 0; i < rowVect.size(); i++)
-	{
-		rowVect[i].partMover.SetPartReper(defaultRepers[i]);
-
-		g_manager.HideSolid(rowVect[i].partMover.GetPart());
-		g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
-	}
+	TimeLine::resetState();
 	//
 
 	auto cam0 = GeometryRenderManager::GetCamera(0);
@@ -345,9 +426,13 @@ void TimeLine::actionRun()
 		{
 			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);
 
-			for (int k = 0; k < stepsCnt; k++)
+			for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
 			{
-				rowVect[i].partMover.OneStepMove(j, k);
+				thisMovement = rowVect[i].partMover.GetMovementAt(j);
+
+				thisMovement->Update();
+
+				rowVect[i].partMover.OneStepMove(j);
 
 				auto f = rowVect[i].partMover.getModFunc(j, k);
 
@@ -357,20 +442,14 @@ void TimeLine::actionRun()
 					{
 						cam0Render->ModifyObject((void*)&(*fItr), f);
 					}
-
 					cam0Render->RepaintContent();
 				}
 			}
 			//Обновляем
 // 			TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
 // 			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
- 		}
-		
+ 		}	
 	}
-
-
-
-
 }
 
 void TimeLine::actionAdd()
@@ -452,7 +531,7 @@ void TimeLine::showEdit(CMovements * numMovement)
 {
 	sednderRect = (tGraphicsRectItem*)sender();
 
-	editWin = new tEditWin(numMovement);
+	editWin = new tEditWin(numMovement, segments);
 	connect(editWin, SIGNAL(movementEdited()), this, SLOT(resizeMarker()));
 	editWin->show();
 
@@ -488,12 +567,14 @@ void TimeLine::moveSplitterLeft()
 	{
 		point = splitFirst->pos();
 		if (point.rx() == 0) { return; }
+		if (point.rx() == splitSecond->pos().x() + segmentSize) { return; }
 		splitFirst->setPos(point.rx()-segmentSize, 0);
 	}
 	else if (splitSecond->isSelected() == true)
 	{
 		point = splitSecond->pos();
 		if (point.rx() == 0) { return; }
+		if (point.rx() == splitFirst->pos().x() + segmentSize) { return; }
 		splitSecond->setPos(point.rx() - segmentSize, 0);
 	}
 }
@@ -506,12 +587,14 @@ void TimeLine::moveSplitterRight()
 	{
 		point = splitFirst->pos();
 		if (point.rx() == segments*segmentSize) { return; }
+		if (point.rx() == splitSecond->pos().x() - segmentSize) { return; }
 		splitFirst->setPos(point.rx() + segmentSize, 0);
 	}
 	else if (splitSecond->isSelected() == true)
 	{
 		point = splitSecond->pos();
 		if (point.rx() == segments*segmentSize) { return; }
+		if (point.rx() == splitFirst->pos().x() - segmentSize) { return; }
 		splitSecond->setPos(point.rx() + segmentSize, 0);
 	}
 }
@@ -530,5 +613,16 @@ void TimeLine::resizeMarker()
 	point = sednderRect->pos();
 
 	sednderRect->mName->setPos(point);
+}
+
+void TimeLine::resetState()
+{
+	for (int i = 0; i < rowVect.size(); i++)
+	{
+		rowVect[i].partMover.SetPartReper(defaultRepers[i]);
+
+		g_manager.HideSolid(rowVect[i].partMover.GetPart());
+		g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+	}
 }
 

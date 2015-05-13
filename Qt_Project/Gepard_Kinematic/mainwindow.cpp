@@ -85,7 +85,7 @@ void MainWindow::on_actionMoveIt_triggered()
             int _cnt = m.GetStepsCntForMovement(i);
             for (int j=0;j<_cnt;j++)
             {
-                m.OneStepMove(i,j);
+                m.OneStepMove(i);
                 auto f = m.getModFunc(i, j);
 
                 if (cam0Render->isSolidExist(solidPtr))

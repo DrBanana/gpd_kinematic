@@ -22,9 +22,9 @@ m_movementsVector.push_back(movement);
 return m_movementsVector.size();
 }
 
-int CMover::AddMovement(EMovementTypes movType, string name, double shift, GPDPoint point, GPDVector axis, int start=0, int end=1, string axisName="")
+int CMover::AddMovement(EMovementTypes movType, string name, double shift, GPDPoint point, GPDVector axis, int start = 0, int end = 1, string axisName = "", Gepard::Topology_Geometry::GPDFace* _facePtr=nullptr)
 {
-    m_movementsVector.push_back(CMovements(movType,name, shift, point,axis,start,end,axisName));
+	m_movementsVector.push_back(CMovements(movType, name, shift, point, axis, start, end, axisName, _facePtr));
     return m_movementsVector.size();
 }
 
@@ -34,14 +34,10 @@ int CMover::GetStepsCntForMovement(int movementId)
 }
 
 //посчитать новый репер тела в зависимости от движения
-void CMover::CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRep, Gepard::BasicMath::GPDReper &newRep)
+void CMover::CalcReper(int movement, Gepard::BasicMath::GPDReper &oldRep, Gepard::BasicMath::GPDReper &newRep)
 {
     CMovements move = m_movementsVector.at(movement);
     int steps = move.GetStepsCnt();
-    if (stp > steps || stp < 0)
-    {
-        return;
-    }
 
     GPDReper rep = m_part->SolidReper;
     oldRep = rep;
@@ -49,7 +45,7 @@ void CMover::CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRe
     int end = move.GetEnd();
     double _oneStepShift = move.GetMovePerStep();
 
-	double _resultShift = _oneStepShift/*(stp + 1)*/;
+	double _resultShift = _oneStepShift;
 
     if (move.GetMovementType() == EMovementTypes::CIRCULAR)
     {
@@ -76,7 +72,7 @@ void CMover::CalcReper(int movement, int stp, Gepard::BasicMath::GPDReper &oldRe
 Gepard::BasicMath::TModifyPointsFunc CMover::getModFunc(int movement, int stp)
 {    
     GPDReper repOld, repNew;
-    CalcReper(movement, stp, repOld, repNew);
+    CalcReper(movement, repOld, repNew);
 
     TModifyPointsFunc f = [repOld, repNew](Gepard::BasicMath::GPDPoint2d, Gepard::BasicMath::GPDPoint &P)
     {
@@ -87,10 +83,10 @@ Gepard::BasicMath::TModifyPointsFunc CMover::getModFunc(int movement, int stp)
     return f;
 }
 
-void CMover::OneStepMove(int movement,int stp)
+void CMover::OneStepMove(int movement)
 {
     GPDReper repOld, repNew;
-    CalcReper(movement, stp, repOld, repNew);
+    CalcReper(movement, repOld, repNew);
     m_part->UpdateSolidPosition(repNew);
 }
 
@@ -173,4 +169,14 @@ GPDSolid * CMover::GetPart()
 void CMover::SetPartReper(GPDReper  rep)
 {
 	m_part->UpdateSolidPosition(rep);
+}
+
+void CMover::setPartName(std::string name)
+{
+	m_partName = name;
+}
+
+std::string CMover::getPartName()
+{
+	return m_partName;
 }
