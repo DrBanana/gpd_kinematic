@@ -156,6 +156,7 @@ private:
 	QAction * aRunParams;     //Запуск с параметрами
 	QAction * aMover;         //Добавить двигатель + установить движения 
 	QAction * aRemove;
+	QAction * aReset;
 
 	//Тулбар и кнопки
 	QToolBar * tBar;
@@ -188,6 +189,8 @@ private:
 	tGraphicsRectItem * sednderRect;
 	
 	Gepard::GeometryManager g_manager;
+
+	bool stateFlag;  //
 };
 
 #endif // TIMELINE_H

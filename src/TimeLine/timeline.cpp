@@ -9,7 +9,8 @@ using namespace Gepard::Callbacks;
 TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget *parent)
     : QWidget(parent)
 {
-	
+	stateFlag = false;
+
 	TimeLine_g_manager = g_manager;
 
 	segments = defSegments;
@@ -68,7 +69,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	TableViewer->setCellWidget(0, 1, graphicsWindow);
     
 	//ћенюЅар
-	mainMenu = new QMenuBar();
+	mainMenu = new QMenuBar();  
 	
 	mRun = new QMenu(tr("Run"), mainMenu);                   //ћенюшка в баре
 	mAdd = new QMenu(tr("Add"), mainMenu);
@@ -77,6 +78,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	aRun = new QAction(tr("Run"), mRun);                     //Ёкшн запуск с параметрами
 	aMover = new QAction(tr("Add part mover"), mAdd);
 	aRemove = new QAction(tr("Remove row"), mainMenu);
+	aReset = new QAction(tr("Reset"), mainMenu);
 	
 	mainMenu->addMenu(mRun);                //ћенюшку в бар
 	mRun->addAction(aRun);                  //Ёкшн в менюшку
@@ -86,6 +88,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	mAdd->addAction(aMover);
 
 	mainMenu->addAction(aRemove);
+	mainMenu->addAction(aReset);
 
 	//“улбар
 	tBar = new QToolBar();
@@ -133,6 +136,7 @@ TimeLine::TimeLine(int defSegments, Gepard::GeometryManager *g_manager, QWidget 
 	connect(aRun, SIGNAL(triggered()), this, SLOT(actionRun()));
 	connect(aRemove, SIGNAL(triggered()), this, SLOT(delRowDialog()));
 	connect(aMover, SIGNAL(triggered()), this, SLOT(actionAdd()));
+	connect(aReset, SIGNAL(triggered()), this, SLOT(resetState()));
 	connect(addMovementDialog, SIGNAL(moverToLine(CMover)), this, SLOT(addRow(CMover)));
 	connect(delWin, SIGNAL(accept(int)), this, SLOT(delRow(int)));
 	connect(aRight, SIGNAL(triggered()), this, SLOT(moveSplitterRight()));
@@ -311,14 +315,18 @@ void TimeLine::actionRunWithPrms()
 {
 	//prmWin->show();
 
-	QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
-
-	int res = msgBox->exec();
-
-	if (res == QMessageBox::No)
+	if (stateFlag == true)
 	{
-		return;
+		QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
+
+		int res = msgBox->exec();
+
+		if (res == QMessageBox::No)
+		{
+			return;
+		}
 	}
+	
 
 	//—брасываем позиции объектов
 
@@ -366,6 +374,9 @@ void TimeLine::actionRunWithPrms()
 
 			if (stepEnd <= p1) //ƒвижение перед периодом
 			{
+				
+				thisMovement->SetStart(p1 - 1);
+				thisMovement->SetEnd(p1);
 				newMovementsVect.push_back(*thisMovement);
 			}
 			else if (stepStart >= p1 && stepEnd<=p2) //ƒвижение в периоде
@@ -380,6 +391,8 @@ void TimeLine::actionRunWithPrms()
 
 				//—оздаем движение за периодом
 				movementOut = splitMovementF(thisMovement, stepOut, stepsCnt);
+				movementOut.SetStart(p1 - 1);
+				movementOut.SetEnd(p1);
 				newMovementsVect.push_back(movementOut);
 				//—оздаем движение внутри периодоа
 				movementIn = splitMovementB(thisMovement, stepOut, stepsCnt);
@@ -405,6 +418,8 @@ void TimeLine::actionRunWithPrms()
 
 				//—оздаем движение за периодом
 				movementOut = splitMovementF(thisMovement, stepOut, stepsCnt);
+				movementOut.SetStart(p1 - 1);
+				movementOut.SetEnd(p1);
 				newMovementsVect.push_back(movementOut);
 				//—оздаем движение внутри периодоа
 				movementIn = pullMovement(thisMovement, p1, p2);
@@ -432,23 +447,24 @@ void TimeLine::actionRunWithPrms()
 			stepsCnt = newMoverVect[i].GetStepsCntForMovement(j);   //„исло шагов движени€
 
 			//ќпредел€ем где находитс€ движение
-			thisMovement = newMoverVect[i].GetMovementAt(j);
+// 			thisMovement = newMoverVect[i].GetMovementAt(j);
+// 
+// 			stepStart = thisMovement->GetStart();
+// 			stepEnd = thisMovement->GetEnd();
 
-			stepStart = thisMovement->GetStart();
-			stepEnd = thisMovement->GetEnd();
+// 			if (stepEnd <= p1) //ƒвижение не входит в период
+// 			{
+// 				thisMovement->Update();          //ћувит деает что-то не так, двигать все ванстепмувом, но все что перед периодом установить в 1 шаг
+// 
+// 				newMoverVect[i].MoveIt(j);
+// 				TimeLine_g_manager->HideSolid(newMoverVect[i].GetPart());
+// 				TimeLine_g_manager->ShowSolidInRender(newMoverVect[i].GetPart(), GeometryRenderManager::GetCamera(0));
+// 			}
 
-			if (stepEnd <= p1) //ƒвижение не входит в период
-			{
-				thisMovement->Update();          //ћувит деает что-то не так, двигать все ванстепмувом, но все что перед периодом установить в 1 шаг
-
-				newMoverVect[i].MoveIt(j);
-				TimeLine_g_manager->HideSolid(newMoverVect[i].GetPart());
-				TimeLine_g_manager->ShowSolidInRender(newMoverVect[i].GetPart(), GeometryRenderManager::GetCamera(0));
-			}
-			else if (stepStart >= p1) //ƒвижение в периоде
-			{
 				for (int k = 0; k < stepsCnt; k++)        //÷икл по шагам движени€
 				{
+					thisMovement = newMoverVect[i].GetMovementAt(j);
+
 					thisMovement->Update();
 
 					newMoverVect[i].OneStepMove(j);
@@ -464,22 +480,28 @@ void TimeLine::actionRunWithPrms()
 						cam0Render->RepaintContent();
 					}
 				}
-			}
+			
 		}
 	}
+
+	stateFlag = true;
 }
 
 void TimeLine::actionRun()
 {
 
-	QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
-
-	int res = msgBox->exec();
-
-    if (res == QMessageBox::No)
+	if (stateFlag == true)
 	{
-		return;
+		QMessageBox * msgBox = new QMessageBox(QMessageBox::Question, tr("Reset state"), tr("Reset state and start new simulation?"), QMessageBox::Yes | QMessageBox::No);
+
+		int res = msgBox->exec();
+
+		if (res == QMessageBox::No)
+		{
+			return;
+		}
 	}
+	
 
 	//—брасываем позиции объектов
 
@@ -533,6 +555,8 @@ void TimeLine::actionRun()
 // 			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
  		}	
 	}
+
+	stateFlag = true;
 }
 
 void TimeLine::actionAdd()
@@ -707,6 +731,8 @@ void TimeLine::resetState()
 		g_manager.HideSolid(rowVect[i].partMover.GetPart());
 		g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 	}
+
+	stateFlag = false;
 }
 
 CMovements TimeLine::splitMovementF(CMovements * oldMovement, int piece, int steps)
