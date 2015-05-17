@@ -117,6 +117,10 @@ public slots:
 	//Сброс реперов (лол)
 	void resetState();
 
+	//Разделить движение
+	CMovements splitMovementF(CMovements *, int, int);   //Разделяет движение и возвращает первую часть
+	CMovements splitMovementB(CMovements *, int, int);   //Разделяет движение и возвращает последнюю часть
+	CMovements pullMovement(CMovements *, int, int);     //Вытащить часть движения
 
 signals:
 

@@ -334,43 +334,126 @@ void TimeLine::actionRunWithPrms()
 
 	int rowCnt = rowVect.size();
 	CMovements * thisMovement;
+
 	Gepard::GPDSolid *solidPtr;
 	int stepsCnt;
 	int stepStart;
 	int stepEnd;
 
+	CMovements movementIn;
+	CMovements movementOut;
+
+	vector <CMover> newMoverVect;
+	vector <CMovements> newMovementsVect;
+
+	//Переопределяем список движений 
+
 	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
 	{
 
 		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();   //Число движений мувера
-		solidPtr = rowVect[i].partMover.GetPart();                            //Деталь которую муер двигает
+		solidPtr = rowVect[i].partMover.GetPart();
+		CMover thisMover(solidPtr);
 
 		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
 		{
 			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);   //Число шагов движения
+
+			//Определяем где находится движение
 			thisMovement = rowVect[i].partMover.GetMovementAt(j);
+			stepStart = thisMovement->GetStart();
+			stepEnd = thisMovement->GetEnd();
+
+			if (stepEnd <= p1) //Движение перед периодом
+			{
+				newMovementsVect.push_back(*thisMovement);
+			}
+			else if (stepStart >= p1 && stepEnd<=p2) //Движение в периоде
+			{
+				newMovementsVect.push_back(*thisMovement);
+			}
+			else if (stepStart < p1 && stepEnd <= p2)  //Часть движения в периоде, часть перед ним
+			{
+				//Разбиваем движение
+				int stepIn = stepEnd - p1;
+				int stepOut = p1 - stepStart;
+
+				//Создаем движение за периодом
+				movementOut = splitMovementF(thisMovement, stepOut, stepsCnt);
+				newMovementsVect.push_back(movementOut);
+				//Создаем движение внутри периодоа
+				movementIn = splitMovementB(thisMovement, stepOut, stepsCnt);
+				newMovementsVect.push_back(movementIn);
+
+			}
+			else if (stepStart >= p1 && stepEnd > p2)  //Часть движения в периоде, часть за ним
+			{
+				//Разбиваем движение
+				int stepIn = p2 - stepStart;
+				int stepOut = stepEnd - p2;
+
+				//Создаем движение внутри периодоа
+				movementIn = splitMovementF(thisMovement, stepIn, stepsCnt);
+				newMovementsVect.push_back(movementIn);
+
+			}
+			else if (stepStart <  p1 && stepEnd > p2)  //начало движения за периодом, конец за периодом
+			{
+				//Разбиваем движение
+				int stepIn = p2 - p1;
+				int stepOut = p1 - stepStart;
+
+				//Создаем движение за периодом
+				movementOut = splitMovementF(thisMovement, stepOut, stepsCnt);
+				newMovementsVect.push_back(movementOut);
+				//Создаем движение внутри периодоа
+				movementIn = pullMovement(thisMovement, p1, p2);
+				newMovementsVect.push_back(movementIn);
+
+			}
+
+		}
+
+		thisMover.SetMovementsVector(newMovementsVect);
+
+		newMoverVect.push_back(thisMover);
+	}
+
+	//Двигаем по новому списку
+
+	for (int i = 0; i < newMoverVect.size(); i++) //Цикл по муверам
+	{
+
+		int movementsCnt = newMoverVect[i].GetSizeOfmovementsVector();   //Число движений мувера
+		solidPtr = newMoverVect[i].GetPart();
+
+		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
+		{
+			stepsCnt = newMoverVect[i].GetStepsCntForMovement(j);   //Число шагов движения
+
+			//Определяем где находится движение
+			thisMovement = newMoverVect[i].GetMovementAt(j);
 
 			stepStart = thisMovement->GetStart();
 			stepEnd = thisMovement->GetEnd();
 
-			if (stepStart < p1 && stepEnd <= p1)
+			if (stepEnd <= p1) //Движение не входит в период
 			{
-				rowVect[i].partMover.MoveIt(j);
-				TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
-				TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
-			}
-			else if (stepStart<p1 && stepEnd>p1 && stepEnd<p2)
-			{
-				//Делим движение
+				thisMovement->Update();          //Мувит деает что-то не так, двигать все ванстепмувом, но все что перед периодом установить в 1 шаг
 
+				newMoverVect[i].MoveIt(j);
+				TimeLine_g_manager->HideSolid(newMoverVect[i].GetPart());
+				TimeLine_g_manager->ShowSolidInRender(newMoverVect[i].GetPart(), GeometryRenderManager::GetCamera(0));
 			}
-			else if (stepStart>=p1 && stepEnd <=p2)
+			else if (stepStart >= p1) //Движение в периоде
 			{
 				for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
 				{
-					rowVect[i].partMover.OneStepMove(j);
+					thisMovement->Update();
 
-					auto f = rowVect[i].partMover.getModFunc(j, k);
+					newMoverVect[i].OneStepMove(j);
+
+					auto f = newMoverVect[i].getModFunc(j, k);
 
 					if (cam0Render->isSolidExist(solidPtr))
 					{
@@ -624,5 +707,80 @@ void TimeLine::resetState()
 		g_manager.HideSolid(rowVect[i].partMover.GetPart());
 		g_manager.ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
 	}
+}
+
+CMovements TimeLine::splitMovementF(CMovements * oldMovement, int piece, int steps)
+{
+	if (piece >= steps) { return *oldMovement; }
+	if (steps != oldMovement->GetStepsCnt()) { return *oldMovement; }
+
+	CMovements newMovement;
+
+	newMovement.SetMoveName(oldMovement->GetMoveName());             //Копируем имя
+	newMovement.SetMovementType(oldMovement->GetMovementType());     //Копируем тип
+	if (oldMovement->GetMovementType() == CIRCULAR)
+	{
+		newMovement.SetShift(oldMovement->GetDegrees() / steps*piece); //Копируем часть сдвига вне периода
+	}
+	else
+	{
+		newMovement.SetShift(oldMovement->GetShift() / steps*piece); //Копируем часть сдвига вне периода
+	}
+	newMovement.SetAxis(oldMovement->GetAxis());                      //Копируем ось
+	newMovement.SetPoint(oldMovement->GetPoint());                    //Точку
+	newMovement.SetStart(oldMovement->GetStart());                    //Начало
+	newMovement.SetEnd(oldMovement->GetStart()+piece);                //Присваиваем конец равный начальной точке периода
+	newMovement.setAxisName(oldMovement->getAxisName());              //копируем имя оси
+	newMovement.setFace(oldMovement->getFace());                      //Копируем поверхность
+
+	return newMovement;
+}
+
+CMovements TimeLine::splitMovementB(CMovements * oldMovement, int piece, int steps)
+{
+	if (piece >= steps) { return *oldMovement; }
+	if (steps != oldMovement->GetStepsCnt()) { return *oldMovement; }
+
+	CMovements newMovement;
+
+	newMovement.SetMoveName(oldMovement->GetMoveName());             //Копируем имя
+	newMovement.SetMovementType(oldMovement->GetMovementType());     //Копируем тип
+	if (oldMovement->GetMovementType() == CIRCULAR)
+	{
+		newMovement.SetShift(oldMovement->GetDegrees() / steps*(steps - piece)); //Копируем часть сдвига в области периода
+	}
+	else
+	{
+		newMovement.SetShift(oldMovement->GetShift() / steps*(steps - piece)); //Копируем часть сдвига в области периода
+	}
+	newMovement.SetAxis(oldMovement->GetAxis());                      //Копируем ось
+	newMovement.SetPoint(oldMovement->GetPoint());                    //Точку
+	newMovement.SetStart(oldMovement->GetStart()+piece);              //Присваиваем начало равное начальной точке периода      
+	newMovement.SetEnd(oldMovement->GetEnd());                        //Конец
+	newMovement.setAxisName(oldMovement->getAxisName());              //копируем имя оси
+	newMovement.setFace(oldMovement->getFace());                      //Копируем поверхность
+
+	return newMovement;
+}
+
+CMovements TimeLine::pullMovement(CMovements * oldMovement, int p1, int p2)
+{
+	if (p2<=p1)
+	{
+		return *oldMovement;
+	}
+	CMovements newMovement;
+
+	newMovement.SetMoveName(oldMovement->GetMoveName());             //Копируем имя
+	newMovement.SetMovementType(oldMovement->GetMovementType());     //Копируем тип
+	newMovement.SetShift(oldMovement->GetShift() / oldMovement->GetStepsCnt() * (p2 - p1)); //Копируем часть сдвига в области периода
+	newMovement.SetAxis(oldMovement->GetAxis());                      //Копируем ось
+	newMovement.SetPoint(oldMovement->GetPoint());                    //Точку
+	newMovement.SetStart(p1);                                         //Присваиваем начало равное начальной точке периода      
+	newMovement.SetEnd(p2);                                           //Присваиваем конец равный конечной точке периода
+	newMovement.setAxisName(oldMovement->getAxisName());              //копируем имя оси
+	newMovement.setFace(oldMovement->getFace());                      //Копируем поверхность
+
+	return newMovement;
 }
 
