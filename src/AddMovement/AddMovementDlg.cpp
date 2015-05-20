@@ -381,8 +381,15 @@ void AddMovementDlg::addMovement()
  	moveList->setCellWidget(row, 0, tempLabel2);
  
 	moveList->setCellWidget(row, 1, tempLabel);
- 
- 	tempLabel3->setText(QString::number(newMovement.GetShift()));
+	
+	if (newMovement.GetMovementType() == CIRCULAR)
+	{
+		tempLabel3->setText(QString::number(newMovement.GetDegrees()));
+	}
+	else
+	{
+		tempLabel3->setText(QString::number(newMovement.GetShift()));
+	}
  	moveList->setCellWidget(row, 2, tempLabel3);
 
 	int a = newMovement.GetStart();
