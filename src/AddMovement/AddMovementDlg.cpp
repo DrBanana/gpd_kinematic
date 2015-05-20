@@ -356,7 +356,7 @@ void AddMovementDlg::addMovement()
 	newMovement.SetPoint(newPoint);
 	newMovement.SetStart(startStepInput->text().toInt());
 	newMovement.SetEnd(endStepInput->text().toInt());
-	if (newMovement.GetEnd() > 20) { newMovement.SetEnd(20); }
+	if (newMovement.GetEnd() > stepCount) { newMovement.SetEnd(stepCount); }
 	newMovement.setAxisName(axisOutput->text().toStdString());
 	newMovement.setFace(_facePtr);
 

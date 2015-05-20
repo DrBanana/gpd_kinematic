@@ -12,6 +12,7 @@ tEditWin::tEditWin(CMovements* thisMovement, int defSegments,QWidget *parent /*=
 	: QWidget(parent)
 {
 	movement = thisMovement;
+	stepCount = defSegments;
 
 	if (thisMovement->GetMovementType() == LINEAR) { typeFlag = true; }
 	else if (thisMovement->GetMovementType() == CIRCULAR) { typeFlag = false; }
@@ -217,7 +218,7 @@ void tEditWin::sendMovement()
 	movement->SetPoint(prtPoint);
 	movement->SetStart(startEdit->text().toInt());
 	movement->SetEnd(endEdit->text().toInt());
-	if (movement->GetEnd() > 20) { movement->SetEnd(20); }
+	if (movement->GetEnd() > stepCount) { movement->SetEnd(stepCount); }
 	movement->setAxisName(axisEdit->text().toStdString());
 	movement->setFace(_facePtr);
 

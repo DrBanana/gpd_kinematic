@@ -85,6 +85,7 @@ private:
 	bool typeFlag;
 
 	int shift;
+	int stepCount;
 
 	Gepard::BasicMath::GPDReper fReper;
 	GAxis * newAxis;                                //ось

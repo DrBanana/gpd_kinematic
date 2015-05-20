@@ -449,27 +449,23 @@ void TimeLine::actionRunWithPrms()
 		newMoverVect2[i].sortMovements();
 	}
 
-	//Двигаем по новому списку
-
-	for (int i = 0; i < newMoverVect.size(); i++) //Цикл по муверам
+	//Двигаем шагам
+	for (int i = 0; i < segments; i++) //Цикл по шагам на таймлайне
 	{
-
-		int movementsCnt = newMoverVect[i].GetSizeOfmovementsVector();   //Число движений мувера
-		solidPtr = newMoverVect[i].GetPart();
-
-		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
+		for (int j = 0; j < newMoverVect2.size(); j++) //Цикл по муверам
 		{
-			stepsCnt = newMoverVect[i].GetStepsCntForMovement(j);   //Число шагов движения
+			int movcnt = newMoverVect2[j].GetSizeOfmovementsVector();
+			solidPtr = newMoverVect2[j].GetPart();
 
-				for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
+			for (int k = 0; k < movcnt; k++) //Проверяем движения на соответствие номера с номером шага
+			{
+				thisMovement = newMoverVect2[j].GetMovementAt(k);
+
+				if (thisMovement->GetStart() == i)
 				{
-					thisMovement = newMoverVect[i].GetMovementAt(j);
-
 					thisMovement->Update();
 
-					newMoverVect[i].OneStepMove(j);
-
-					auto f = newMoverVect[i].getModFunc(j, k);
+					auto f = newMoverVect2[j].getModFunc(k, 0);
 
 					if (cam0Render->isSolidExist(solidPtr))
 					{
@@ -479,8 +475,10 @@ void TimeLine::actionRunWithPrms()
 						}
 						cam0Render->RepaintContent();
 					}
+
+					newMoverVect2[j].OneStepMove(k);
 				}
-			
+			}
 		}
 	}
 
@@ -540,44 +538,71 @@ void TimeLine::actionRun()
 	//Двигаем по шагам
 	for (int i = 0; i < segments; i++) //Цикл по шагам на таймлайне
 	{
-		for ()
-	}
-
-	//Двигаем
-	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
-	{
-
-		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();
-		solidPtr = rowVect[i].partMover.GetPart();
-
-		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
+		for (int j = 0; j < newMoverVect.size(); j++) //Цикл по муверам
 		{
-			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);
+			int movcnt = newMoverVect[j].GetSizeOfmovementsVector();
+			solidPtr = newMoverVect[j].GetPart();
 
-			for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
+			for (int k = 0; k < movcnt; k++) //Проверяем движения на соответствие номера с номером шага
 			{
-				thisMovement = rowVect[i].partMover.GetMovementAt(j);
+				thisMovement = newMoverVect[j].GetMovementAt(k);
 
-				thisMovement->Update();
-
-				rowVect[i].partMover.OneStepMove(j);
-
-				auto f = rowVect[i].partMover.getModFunc(j, k);
-
-				if (cam0Render->isSolidExist(solidPtr))
+				if (thisMovement->GetStart() == i)
 				{
-					for (auto fItr = solidPtr->Faces.std_begin(); fItr != solidPtr->Faces.std_end(); fItr++)
+					thisMovement->Update();
+					
+					auto f = newMoverVect[j].getModFunc(k, 0);
+
+					if (cam0Render->isSolidExist(solidPtr))
 					{
-						cam0Render->ModifyObject((void*)&(*fItr), f);
+						for (auto fItr = solidPtr->Faces.std_begin(); fItr != solidPtr->Faces.std_end(); fItr++)
+							{
+							cam0Render->ModifyObject((void*)&(*fItr), f);
+							}
+							cam0Render->RepaintContent();
 					}
-					cam0Render->RepaintContent();
+
+					newMoverVect[j].OneStepMove(k);
 				}
 			}
-			//Обновляем
-// 			TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
-// 			TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
- 		}	
+		}
 	}
+
+// 	Двигаем
+// 		for (int i = 0; i < rowCnt; i++) //Цикл по муверам
+// 		{
+// 	
+// 			int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();
+// 			solidPtr = rowVect[i].partMover.GetPart();
+// 	
+// 			for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
+// 			{
+// 				stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);
+// 	
+// 				for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
+// 				{
+// 					thisMovement = rowVect[i].partMover.GetMovementAt(j);
+// 	
+// 					thisMovement->Update();
+// 	
+// 					rowVect[i].partMover.OneStepMove(j);
+// 	
+// 					auto f = rowVect[i].partMover.getModFunc(j, k);
+// 	
+// 					if (cam0Render->isSolidExist(solidPtr))
+// 					{
+// 						for (auto fItr = solidPtr->Faces.std_begin(); fItr != solidPtr->Faces.std_end(); fItr++)
+// 						{
+// 							cam0Render->ModifyObject((void*)&(*fItr), f);
+// 						}
+// 						cam0Render->RepaintContent();
+// 					}
+// 				}
+// 				//Обновляем
+// 				TimeLine_g_manager->HideSolid(rowVect[i].partMover.GetPart());
+// 				TimeLine_g_manager->ShowSolidInRender(rowVect[i].partMover.GetPart(), GeometryRenderManager::GetCamera(0));
+// 	 		}	
+// 		}
 
 	stateFlag = true;
 }
