@@ -76,6 +76,12 @@ public:
 	void setPartName(std::string);
 	std::string getPartName();
 
+	void cutMovements();
+
+	int getStart();
+	int getEnd();
+
+	void sortMovements();
 };
 
 #endif //MOVER_H

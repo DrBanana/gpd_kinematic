@@ -180,3 +180,80 @@ std::string CMover::getPartName()
 {
 	return m_partName;
 }
+
+void CMover::cutMovements()
+{
+	vector <CMovements> newMovementsVector;
+	CMovements oldMovement;
+	CMovements newMovement;
+	int stepsCnt;
+
+	//Разрезаем движения
+	for (int i = 0; i < m_movementsVector.size(); i++)
+	{
+		oldMovement = m_movementsVector[i];
+
+		stepsCnt = oldMovement.GetStepsCnt();
+
+		for (int j = 0; j < stepsCnt; j++)
+		{
+
+			//Выдергиваем шаги из движения
+			newMovement.SetMoveName(oldMovement.GetMoveName()+"_"+ std::to_string(j));             //Копируем имя
+			newMovement.SetMovementType(oldMovement.GetMovementType());                            //Копируем тип
+			newMovement.SetShift(oldMovement.GetShift()/stepsCnt);                                 //Копируем часть сдвига в области периода
+			newMovement.SetAxis(oldMovement.GetAxis());                                            //Копируем ось
+			newMovement.SetPoint(oldMovement.GetPoint());                                          //Точку
+			newMovement.SetStart(oldMovement.GetStart()+j);                                        //Присваиваем начало равное начальной точке периода      
+			newMovement.SetEnd(newMovement.GetStart()+1);                                           //Присваиваем конец равный конечной точке периода
+			newMovement.setAxisName(oldMovement.getAxisName());                                    //копируем имя оси
+			newMovement.setFace(oldMovement.getFace());                                            //Копируем поверхность
+
+			newMovementsVector.push_back(newMovement);
+		}
+	}
+
+	m_movementsVector.swap(newMovementsVector);
+
+}
+
+int CMover::getStart()
+{
+	int start = m_movementsVector[0].GetStart();
+
+	for (int i = 0; i < m_movementsVector.size(); i++)
+	{
+		if (start > m_movementsVector[i].GetStart())
+		{
+			start = m_movementsVector[i].GetStart();
+		}
+	}
+
+	return start;
+}
+
+int CMover::getEnd()
+{
+	int end = m_movementsVector[0].GetEnd();
+
+	for (int i = 0; i < m_movementsVector.size(); i++)
+	{
+		if (end < m_movementsVector[i].GetEnd())
+		{
+			end = m_movementsVector[i].GetEnd();
+		}
+	}
+
+	return end;
+}
+
+void CMover::sortMovements()
+{
+	//Сделали cutMovements
+
+	std::sort(m_movementsVector.begin(), m_movementsVector.end(), [](CMovements &A, CMovements &B)->bool 
+	{
+		return (A.GetStart() < B.GetStart());
+	});
+
+}

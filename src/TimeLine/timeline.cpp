@@ -352,6 +352,7 @@ void TimeLine::actionRunWithPrms()
 	CMovements movementOut;
 
 	vector <CMover> newMoverVect;
+	vector <CMover> newMoverVect2;
 	vector <CMovements> newMovementsVect;
 
 	//Переопределяем список движений 
@@ -434,6 +435,20 @@ void TimeLine::actionRunWithPrms()
 		newMoverVect.push_back(thisMover);
 	}
 
+	newMoverVect2 = newMoverVect;
+
+	//Режем движения
+	for (int i = 0; i < rowCnt; i++)
+	{
+		newMoverVect2[i].cutMovements();
+	}
+
+	//Сортируем
+	for (int i = 0; i < rowCnt; i++)
+	{
+		newMoverVect2[i].sortMovements();
+	}
+
 	//Двигаем по новому списку
 
 	for (int i = 0; i < newMoverVect.size(); i++) //Цикл по муверам
@@ -445,21 +460,6 @@ void TimeLine::actionRunWithPrms()
 		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
 		{
 			stepsCnt = newMoverVect[i].GetStepsCntForMovement(j);   //Число шагов движения
-
-			//Определяем где находится движение
-// 			thisMovement = newMoverVect[i].GetMovementAt(j);
-// 
-// 			stepStart = thisMovement->GetStart();
-// 			stepEnd = thisMovement->GetEnd();
-
-// 			if (stepEnd <= p1) //Движение не входит в период
-// 			{
-// 				thisMovement->Update();          //Мувит деает что-то не так, двигать все ванстепмувом, но все что перед периодом установить в 1 шаг
-// 
-// 				newMoverVect[i].MoveIt(j);
-// 				TimeLine_g_manager->HideSolid(newMoverVect[i].GetPart());
-// 				TimeLine_g_manager->ShowSolidInRender(newMoverVect[i].GetPart(), GeometryRenderManager::GetCamera(0));
-// 			}
 
 				for (int k = 0; k < stepsCnt; k++)        //Цикл по шагам движения
 				{
@@ -513,14 +513,37 @@ void TimeLine::actionRun()
 
 	int rowCnt = rowVect.size();
 	CMovements * thisMovement;
+	vector <CMover> newMoverVect;
+	vector <CMovements> newMovementsVect;
 	Gepard::GPDSolid *solidPtr;
 	int stepsCnt;
 
+	
+	//Копируем движения в newMoverVctor
+	for (int i = 0; i < rowCnt; i++)
+	{
+		newMoverVect.push_back(rowVect[i].partMover);
+	}
 
-	//Главный косяк последовательного движения в том, что мы назначили точки вдол/вокруг которых двигать и не обновляем их, в 
-	//результате чего деталь сдвигается на 50,0,0 а потом крутится относительно точки назначеной тогда когда она была в 
-	//положении 0,0,0 без учета текущего сдвига детали...
+	//Разрезаем движения
+	for (int i = 0; i < rowCnt; i++)
+	{
+		newMoverVect[i].cutMovements();
+	}
+	
+	//Сортируем список
+	for (int i = 0; i < rowCnt; i++)
+	{
+		newMoverVect[i].sortMovements();
+	}
 
+	//Двигаем по шагам
+	for (int i = 0; i < segments; i++) //Цикл по шагам на таймлайне
+	{
+		for ()
+	}
+
+	//Двигаем
 	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
 	{
 
