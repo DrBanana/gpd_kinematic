@@ -201,7 +201,14 @@ void CMover::cutMovements()
 			//Выдергиваем шаги из движения
 			newMovement.SetMoveName(oldMovement.GetMoveName()+"_"+ std::to_string(j));             //Копируем имя
 			newMovement.SetMovementType(oldMovement.GetMovementType());                            //Копируем тип
-			newMovement.SetShift(oldMovement.GetShift()/stepsCnt);                                 //Копируем часть сдвига в области периода
+			if (newMovement.GetMovementType() == CIRCULAR)
+			{
+				newMovement.SetShift(oldMovement.GetDegrees() / stepsCnt);
+			}
+			else
+			{
+				newMovement.SetShift(oldMovement.GetShift() / stepsCnt);                           //Копируем часть сдвига в области периода
+			}
 			newMovement.SetAxis(oldMovement.GetAxis());                                            //Копируем ось
 			newMovement.SetPoint(oldMovement.GetPoint());                                          //Точку
 			newMovement.SetStart(oldMovement.GetStart()+j);                                        //Присваиваем начало равное начальной точке периода      
