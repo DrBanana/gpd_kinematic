@@ -71,6 +71,8 @@ public slots:
 
 	void sendMover();
 
+	void axisChange();
+
 signals:
 
 	void moverToLine(CMover);
@@ -105,6 +107,7 @@ private:
 
 	QPushButton * partAddButton;       //Добавть деталь
 	QPushButton * axisAddButton;       //Добавить ось
+	QPushButton * axisRevent;
 	QPushButton * moveAddButton;       //Добавить движение
 	QPushButton * moveDropButton;      //Сбросить данные диалога
 	QPushButton * moverAdd;

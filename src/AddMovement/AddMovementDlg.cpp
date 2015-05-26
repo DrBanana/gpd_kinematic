@@ -56,6 +56,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 
 	partAddButton = new QPushButton(tr("+"));       //Добавть деталь
 	axisAddButton = new QPushButton(tr("+"));       //Добавить ось
+	axisRevent = new QPushButton(tr("<->"));
 	moveAddButton = new QPushButton(tr("Add"));       //Добавить движение
 	moveDropButton = new QPushButton(tr("Drop"));      //Сбросить данные диалога
 	moverAdd = new QPushButton(tr("Add Mover"));
@@ -92,6 +93,7 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	mainLay->addWidget(axisLabel, 6, 0, 1, 1);
 	mainLay->addWidget(axisOutput, 6, 1, 1, 1);
 	mainLay->addWidget(axisAddButton, 6, 2, 1, 1);
+	mainLay->addWidget(axisRevent, 6, 3, 1, 1);
 	//строка 7
 	mainLay->addWidget(startStepLabel, 7, 0, 1, 1);
 	mainLay->addWidget(startStepInput, 7, 1, 1, 1);
@@ -129,6 +131,8 @@ AddMovementDlg::AddMovementDlg(int steps, QWidget *parent)
 	connect(moveAddButton, SIGNAL(clicked()), this, SLOT(addMovement()));
 
 	connect(moverAdd, SIGNAL(clicked()), this, SLOT(sendMover()));
+
+	connect(axisRevent, SIGNAL(clicked()), this, SLOT(axisChange()));
 	//changePalette(partNameOutput, greenPalette);
 
 	currentMode = NOTHING;
@@ -249,6 +253,7 @@ void AddMovementDlg::hideAll()
 	axisLabel->hide();
 	axisOutput->hide();
 	axisAddButton->hide();
+	axisRevent->hide();
 	startStepLabel->hide();
 	startStepInput->hide();
 	endStepLabel->hide();
@@ -272,6 +277,7 @@ void AddMovementDlg::showAll()
 	axisLabel->show();
 	axisOutput->show();
 	axisAddButton->show();
+	axisRevent->show();
 	startStepLabel->show();
 	startStepInput->show();
 	endStepLabel->show();
@@ -360,7 +366,7 @@ void AddMovementDlg::addMovement()
 	newMovement.setAxisName(axisOutput->text().toStdString());
 	newMovement.setFace(_facePtr);
 
-	//ПРоверяем какое движение выбрал пользователь
+	//Проверяем какое движение выбрал пользователь
 	if (moveFlag == true) 
 	{
 		newMovement.SetMovementType(LINEAR);
@@ -462,6 +468,12 @@ void AddMovementDlg::sendMover()
 
 	//Закрываем диалог
 	this->close();
+}
+
+void AddMovementDlg::axisChange()
+{
+	shiftEnd = shiftEnd*(-1);
+	showAxis();
 }
 
 

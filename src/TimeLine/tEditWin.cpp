@@ -40,6 +40,7 @@ tEditWin::tEditWin(CMovements* thisMovement, int defSegments,QWidget *parent /*=
 	startEdit = new QLineEdit();
 	endEdit = new QLineEdit();
 
+	axisRevent = new QPushButton(tr("<->"));
 	okButton = new QPushButton(tr("Ok"));
 	cancelButton = new QPushButton(tr("Cancel"));
 
@@ -55,6 +56,7 @@ tEditWin::tEditWin(CMovements* thisMovement, int defSegments,QWidget *parent /*=
 	//3
 	mainLay->addWidget(axisLabel,3,0);
 	mainLay->addWidget(axisEdit,3,1);
+	mainLay->addWidget(axisRevent, 3, 2);
 	//4
 	mainLay->addWidget(startLabel,4,0);
 	mainLay->addWidget(startEdit,4,1);
@@ -87,6 +89,7 @@ tEditWin::tEditWin(CMovements* thisMovement, int defSegments,QWidget *parent /*=
 
 	connect(cancelButton, SIGNAL(clicked()), this, SLOT(close()));
 	connect(okButton, SIGNAL(clicked()), this, SLOT(sendMovement()));
+	connect(axisRevent, SIGNAL(clicked()), this, SLOT(axisCange()));
 
 }
 
@@ -225,4 +228,10 @@ void tEditWin::sendMovement()
 	emit movementEdited();
 
 	this->close();
+}
+
+void tEditWin::axisCange()
+{
+	shiftEnd = shiftEnd*(-1);
+	showAxis();
 }

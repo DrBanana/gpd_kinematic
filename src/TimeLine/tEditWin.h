@@ -53,6 +53,8 @@ public slots:
 	void showAxis(int, int, int, int, int, int);
 	void deleteAxis(GAxis *);
 
+	void axisCange();
+
 signals:
 
 	void movementEdited();
@@ -79,6 +81,7 @@ private:
 	QLineEdit * startEdit;
 	QLineEdit * endEdit;
 
+	QPushButton * axisRevent;
 	QPushButton * okButton;
 	QPushButton * cancelButton;
 
