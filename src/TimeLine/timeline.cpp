@@ -351,25 +351,32 @@ void TimeLine::actionRunWithPrms()
 	CMovements movementIn;
 	CMovements movementOut;
 
+	vector <CMover> TempVect;
 	vector <CMover> newMoverVect;
 	vector <CMover> newMoverVect2;
 	vector <CMovements> newMovementsVect;
 
+	//
+	for (int i = 0; i < rowVect.size(); i++)
+	{
+		TempVect.push_back(rowVect[i].partMover);
+	}
+
 	//Переопределяем список движений 
 
-	for (int i = 0; i < rowCnt; i++) //Цикл по муверам
+	for (int i = 0; i < TempVect.size(); i++) //Цикл по муверам
 	{
 
-		int movementsCnt = rowVect[i].partMover.GetSizeOfmovementsVector();   //Число движений мувера
-		solidPtr = rowVect[i].partMover.GetPart();
+		int movementsCnt = TempVect[i].GetSizeOfmovementsVector();   //Число движений мувера
+		solidPtr = TempVect[i].GetPart();
 		CMover thisMover(solidPtr);
 
 		for (int j = 0; j < movementsCnt; j++)  //цикл по движениям мувера
 		{
-			stepsCnt = rowVect[i].partMover.GetStepsCntForMovement(j);   //Число шагов движения
+			stepsCnt = TempVect[i].GetStepsCntForMovement(j);   //Число шагов движения
 
 			//Определяем где находится движение
-			thisMovement = rowVect[i].partMover.GetMovementAt(j);
+			thisMovement = TempVect[i].GetMovementAt(j);
 			stepStart = thisMovement->GetStart();
 			stepEnd = thisMovement->GetEnd();
 
